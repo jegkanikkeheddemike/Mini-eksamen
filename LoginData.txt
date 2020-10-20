@@ -1,0 +1,9 @@
+Email:
+	Jensogkarsten@gmail.com
+Password:
+	andersersej123
+DataBase URL:
+	
+
+DataBase password:
+	dwXIS5wPWiDLTYZdyNobtkTmO3gUiPn8
