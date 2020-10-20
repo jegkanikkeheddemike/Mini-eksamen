@@ -5,7 +5,6 @@ class Window {
   int y;
   int sizeX;
   int sizeY;
-  boolean isActive = true;
 
   boolean hasBackdrop = false;
   color backdropColor = color(150);

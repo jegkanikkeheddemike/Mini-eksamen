@@ -36,8 +36,8 @@ class UIElement {
   }
   boolean clickedOn() {
     if (mouseReleased) {
-      if (math.within(x, mouseX, x + sizeX)) {
-        if (math.within(y, mouseY, y + sizeY)) {
+      if (within(x, mouseX, x + sizeX)) {
+        if (within(y, mouseY, y + sizeY)) {
           return true;
         }
       }
@@ -46,14 +46,14 @@ class UIElement {
   }
   boolean clickedOff() {
     if (mouseReleased) {
-      if (math.within(x, mouseX, x+sizeX)) {
-        if (math.within(y, mouseY, y + sizeY)) {
+      if (within(x, mouseX, x+sizeX)) {
+        if (within(y, mouseY, y + sizeY)) {
           return false;
         }
       }
       return true;
     }
-    
+
     return false;
   }
   void reactEnter() {
