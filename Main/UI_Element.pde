@@ -26,6 +26,7 @@ class UIElement {
     if (isActive && keyTapped(ENTER)) {
       reactEnter();
     }
+    stepAlways();
   }
   void drawElement() {
     fill(255, 150, 150);
@@ -61,6 +62,8 @@ class UIElement {
   void reactClickedOn() {
   }
   void stepActive() {
+  }
+  void stepAlways() {  //Used only for multiple choice so far
   }
   String getOutput() {
     return "";
