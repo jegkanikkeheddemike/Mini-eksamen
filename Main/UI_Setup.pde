@@ -28,9 +28,7 @@ void UI_Setup() {
 
   loginWindow.elements.add(new Button("LoginButton", "Press to login", 90, 470, 220, 40, loginWindow) {
     public void reactClickedOn() {
-      String username = loginWindow.findElement("Username").getOutput();
-      String password = loginWindow.findElement("Password").getOutput();
-      println("Logged in as", username, "at", millis());
+      login();
     }
   }
   );
@@ -72,9 +70,9 @@ void UI_Setup() {
   createUserWindow.elements.add(new Button("CreateUserButton", "Create User", 90, 520, 220, 40, createUserWindow) {
     public void reactClickedOn() {
       if (owner.findElement("ChooseType").getOutput() != null) {
-        String username = owner.findElement("CreateUsername").getOutput();
-        String password = owner.findElement("CreatePassword").getOutput();
-        println("Created User", username, "at", millis());
+        //String username = owner.findElement("CreateUsername").getOutput();
+        //String password = owner.findElement("CreatePassword").getOutput();
+        createLogin();
         activeScreen = loginScreen;
       } else {
         println("Please Choose a role");
