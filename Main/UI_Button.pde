@@ -10,8 +10,11 @@ class Button extends UIElement {
     calcXY();
   }
   void drawElement() {
-    fill(0);
+    textAlign(CENTER);
+    fill(255);
+    textSize(int(sizeY*0.8));
     rect(x, y, sizeX, sizeY);
-    text(description, x, y);
+    fill(0);
+    text(description, x+(sizeX/2), y+(sizeY*0.8));
   }
 }

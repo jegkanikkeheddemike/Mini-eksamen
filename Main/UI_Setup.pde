@@ -1,15 +1,29 @@
 Screen loginScreen = new Screen();
 volatile Screen activeScreen = loginScreen;
 
+Window loginWindow;
+
 void UI_Setup() {
   //LOGINSCREEN
-  Window loginWindow = new Window(0, 0, width, height);
-  loginWindow.elements.add(new textDisplay("Login", "Login", 100, 100, 30, loginWindow));
-  loginWindow.elements.add(new Button("Login", "tryk på mig", 20, 20, 20, 20, loginWindow) {
+  loginWindow = new Window(width/2-200, height/2-300, 400, 600);
+  loginWindow.elements.add(new textDisplay("Login", "Login", 200, 80, 50, loginWindow, CENTER));
+  loginWindow.elements.add(new textBox("Username", "Username", 20, 180, 360, 40, loginWindow) {
+    public void reactEnter() {
+      loginWindow.findElement("LoginButton").reactClickedOn();
+    }
+  }
+  );
+  loginWindow.elements.add(new textBox("Password", "Password", 20, 280, 360, 40, loginWindow));
+
+  loginWindow.elements.add(new Button("LoginButton", "Press to login", 90, 520, 220, 40, loginWindow) {
     public void reactClickedOn() {
-      //try to log in.
+      String username = loginWindow.findElement("Username").getOutput();
+      String password = loginWindow.findElement("Password").getOutput();
+      println("Logged in as", username, "at", millis());
     }
   }
   );
   loginScreen.windows.add(loginWindow);
+
+  //CREATE USER SCREEN
 }

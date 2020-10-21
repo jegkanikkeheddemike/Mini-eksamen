@@ -6,7 +6,7 @@ class Window {
   int sizeX;
   int sizeY;
 
-  boolean hasBackdrop = false;
+  boolean hasBackdrop = true;
   color backdropColor = color(150);
   boolean hasOutline = false;
   color outlineColor = color(255);
@@ -20,6 +20,14 @@ class Window {
     y = getY;
     sizeX = getSizeX;
     sizeY = getSizeY;
+  }
+  UIElement findElement(String eName) {
+    for (UIElement i : elements) {
+      if (i.name.equals(eName)) {
+        return i;
+      }
+    }
+    return null;
   }
 
   void stepWindow() {

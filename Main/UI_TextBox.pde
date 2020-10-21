@@ -20,6 +20,7 @@ class textBox extends UIElement {
     }
   }
   void drawElement() {
+    textAlign(LEFT);
     stroke(0);
     strokeWeight(sizeY/10);
     if (isActive) {
@@ -33,7 +34,7 @@ class textBox extends UIElement {
     text(text, x+3, y+sizeY * 0.8);
 
     fill(0);
-    text(description, x+1, y-3);
+    text(description, x+1, y-4);
   }
   String getOutput() {
     return text;
