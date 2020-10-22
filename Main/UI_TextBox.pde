@@ -14,7 +14,7 @@ class textBox extends UIElement {
     for (Character i : tappedKeys) {
       if (i == BACKSPACE && text.length() > 0) {
         text = text.substring(0, text.length()-1);
-      } else if (i != ENTER && i != BACKSPACE) {
+      } else if (i != ENTER && i != BACKSPACE && i!=TAB) {
         text += i;
       }
     }

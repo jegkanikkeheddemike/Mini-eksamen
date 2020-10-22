@@ -52,6 +52,7 @@ void login() {
           st.close();
           rs.close();
           println("logged in as", givenName, surName);
+          activeScreen = homeScreen;
         }
       } 
       catch (Exception e) {
@@ -65,7 +66,15 @@ void login() {
 void createLogin() {
   Thread createLoginThread = new Thread() {
     public void run() {
-      println("Trying to create login, but its 23:33 and im too tired to keep working right now :}");
+      try {
+        //username
+      } 
+      catch(Exception e) {
+        println(e);
+      }
+
+
+      println("Trying to create login, but its 23:33 and im too tired to keep working right now :} instead log in as Thor9987 / thorPass");
     }
   };
   createLoginThread.start();
