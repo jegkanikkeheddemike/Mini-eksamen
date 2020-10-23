@@ -116,6 +116,14 @@ void UI_Setup() {
   //TOPMENU
   topMenu = new Window(0, 0, width, 200);
   topMenu.elements.add(new textDisplay("Header", "The New Lectio", 20, 60, 60, topMenu));
-  topMenu.elements.add(new screenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen));
+  topMenu.elements.add(new screenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
+    public void extraAction() {
+      givenName = null;
+      surName=null;
+      userClass=null;
+      role=null;
+    }
+  }
+  );
   homeScreen.windows.add(topMenu);
 }

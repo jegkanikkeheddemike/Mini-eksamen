@@ -42,6 +42,9 @@ class screenButton extends UIElement {
     text(description, x+(sizeX/2), y+(sizeY*0.8));
   }
   void reactClickedOn() {
+    extraAction();
     activeScreen = location;
+  }
+  void extraAction() {
   }
 }
