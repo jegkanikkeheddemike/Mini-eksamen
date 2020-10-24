@@ -1,7 +1,19 @@
 class textDisplay extends UIElement {
   int textSize;
-  String text;
   int textMode = LEFT;
+  color textColor = color(0);
+  textDisplay(String getName, String getDescription, int getX, int getY, int getSize, Window getOwner, int getTextMode, color getTextColor) {
+    name = getName;
+    description = getDescription;
+    text = getDescription;
+    localX = getX;
+    localY = getY;
+    owner = getOwner;
+    textSize = getSize;
+    textMode = getTextMode;
+    textColor = getTextColor;
+    calcXY();
+  }
   textDisplay(String getName, String getDescription, int getX, int getY, int getSize, Window getOwner, int getTextMode) {
     name = getName;
     description = getDescription;
@@ -25,7 +37,7 @@ class textDisplay extends UIElement {
   }
   void drawElement() {
     textAlign(textMode);
-    fill(0);
+    fill(textColor);
     textSize(textSize);
     text(text, x, y);
   }

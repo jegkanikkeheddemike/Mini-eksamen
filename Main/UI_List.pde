@@ -33,9 +33,9 @@ class List extends UIElement {
   }
 }
 
-class assignMent extends UIElement {
+class Assignment extends UIElement {
   Date dueDate;
-  assignMent(String getName, String getDescription) {
+  Assignment(String getName, String getDescription) {
     name = getName;
     description = getDescription;
     sizeX = 280;

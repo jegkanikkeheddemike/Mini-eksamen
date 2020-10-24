@@ -8,7 +8,12 @@ class UIElement {
   int sizeY;
   int x;
   int y;
-
+  
+  //AAHHHHHHHH
+  color textColor;
+  String text;
+  //AHHHHH
+  
   Window owner;
   boolean isActive = false;
 
@@ -26,14 +31,14 @@ class UIElement {
     if (isActive && keyTapped(ENTER)) {
       reactEnter();
     }
-    stepAlways();
+      stepAlways();
   }
   void drawElement() {
-    fill(255, 150, 150);
-    rect(x, y, sizeX, sizeY);
-    textSize(sizeY-1);
-    fill(0);
-    text("NO TEXTURE", x, y+sizeY);
+      fill(255, 150, 150);
+      rect(x, y, sizeX, sizeY);
+      textSize(sizeY-1);
+      fill(0);
+      text("NO TEXTURE", x, y+sizeY);
   }
   boolean clickedOn() {
     if (mouseReleased) {
@@ -65,6 +70,9 @@ class UIElement {
   }
   void stepAlways() {  //Used only for multiple choice so far
   }
+  void setText(String newText){
+    text = newText;
+  }
   String getOutput() {
     return "";
   }
@@ -74,7 +82,7 @@ class UIElement {
   
   //TextBox
   void clearText(){}
-
+  
   void calcXY() {
     x = owner.x + localX;
     y = owner.y + localY;

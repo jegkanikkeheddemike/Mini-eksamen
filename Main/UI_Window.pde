@@ -1,6 +1,6 @@
 class Window {
-  int name;
-  int description;
+  String name;
+  String description;
   int x;
   int y;
   int sizeX;
@@ -15,24 +15,17 @@ class Window {
   ArrayList<UIElement> elements = new ArrayList<UIElement>();
   ArrayList<UIElement> removeList = new ArrayList<UIElement>();
 
-  Window(int getX, int getY, int getSizeX, int getSizeY) {
+  Window(int getX, int getY, int getSizeX, int getSizeY, String getName) {
     x = getX;
     y = getY;
     sizeX = getSizeX;
     sizeY = getSizeY;
+    name = getName;
   }
-  UIElement findElement(String eName) {
-    for (UIElement i : elements) {
-      if (i.name.equals(eName)) {
-        return i;
-      }
-    }
-    return null;
-  }
-  
-  UIElement getElement(String elementName){
-    for(UIElement element : elements){
-      if(element.name.equals(elementName)){
+
+  UIElement getElement(String elementName) {
+    for (UIElement element : elements) {
+      if (element.name.equals(elementName)) {
         return element;
       }
     }
@@ -41,11 +34,11 @@ class Window {
 
 
   void stepWindow() {
-    for (UIElement i : elements) {
-      i.step();
+    for (UIElement element : elements) {
+      element.step();
     }
-    for (UIElement i : removeList) {
-      elements.remove(i);
+    for (UIElement element : removeList) {
+      elements.remove(element);
     }
   }
   void drawWindow() {
@@ -60,9 +53,39 @@ class Window {
 
       rect(x, y, sizeX, sizeY);
     }
-    for (UIElement i : elements) {
-      i.drawElement();
+    for (UIElement element : elements) {
+      element.drawElement();
     }
   }
 }
-ArrayList<Window> windows = new ArrayList<Window>();
+
+class TimedWindow extends Window {
+  boolean show = false;
+  int time = 0;
+  int timeShown;
+  TimedWindow(int getX, int getY, int getSizeX, int getSizeY, String getName, int getTimeShown) {
+    super(getX, getY, getSizeX, getSizeY, getName);
+    timeShown = getTimeShown;
+  }
+
+  void show() {
+    time = millis();
+    show = true;
+  }
+  
+  void stepWindow() {
+    if (show) {  
+      if (millis() > time + timeShown) {
+        show = false;
+      } else {
+        super.stepWindow();
+      }
+    }
+  }
+
+  void drawWindow() {
+    if(show){
+      super.drawWindow();
+    }
+  }
+}

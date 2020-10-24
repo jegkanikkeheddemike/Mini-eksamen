@@ -61,6 +61,9 @@ class multiChoice extends UIElement {
       return null;
     }
   }
+  void clearText(){
+    Chosen = null;
+  }
 }
 
 
