@@ -1,6 +1,6 @@
-class textBox extends UIElement {
+class TextBox extends UIElement {
   String text = "";
-  textBox(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, Window getOwner) {
+  TextBox(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, Window getOwner) {
     name = getName;
     description = getDescription;
     localX = getX;
@@ -19,6 +19,10 @@ class textBox extends UIElement {
       }
     }
   }
+  void clearText(){
+    text = "";
+  }
+  
   void drawElement() {
     textAlign(LEFT);
     stroke(0);

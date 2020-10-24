@@ -29,6 +29,16 @@ class Window {
     }
     return null;
   }
+  
+  UIElement getElement(String elementName){
+    for(UIElement element : elements){
+      if(element.name.equals(elementName)){
+        return element;
+      }
+    }
+    return null;
+  }
+
 
   void stepWindow() {
     for (UIElement i : elements) {

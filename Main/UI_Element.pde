@@ -71,6 +71,9 @@ class UIElement {
   void deleteMe() {
     owner.removeList.add(this);
   }
+  
+  //TextBox
+  void clearText(){}
 
   void calcXY() {
     x = owner.x + localX;

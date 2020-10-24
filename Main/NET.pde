@@ -1,4 +1,3 @@
-//indsæt netcode her :)
 Connection db;
 import java.sql.*;
 void connectToDatabase() {
@@ -26,8 +25,7 @@ void connectToDatabase() {
   connectThread.start();
 }
 //LOGGED IN USERDATA
-String givenName;
-String surName;
+String userName;
 String userClass;
 String role;
 
@@ -39,10 +37,9 @@ void login() {
       println(username);
       try {
         Statement st = db.createStatement();
-        ResultSet rs = st.executeQuery("SELECT * FROM users WHERE(login = '"+username+"' AND password='"+password+"')");
+        ResultSet rs = st.executeQuery("SELECT * FROM users WHERE(login = '"+username+"' AND userpassword='"+password+"')");
         if (rs.next()) {
-          givenName = rs.getString("givenname");
-          surName = rs.getString("surname");
+          userName = rs.getString("username");
           role = rs.getString("role");
           if (role.equals("student")) {
             userClass = rs.getString("class");
@@ -51,8 +48,13 @@ void login() {
           }
           st.close();
           rs.close();
-          println("logged in as", givenName, surName);
+          println("logged in as", userName);
           activeScreen = homeScreen;
+          //Clear the userlogin & password textbox
+          Window loginWindow = loginScreen.windows.get(0);
+          
+          loginWindow.getElement("Username").clearText();
+          loginWindow.getElement("Password").clearText();
         }
       } 
       catch (Exception e) {

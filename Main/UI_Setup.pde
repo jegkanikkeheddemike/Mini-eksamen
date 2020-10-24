@@ -9,22 +9,19 @@ Window topMenu;
 Window assignMents;
 
 void UI_Setup() {
-
-
   //LOGINSCREEN
   loginWindow = new Window(width/2-200, height/2-300, 400, 600);
   loginScreen.windows.add(loginWindow);
 
   loginWindow.elements.add(new textDisplay("Login", "Login", 200, 80, 45, loginWindow, CENTER));
-
-  loginWindow.elements.add(new textBox("Username", "Username", 20, 180, 360, 40, loginWindow) {
+  loginWindow.elements.add(new TextBox("Username", "Username", 20, 180, 360, 40, loginWindow) {
     public void reactEnter() {
       owner.findElement("LoginButton").reactClickedOn();
     }
   }
   );
 
-  loginWindow.elements.add(new textBox("Password", "Password", 20, 280, 360, 40, loginWindow) {
+  loginWindow.elements.add(new TextBox("Password", "Password", 20, 280, 360, 40, loginWindow) {
     public void reactEnter() {
       owner.findElement("LoginButton").reactClickedOn();
     }
@@ -58,26 +55,26 @@ void UI_Setup() {
   }
   createUserWindow.elements.add(SelectRole);
 
-  createUserWindow.elements.add(new textBox("CreateUsername", "Username", 20, 280, 360, 40, createUserWindow) {
+  createUserWindow.elements.add(new TextBox("CreateUsername", "Username", 20, 280, 360, 40, createUserWindow) {
     public void reactEnter() {
       owner.findElement("CreateUserButton").reactClickedOn();
     }
   }
   );
 
-  createUserWindow.elements.add(new textBox("CreatePassword", "Password", 20, 380, 360, 40, createUserWindow) {
+  createUserWindow.elements.add(new TextBox("CreatePassword", "Password", 20, 380, 360, 40, createUserWindow) {
     public void reactEnter() {
       owner.findElement("CreateUserButton").reactClickedOn();
     }
   }
   );
-  createUserWindow.elements.add(new textBox("CreateRealname", "Real Name", 20, 480, 360, 40, createUserWindow) {
+  createUserWindow.elements.add(new TextBox("CreateRealname", "Real Name", 20, 480, 360, 40, createUserWindow) {
     public void reactEnter() {
       owner.findElement("CreateUserButton").reactClickedOn();
     }
   }
   );
-  createUserWindow.elements.add(new textBox("CreateClass", "Class", 20, 580, 360, 40, createUserWindow) {
+  createUserWindow.elements.add(new TextBox("CreateClass", "Class", 20, 580, 360, 40, createUserWindow) {
     public void reactEnter() {
       owner.findElement("CreateUserButton").reactClickedOn();
     }
@@ -90,6 +87,8 @@ void UI_Setup() {
         //String username = owner.findElement("CreateUsername").getOutput();
         //String password = owner.findElement("CreatePassword").getOutput();
         createLogin();
+        
+        //Switch back to the loginScreen
         activeScreen = loginScreen;
       } else {
         println("Please Choose a role");
@@ -118,10 +117,9 @@ void UI_Setup() {
   topMenu.elements.add(new textDisplay("Header", "The New Lectio", 20, 60, 60, topMenu));
   topMenu.elements.add(new screenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
-      givenName = null;
-      surName=null;
-      userClass=null;
-      role=null;
+      userName = null;
+      userClass = null;
+      role = null;
     }
   }
   );
