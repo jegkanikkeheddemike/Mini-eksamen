@@ -42,7 +42,7 @@ void login() {
           userName = rs.getString("username");
           role = rs.getString("role");
           if (role.equals("student")) {
-            userClass = rs.getString("class");
+            userClass = rs.getString("classid");
           } else {
             userClass = null;
           }
