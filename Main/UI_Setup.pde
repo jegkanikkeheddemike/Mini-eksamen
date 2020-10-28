@@ -32,9 +32,6 @@ void setupUniversalWindows() {
   topMenu.elements.add(new TextDisplay("Header", "The New Lectio", 20, 60, 60, topMenu));
   topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
-      userName = null;
-      userClass = null;
-      role = null;
     }
   }
   );

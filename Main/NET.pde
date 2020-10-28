@@ -28,9 +28,3 @@ void connectToDatabase() {
   };
   connectThread.start();
 }
-
-//LOGGED IN USERDATA
-//MAKE THIS INTO A SESSION CLASS!!
-String userName;
-String userClass;
-String role;

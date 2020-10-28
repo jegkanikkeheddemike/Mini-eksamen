@@ -55,7 +55,6 @@ void createLoginSuccess() {
   //Show a successmessage
   successWindow.getElement("SuccessMessage").setText("A new user was successfully created"); 
   successWindow.show();
-  println("SUCCESS");
   
   //Switch back to login-screen
   activeScreen = loginScreen;
