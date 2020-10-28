@@ -128,6 +128,25 @@ void UI_Setup() {
       elements.add(new Assignment("Placeholder", "Alle assignmentsne skal være indivudueller for hver klasse."));
     }
   };
+  /*
+  
+  
+  ArrayList<String> classList = new ArrayList<String>();
+  classList.add("3ak");
+  classList.add("3a");
+  List classesList = new List("Classes","",){
+    
+    
+  }
+  
+
+  
+  for(String classes: classesList){
+    
+  }
+  //assignments.elements.add(new screenButton());
+  */
+  
   assignments.elements.add(asssignmentList);
   homeScreen.windows.add(assignments);
 
