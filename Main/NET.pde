@@ -1,5 +1,9 @@
 Connection db;
 import java.sql.*;
+//HUSK!!
+//Resultset executeQuory(String"") bruges til KUN til at hente data
+//void updateQuory(String"") bruges Kun til at opdatere data i databasen 
+
 void connectToDatabase() {
   Thread connectThread = new Thread() {
     public void run() {
