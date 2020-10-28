@@ -150,7 +150,7 @@ class List extends UIElement {
   int scrool = 0;
   ArrayList<UIElement> elements = new ArrayList<UIElement>();
   List(String getName, String getDescription, int getX, int getY, int getSizeX, Window getOwner) {
-    listRender = createGraphics(getSizeX,getOwner.sizeY-20);
+    listRender = createGraphics(getSizeX, getOwner.sizeY-20);
     name = getName;
     description = getDescription;
     localX = getX;
@@ -161,7 +161,7 @@ class List extends UIElement {
     addElements();
   }
   void drawElement() {
-    
+
     textSize(20);
     text(description, x, y);
     int yy = 10+scrool;
@@ -257,7 +257,7 @@ class MultiChoice extends UIElement {
       return null;
     }
   }
-  void clearText(){
+  void clearText() {
     Chosen = null;
   }
 }
@@ -291,10 +291,10 @@ class TextBox extends UIElement {
       }
     }
   }
-  void clearText(){
+  void clearText() {
     text = "";
   }
-  
+
   void drawElement() {
     textAlign(LEFT);
     stroke(0);
