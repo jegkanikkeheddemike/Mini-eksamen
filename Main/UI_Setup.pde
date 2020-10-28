@@ -23,7 +23,7 @@ void UI_Setup() {
   loginWindow = new Window(width/2-200, height/2-300, 400, 600, "LoginWindow");
   loginScreen.windows.add(loginWindow);
 
-  loginWindow.elements.add(new textDisplay("Login", "Login", 200, 80, 45, loginWindow, CENTER));
+  loginWindow.elements.add(new TextDisplay("Login", "Login", 200, 80, 45, loginWindow, CENTER));
   loginWindow.elements.add(new TextBox("Username", "Username", 20, 180, 360, 40, loginWindow) {
     public void reactEnter() {
       owner.getElement("LoginButton").reactClickedOn();
@@ -57,8 +57,8 @@ void UI_Setup() {
   createUserWindow = new Window(width/2-200, height/2-400, 400, 800, "CreateUserWindow");
   createUserScreen.windows.add(createUserWindow);
 
-  createUserWindow.elements.add(new textDisplay("CreateUser", "Create New User", 200, 80, 45, createUserWindow, CENTER));
-  multiChoice SelectRole = new multiChoice("ChooseRole", "What are you?", 10, 150, createUserWindow);
+  createUserWindow.elements.add(new TextDisplay("CreateUser", "Create New User", 200, 80, 45, createUserWindow, CENTER));
+  MultiChoice SelectRole = new MultiChoice("ChooseRole", "What are you?", 10, 150, createUserWindow);
   {//Select roles
     SelectRole.Choices.add(new Choice("Student"));
     SelectRole.Choices.add(new Choice("Teacher"));
@@ -118,7 +118,7 @@ void UI_Setup() {
 
   //HOMESCREEN
   assignments = new Window(width-450, 300, 400, 800, "AssignmentsWindow");
-  assignments.elements.add(new textDisplay("AssignMentHeader", "Assignments", 20, 40, 40, assignments));
+  assignments.elements.add(new TextDisplay("AssignMentHeader", "Assignments", 20, 40, 40, assignments));
   List asssignmentList = new List("Assignments", "", 10, 50, 380, assignments)
   {
     public void addElements() {
@@ -133,7 +133,7 @@ void UI_Setup() {
 
   //TOPMENU
   topMenu = new Window(0, 0, width, 200, "TopMenu");
-  topMenu.elements.add(new textDisplay("Header", "The New Lectio", 20, 60, 60, topMenu));
+  topMenu.elements.add(new TextDisplay("Header", "The New Lectio", 20, 60, 60, topMenu));
   topMenu.elements.add(new screenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
       userName = null;
@@ -148,12 +148,12 @@ void UI_Setup() {
   //ERRORWINDOW
   errorWindow = new TimedWindow(0, 0, width, 200, "Error", 1000);
   errorWindow.backdropColor = color(255, 0, 0, 125);
-  errorWindow.elements.add(new textDisplay("ErrorMessage", "", width/2, 100, 60, errorWindow, CENTER, color(255)));
+  errorWindow.elements.add(new TextDisplay("ErrorMessage", "", width/2, 100, 60, errorWindow, CENTER, color(255)));
   
   //SUCCESSWINDOW
   successWindow = new TimedWindow(0, 0, width, 200, "Success", 1000);
   successWindow.backdropColor = color(0, 255, 0, 125);
-  successWindow.elements.add(new textDisplay("SuccessMessage", "", width/2, 100, 60, successWindow, CENTER, color(255)));
+  successWindow.elements.add(new TextDisplay("SuccessMessage", "", width/2, 100, 60, successWindow, CENTER, color(255)));
   
   //Adding the success and error window to all of the screens.
   loginScreen.windows.add(errorWindow);
