@@ -8,7 +8,6 @@ void settings() {
 
 void setup() {
   UI_Setup();
-  activeScreen = homeScreen;
   connectToDatabase();
 }
 
