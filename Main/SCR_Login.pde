@@ -31,3 +31,37 @@ void setupLoginScreen() {
   }
   );
 }
+
+void login() {
+  Thread loginThread = new Thread() {
+    public void run() {
+      String username = loginWindow.getElement("Username").getOutput();
+      String password = loginWindow.getElement("Password").getOutput();
+      println(username);
+      try {
+        Statement st = db.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM users WHERE(login = '"+username+"' AND userpassword='"+password+"')");
+        if (rs.next()) {
+          userName = rs.getString("username");
+          role = rs.getString("role");
+          if (role.equals("student")) {
+            userClass = rs.getString("classid");
+          } else {
+            userClass = null;
+          }
+          st.close();
+          rs.close();
+          println("logged in as", userName);
+          activeScreen = homeScreen;
+          //Clear the userlogin & password textbox
+          loginWindow.getElement("Username").clearText();
+          loginWindow.getElement("Password").clearText();
+        }
+      } 
+      catch (Exception e) {
+        println(e);
+      }
+    }
+  };
+  loginThread.run();
+}
