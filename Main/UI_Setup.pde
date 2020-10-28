@@ -1,3 +1,10 @@
+/*
+UI_Setup skal deles op i flere underfunktioner som deles ud i filer.
+Hvor funktionerne fra NET er med i den pågældende fil
+Altså knap-reaktions-funktioner er i samme fil som UI den høre til.
+*/
+
+
 Screen loginScreen = new Screen();
 Screen createUserScreen = new Screen();
 Screen homeScreen = new Screen();

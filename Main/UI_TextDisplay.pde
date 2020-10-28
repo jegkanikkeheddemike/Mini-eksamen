@@ -1,3 +1,4 @@
+
 class textDisplay extends UIElement {
   int textSize;
   int textMode = LEFT;
