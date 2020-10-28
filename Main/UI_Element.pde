@@ -194,6 +194,50 @@ class Assignment extends UIElement {
   }
 }
 
+class HoriList extends UIElement{
+  
+  PGraphics listRender;
+  int scrool = 0;
+  ArrayList<UIElement> elements = new ArrayList<UIElement>();
+  HoriList(String getName, String getDescription, int getX, int getY, int getSizeY, Window getOwner) {
+    listRender = createGraphics(getSizeY, getOwner.sizeY-20);
+    name = getName;
+    description = getDescription;
+    localX = getX;
+    localY = getY;
+    sizeY = getSizeY;
+    owner = getOwner;
+    calcXY();
+    addElements();
+    
+  }
+  void drawElement() {
+  textAlign(LEFT);
+  
+    textSize(20);
+    text(description, x, y);
+    int xx = 0;
+    for (UIElement i : elements) {
+      /*
+      fill(255);
+      rect(x+xx, y, 50, sizeY);
+      fill(0);
+      textSize(20);
+      text(i.name, x+xx, y+20);
+      textSize(15);
+      //text(i.description, x+xx, y+40);
+      xx += 50+10;*/
+      i.x = x+xx;
+      i.y = y;
+      i.drawElement();
+      xx+=i.sizeX+10;
+      
+    }
+  }
+  void addElements() {
+  }
+}
+
 class MultiChoice extends UIElement {
   Choice Chosen;
   boolean hasCorrectChoice;

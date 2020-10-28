@@ -11,6 +11,7 @@ void setupHomeScreen() {
       elements.add(new Assignment("Placeholder", "Alle assignmentsne skal være indivudueller for hver klasse."));
     }
   };
+  
   assignments.elements.add(asssignmentList);
   homeScreen.windows.add(assignments);
 }

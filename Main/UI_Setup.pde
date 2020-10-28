@@ -17,7 +17,8 @@ Window assignments;
 TimedWindow errorWindow;
 TimedWindow successWindow;
 
-//SPLIT THIS UP INTO SEPERATE SETUP FUNCTIONS THAT ARE THEN CALLED IN HERE
+
+//SPLIT THISPERATE SETUP FUNCTIONS THAT ARE THEN CALLED IN HERE
 void UI_Setup() {
   setupLoginScreen();
   setupCreateUserScreen();
@@ -35,6 +36,14 @@ void setupUniversalWindows() {
       userName = null;
       userClass = null;
       role = null;
+    }
+  }
+  );
+  topMenu.elements.add(new HoriList("Classes", "",10, 160, 27, topMenu) {
+    public void addElements() {
+      elements.add(new Button("CLASS","3ak",0,0,50,30,topMenu));
+      elements.add(new Button("CLASS","3a",0,0,50,30,topMenu));
+      elements.add(new Button("CLASS","3td",0,0,50,30,topMenu));
     }
   }
   );
