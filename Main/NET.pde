@@ -16,7 +16,6 @@ void connectToDatabase() {
       String dataBaseUsername = "rerxoubu";
       String dataBasePassword = "kNVkLOXQ6d38WUGrUXvrXL6odC2F_9yN";
       String url = "jdbc:postgresql://hattie.db.elephantsql.com:5432/rerxoubu";
-
       try {
         db = DriverManager.getConnection(url, dataBaseUsername, dataBasePassword);
         println("Connecet to database at", millis(), "ms");
