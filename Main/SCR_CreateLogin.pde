@@ -55,7 +55,7 @@ void createLoginSuccess() {
   //Show a successmessage
   successWindow.getElement("SuccessMessage").setText("A new user was successfully created"); 
   successWindow.show();
-  
+
   //Switch back to login-screen
   activeScreen = loginScreen;
 }
@@ -114,7 +114,8 @@ void createLogin() {
         }
       } 
       catch(Exception e) {
-        println(e);
+        errorWindow.getElement("ErrorMessage").setText(e.toString()); 
+        errorWindow.show();
       }
     }
   };
