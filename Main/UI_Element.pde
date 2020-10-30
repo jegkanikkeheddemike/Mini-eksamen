@@ -330,9 +330,9 @@ class TextBox extends UIElement {
     calcXY();
   }
   void stepActive() {
-    System.out.println("JEG KØRER");
+ 
     for (Integer tappedKey : tappedKeys) {
-      println("KEY: ", char((int) tappedKey));
+
 
       if (tappedKey == BACKSPACE && text.substring(0, cursorIndex).length() > 0) {
         text = text.substring(0, cursorIndex-1)+text.substring(cursorIndex);
@@ -342,7 +342,7 @@ class TextBox extends UIElement {
       } else if (tappedKey == '?' && cursorIndex < text.length()) {
         cursorIndex += 1;
         //}
-      } else if (tappedKey != ENTER && tappedKey != BACKSPACE && tappedKey !=TAB) {
+      } else if ((tappedKey>=48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122)) {
         text = text.substring(0, cursorIndex)+char(tappedKey)+text.substring(cursorIndex);
         cursorIndex += 1;
       }
@@ -350,6 +350,7 @@ class TextBox extends UIElement {
   }
   void clearText() {
     text = "";
+    cursorIndex = 0;
   }
 
   void drawElement() {

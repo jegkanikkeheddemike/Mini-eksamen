@@ -61,7 +61,8 @@ void login() {
       String role  = loginWindow.getElement("Role").getOutput(); //Be careful this might be null.
       String login = loginWindow.getElement("LoginName").getOutput();
       String password = loginWindow.getElement("Password").getOutput();
-
+      println(role,login,password);
+      
       if (role != null) {
         try {
           if (role.equals("Student")) {
@@ -82,8 +83,8 @@ void login() {
                 errorWindow.getElement("ErrorMessage").setText("The password was incorrect"); 
                 errorWindow.show();
               }
-              st.close();
               rs.close();
+              st.close();
             } else {
               //Throw an ERROR on screen
               errorWindow.getElement("ErrorMessage").setText("There is no student with that login"); 

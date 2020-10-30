@@ -47,7 +47,9 @@ void defineIgnoredChar(){
   int t = TAB;
   int d = DELETE;
   int e = ENTER;
+  int s = SHIFT;
   ignoredChar.add((Integer) t);
   ignoredChar.add((Integer) d);
   ignoredChar.add((Integer) e);
+  ignoredChar.add((Integer) s);
 }
