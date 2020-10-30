@@ -1,15 +1,15 @@
-//LOGGED IN USERDATA
-//MAKE THIS INTO A SESSION CLASS!!
-String userName = "USERNAME!!!!!!";
-String userClass = "CLASSS";
-String role = "ROLE!!";
+
+
+Session mainSession = new Session();
 
 class Session{
   String userName;
   String login;
   String role;
+  //int studentClassID;
   String studentClass;
   Integer[] classIDs;
+  //String[] classNames;
   
   Session(){
     userName = "";
