@@ -160,6 +160,13 @@ class List extends UIElement {
     calcXY();
     addElements();
   }
+  
+  void stepAlways(){
+    for (UIElement element: elements){
+      element.step();
+    }
+  }
+  
   void drawElement() {
 
     textSize(20);
@@ -211,6 +218,11 @@ class HoriList extends UIElement{
     addElements();
     
   }
+  void stepAlways(){
+    for (UIElement element: elements){
+      element.step();
+    }
+  }
   void drawElement() {
   textAlign(LEFT);
   
@@ -218,15 +230,6 @@ class HoriList extends UIElement{
     text(description, x, y);
     int xx = 0;
     for (UIElement i : elements) {
-      /*
-      fill(255);
-      rect(x+xx, y, 50, sizeY);
-      fill(0);
-      textSize(20);
-      text(i.name, x+xx, y+20);
-      textSize(15);
-      //text(i.description, x+xx, y+40);
-      xx += 50+10;*/
       i.x = x+xx;
       i.y = y;
       i.drawElement();

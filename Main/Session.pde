@@ -10,11 +10,13 @@ class Session{
   String studentClass;
   Integer[] classIDs;
   //String[] classNames;
+  Integer currentClassID;
   
   Session(){
     userName = "";
     login = "";
     role = "";
+    classIDs = new Integer[10];
   }
   
   void updateStudent(String userName_, String login_, String role_, String class_){

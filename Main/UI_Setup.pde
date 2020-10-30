@@ -28,23 +28,7 @@ void UI_Setup() {
 
 
 void setupUniversalWindows() {
-  //TOPMENU
-  topMenu = new Window(0, 0, width, 200, "TopMenu");
-  topMenu.elements.add(new TextDisplay("Header", "The New Lectio", 20, 60, 60, topMenu));
-  topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
-    public void extraAction() {
-    }
-  }
-  );
-  topMenu.elements.add(new HoriList("Classes", "",10, 160, 27, topMenu) {
-    public void addElements() {
-      elements.add(new Button("CLASS","3ak",0,0,50,30,topMenu));
-      elements.add(new Button("CLASS","3a",0,0,50,30,topMenu));
-      elements.add(new Button("CLASS","3td",0,0,50,30,topMenu));
-    }
-  }
-  );
-  homeScreen.windows.add(topMenu);
+  
 
   //Success and error windows. Setting their time to 1 second.
   //ERRORWINDOW
