@@ -160,6 +160,13 @@ class List extends UIElement {
     calcXY();
     addElements();
   }
+  
+  void stepAlways(){
+    for (UIElement element: elements){
+      element.step();
+    }
+  }
+  
   void drawElement() {
 
     textSize(20);
@@ -194,8 +201,8 @@ class Assignment extends UIElement {
   }
 }
 
-class HoriList extends UIElement{
-  
+class HoriList extends UIElement {
+
   PGraphics listRender;
   int scrool = 0;
   ArrayList<UIElement> elements = new ArrayList<UIElement>();
@@ -209,29 +216,23 @@ class HoriList extends UIElement{
     owner = getOwner;
     calcXY();
     addElements();
-    
+  }
+  void stepAlways(){
+    for (UIElement element: elements){
+      element.step();
+    }
   }
   void drawElement() {
-  textAlign(LEFT);
-  
+    textAlign(LEFT);
+
     textSize(20);
     text(description, x, y);
     int xx = 0;
     for (UIElement i : elements) {
-      /*
-      fill(255);
-      rect(x+xx, y, 50, sizeY);
-      fill(0);
-      textSize(20);
-      text(i.name, x+xx, y+20);
-      textSize(15);
-      //text(i.description, x+xx, y+40);
-      xx += 50+10;*/
       i.x = x+xx;
       i.y = y;
       i.drawElement();
       xx+=i.sizeX+10;
-      
     }
   }
   void addElements() {
@@ -316,6 +317,8 @@ class Choice {
 
 class TextBox extends UIElement {
   String text = "";
+  int cursorIndex = 0;
+
   TextBox(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, Window getOwner) {
     name = getName;
     description = getDescription;
@@ -327,11 +330,21 @@ class TextBox extends UIElement {
     calcXY();
   }
   void stepActive() {
-    for (Character i : tappedKeys) {
-      if (i == BACKSPACE && text.length() > 0) {
-        text = text.substring(0, text.length()-1);
-      } else if (i != ENTER && i != BACKSPACE && i!=TAB) {
-        text += i;
+    System.out.println("JEG KØRER");
+    for (Integer tappedKey : tappedKeys) {
+      println("KEY: ", char((int) tappedKey));
+
+      if (tappedKey == BACKSPACE && text.substring(0, cursorIndex).length() > 0) {
+        text = text.substring(0, cursorIndex-1)+text.substring(cursorIndex);
+        cursorIndex -= 1;
+      } else if (tappedKey == '=' && cursorIndex > 0) {
+        cursorIndex -= 1;
+      } else if (tappedKey == '?' && cursorIndex < text.length()) {
+        cursorIndex += 1;
+        //}
+      } else if (tappedKey != ENTER && tappedKey != BACKSPACE && tappedKey !=TAB) {
+        text = text.substring(0, cursorIndex)+char(tappedKey)+text.substring(cursorIndex);
+        cursorIndex += 1;
       }
     }
   }
@@ -348,14 +361,27 @@ class TextBox extends UIElement {
     } else {
       fill(255);
     }
+    //WE HAVE TO "SCROLL" THE TEXT WHEN IT IS LONGER THAN THE ACTUAL TEXTBOX!
+    //The textbox
     rect(x, owner.y+localY, sizeX, sizeY);
     fill(0);
     textSize(sizeY*0.8);
     text(text, x+3, y+sizeY * 0.8);
 
+    //The cursor
+
+    if (isActive) {
+      fill(255, 0, 0);
+      strokeWeight(2);
+      float textBeforeCursor = textWidth(text.substring(0, cursorIndex));
+      line(x+textBeforeCursor, owner.y+localY, x+textBeforeCursor, owner.y+localY+sizeY);
+    }
+
+    //The description
     fill(0);
     text(description, x+1, y-4);
   }
+
   String getOutput() {
     return text;
   }

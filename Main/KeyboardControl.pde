@@ -1,18 +1,20 @@
-ArrayList<Character> downKeys = new ArrayList<Character>();
-ArrayList<Character> tappedKeys = new ArrayList<Character>();
-ArrayList<Character> ignoredChar = new ArrayList<Character>();
+ArrayList<Integer> downKeys = new ArrayList<Integer>();
+ArrayList<Integer> tappedKeys = new ArrayList<Integer>();
+ArrayList<Integer> ignoredChar = new ArrayList<Integer>();
 boolean mouseReleased = false;
 
 void keyPressed() {
-  if (!downKeys.contains(key) && key != CODED && !ignoredChar.contains(key)) {
-    downKeys.add(key);
-    tappedKeys.add(key);
+  if (!downKeys.contains(key) &&  !ignoredChar.contains(key)) {
+    int k = key;
+    downKeys.add((Integer) k);
+    tappedKeys.add((Integer) k);
   }
 }
 
 void keyReleased() {
   if (downKeys.contains(key)) {
-    downKeys.remove(downKeys.indexOf(key));
+    int k = key;
+    downKeys.remove(downKeys.indexOf((Integer) k));
   }
 }
 
@@ -42,8 +44,10 @@ void cleanKeyboard() {
 }
 
 void defineIgnoredChar(){
-  ignoredChar.add(TAB);
-  ignoredChar.add(DELETE);
-  ignoredChar.add(ENTER);
-
+  int t = TAB;
+  int d = DELETE;
+  int e = ENTER;
+  ignoredChar.add((Integer) t);
+  ignoredChar.add((Integer) d);
+  ignoredChar.add((Integer) e);
 }

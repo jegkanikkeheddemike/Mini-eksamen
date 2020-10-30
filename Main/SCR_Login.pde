@@ -124,6 +124,7 @@ void login() {
         catch (Exception e) {
           println(e);
         }
+          setupTopMenuScreen();
       } else {
         //Throw an ERROR on screen
         errorWindow.getElement("ErrorMessage").setText("Please choose a role"); 

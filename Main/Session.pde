@@ -1,20 +1,22 @@
-//LOGGED IN USERDATA
-//MAKE THIS INTO A SESSION CLASS!!
-String userName = "USERNAME!!!!!!";
-String userClass = "CLASSS";
-String role = "ROLE!!";
+
+
+Session mainSession = new Session();
 
 class Session{
   String userName;
   String login;
   String role;
-  String studentClass;  //HVIS ELEV
-  Integer[] classIDs;  //HVIS LÆRER
+  //int studentClassID;
+  String studentClass;
+  Integer[] classIDs;
+  //String[] classNames;
+  Integer currentClassID;
   
   Session(){
     userName = "";
     login = "";
     role = "";
+    classIDs = new Integer[10];
   }
   
   void updateStudent(String userName_, String login_, String role_, String class_){
