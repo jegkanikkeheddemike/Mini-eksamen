@@ -8,8 +8,8 @@ class Session{
   String userName;
   String login;
   String role;
-  String studentClass;
-  Integer[] classIDs;
+  String studentClass;  //HVIS ELEV
+  Integer[] classIDs;  //HVIS LÆRER
   
   Session(){
     userName = "";
