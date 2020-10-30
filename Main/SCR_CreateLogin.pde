@@ -53,7 +53,7 @@ void createLoginSuccess() {
   clearCreateLoginFields();
 
   //Show a successmessage
-  successWindow.getElement("SuccessMessage").setText("A new user was successfully created"); 
+  successWindow.getElement("SuccessMessage").description = "A new user was successfully created"; 
   successWindow.show();
 
   //Switch back to login-screen
@@ -82,7 +82,7 @@ void createLogin() {
             //If the user already exists
             if (rs.next()) {
               //Throw an ERROR on screen
-              errorWindow.getElement("ErrorMessage").setText("The login already exists"); 
+              errorWindow.getElement("ErrorMessage").description = "The login already exists"; 
               errorWindow.show();
 
               rs.close();
@@ -109,12 +109,12 @@ void createLogin() {
           }
         } else {
           //Throw an ERROR on screen
-          errorWindow.getElement("ErrorMessage").setText("The passwords aren't the same"); 
+          errorWindow.getElement("ErrorMessage").description = "The passwords aren't the same"; 
           errorWindow.show();
         }
       } 
       catch(Exception e) {
-        errorWindow.getElement("ErrorMessage").setText(e.toString()); 
+        errorWindow.getElement("ErrorMessage").description = e.toString(); 
         errorWindow.show();
       }
     }

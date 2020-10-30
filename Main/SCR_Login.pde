@@ -49,10 +49,20 @@ void clearLoginFields() {
 
 void loginSuccess(String realName) {
   //Show a successmessage
-  successWindow.getElement("SuccessMessage").setText("Welcome " + realName); 
+  successWindow.getElement("SuccessMessage").description = "Welcome " + realName; 
   successWindow.show();
   clearLoginFields();
-  activeScreen = homeScreen;
+  topMenu.getElement("Username").description = realName;
+  try {
+    Statement st = db.createStatement();
+    ResultSet rs = st.executeQuery("SELECT * FROM tests");
+    while (rs.next()) {
+      asssignmentList.elements.add(new Assignment(rs.getString("TestName"),rs.getString("testSubject"),rs.getInt("TestID")));
+    }
+  } 
+  catch (Exception e) {
+    e.printStackTrace();
+  }
 }
 
 void login() {
@@ -61,8 +71,8 @@ void login() {
       String role  = loginWindow.getElement("Role").getOutput(); //Be careful this might be null.
       String login = loginWindow.getElement("LoginName").getOutput();
       String password = loginWindow.getElement("Password").getOutput();
-      println(role,login,password);
-      
+      println(role, login, password);
+
       if (role != null) {
         try {
           if (role.equals("Student")) {
@@ -79,15 +89,16 @@ void login() {
                 mainSession.updateStudent(realName, login, role, className);
 
                 loginSuccess(realName);
+                activeScreen = homeStudentScreen;
               } else {
-                errorWindow.getElement("ErrorMessage").setText("The password was incorrect"); 
+                errorWindow.getElement("ErrorMessage").description = "The password was incorrect"; 
                 errorWindow.show();
               }
               rs.close();
               st.close();
             } else {
               //Throw an ERROR on screen
-              errorWindow.getElement("ErrorMessage").setText("There is no student with that login"); 
+              errorWindow.getElement("ErrorMessage").description = "There is no student with that login"; 
               errorWindow.show();
             }
           } else if (role.equals("Teacher")) {
@@ -109,15 +120,16 @@ void login() {
                   mainSession.updateTeacher(realName, login, role, classIDs);
                 }
                 loginSuccess(realName);
+                activeScreen = homeTeacherScreen;
               } else {
-                errorWindow.getElement("ErrorMessage").setText("The password was incorrect"); 
+                errorWindow.getElement("ErrorMessage").description = "The password was incorrect"; 
                 errorWindow.show();
               }
               st.close();
               rs.close();
             } else {
               //Throw an ERROR on screen
-              errorWindow.getElement("ErrorMessage").setText("There is no teacher with that login"); 
+              errorWindow.getElement("ErrorMessage").description = "There is no teacher with that login"; 
               errorWindow.show();
             }
           }
@@ -125,10 +137,9 @@ void login() {
         catch (Exception e) {
           println(e);
         }
-          setupTopMenuScreen();
       } else {
         //Throw an ERROR on screen
-        errorWindow.getElement("ErrorMessage").setText("Please choose a role"); 
+        errorWindow.getElement("ErrorMessage").description = "Please choose a role"; 
         errorWindow.show();
       }
     }

@@ -18,7 +18,7 @@ void connectToDatabase() {
       String url = "jdbc:postgresql://hattie.db.elephantsql.com:5432/rerxoubu";
       try {
         db = DriverManager.getConnection(url, dataBaseUsername, dataBasePassword);
-        println("Connecet to database at", millis(), "ms");
+        println("Connected to database at", millis(), "ms");
       }
       catch (java.sql.SQLException e) {
         System.out.println(e.getMessage());

@@ -7,29 +7,34 @@ UI_Setup skal deles op i flere underfunktioner som deles ud i filer.
 
 Screen loginScreen = new Screen();
 Screen createUserScreen = new Screen();
-Screen homeScreen = new Screen();
+Screen homeTeacherScreen = new Screen();
+Screen homeStudentScreen = new Screen();
 volatile Screen activeScreen = loginScreen;
 
 Window loginWindow;
 Window createUserWindow;
 Window topMenu;
 Window assignments;
+Window takeTest;
+Window makeTest;
+
 TimedWindow errorWindow;
 TimedWindow successWindow;
 
+List asssignmentList;
 
 //SPLIT THISPERATE SETUP FUNCTIONS THAT ARE THEN CALLED IN HERE
 void UI_Setup() {
   setupLoginScreen();
   setupCreateUserScreen();
-  setupHomeScreen();
+  setupHomeTeacherScreen();
+  setupHomeStudentScreen();
   setupUniversalWindows();
 }
 
 
 void setupUniversalWindows() {
-  
-
+  setupTopMenu();
   //Success and error windows. Setting their time to 1 second.
   //ERRORWINDOW
   errorWindow = new TimedWindow(0, 0, width, 200, "Error", 1000);
@@ -44,8 +49,46 @@ void setupUniversalWindows() {
   //Adding the success and error window to all of the screens.
   loginScreen.windows.add(errorWindow);
   createUserScreen.windows.add(errorWindow);
-  homeScreen.windows.add(errorWindow);
+  homeTeacherScreen.windows.add(errorWindow);
+  homeStudentScreen.windows.add(errorWindow);
   loginScreen.windows.add(successWindow);
   createUserScreen.windows.add(successWindow);
-  homeScreen.windows.add(successWindow);
+  homeTeacherScreen.windows.add(successWindow);
+  homeStudentScreen.windows.add(successWindow);
+}
+
+
+void setupTopMenu() {
+  //TOPMENU
+  topMenu = new Window(0, 0, width, 200, "TopMenu");
+  topMenu.elements.add(new TextDisplay("Header", "The New Lectio", 20, 60, 60, topMenu));
+  topMenu.elements.add(new TextDisplay("Username", mainSession.userName, 20, 120, 30, topMenu));
+  topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
+    public void extraAction() {
+    }
+  }
+  );
+  topMenu.elements.add(new HoriList("Classes", "", 10, 160, 27, topMenu) {
+    public void addElements() {
+      if (mainSession.classIDs != null) {
+        try {
+          for (Integer ID : mainSession.classIDs) {
+            Statement st = db.createStatement();
+            ResultSet rs = st.executeQuery ("SELECT * FROM Classes WHERE ClassID = "+ID+";");
+            rs.next();
+            String className = rs.getString("ClassName");
+            elements.add(new ClassButton("CLASS", className, 0, 0, 60, 30, ID, topMenu));
+            rs.close();
+            st.close();
+          }
+        }
+        catch(Exception e) {
+          println(e);
+        }
+      }
+    }
+  }
+  );
+  homeTeacherScreen.windows.add(topMenu);
+  homeStudentScreen.windows.add(topMenu);
 }

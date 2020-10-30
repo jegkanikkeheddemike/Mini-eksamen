@@ -13,10 +13,6 @@ class UIElement {
   int x;
   int y;
 
-  //AAHHHHHHHH
-  color textColor;
-  String text;
-  //AHHHHH
 
   Window owner;
   boolean isActive = false;
@@ -73,9 +69,6 @@ class UIElement {
   void stepActive() {
   }
   void stepAlways() {  //Used only for multiple choice so far
-  }
-  void setText(String newText) {
-    text = newText;
   }
   String getOutput() {
     return "";
@@ -160,27 +153,24 @@ class List extends UIElement {
     calcXY();
     addElements();
   }
-  
-  void stepAlways(){
-    for (UIElement element: elements){
+
+  void stepAlways() {
+    for (UIElement element : elements) {
       element.step();
     }
   }
-  
+
   void drawElement() {
 
     textSize(20);
     text(description, x, y);
     int yy = 10+scrool;
     for (UIElement i : elements) {
-      fill(255);
-      rect(x, y+yy, sizeX, 50);
-      fill(0);
-      textSize(20);
-      text(i.name, x, y+yy+20);
-      textSize(15);
-      text(i.description, x, y+yy+40);
-      yy += 60;
+      i.x = x+10;
+      i.y = y+yy;
+      i.sizeX = sizeX-20;
+      i.drawElement();
+      yy += i.sizeY+10;
     }
   }
   void addElements() {
@@ -190,14 +180,57 @@ class List extends UIElement {
 
 class Assignment extends UIElement {
   Date dueDate;
-  Assignment(String getName, String getDescription) {
+  int testID;
+  Assignment(String getName, String getDescription, int getTestID) {
     name = getName;
     description = getDescription;
-    sizeX = 280;
     sizeY = 50;
+    testID = getTestID;
   }
   void reactClickedOn() {
-    println(name);
+    try {
+      Statement st = db.createStatement();
+      ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
+      int qNr = 1;
+      for (int i = 0; i < 10; i ++) {
+        println();
+      }
+      println(name);
+      while(rs.next()) {
+        println("Question",qNr);
+        String Question = rs.getString("question");
+        int RAnsIn = rs.getInt("rightanswerindex");
+        Array AnsArray = rs.getArray("possibleanswers");  //Arrayen kan ikke læses med det samme. 
+        ResultSet ansRS = AnsArray.getResultSet(); //Den skal omdannes til et Reslustset som kan læses og omdannes til en ArrayList
+        ArrayList<String> Answers = new ArrayList<String>();
+        while(ansRS.next()) {
+          Answers.add(ansRS.getString(2)); //GetString 1 er bare Indexet i resultsettet. Mens 2 er Værdien
+        }
+        
+        
+        
+        println(Question);
+        for (String s: Answers) {
+          print(s," ");
+        }
+        println("");
+        println("Correct Answer: ",Answers.get(RAnsIn));
+        println("__________________");
+        qNr++;
+      }
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  void drawElement() {
+    fill(255);
+    rect(x, y, sizeX, 50);
+    fill(0);
+    textSize(20);
+    text(name + " ID: " + testID, x, y+20);
+    textSize(15);
+    text(description, x, y+40);
   }
 }
 
@@ -217,8 +250,8 @@ class HoriList extends UIElement {
     calcXY();
     addElements();
   }
-  void stepAlways(){
-    for (UIElement element: elements){
+  void stepAlways() {
+    for (UIElement element : elements) {
       element.step();
     }
   }
@@ -330,7 +363,7 @@ class TextBox extends UIElement {
     calcXY();
   }
   void stepActive() {
- 
+
     for (Integer tappedKey : tappedKeys) {
 
 
@@ -396,7 +429,6 @@ class TextDisplay extends UIElement {
   TextDisplay(String getName, String getDescription, int getX, int getY, int getSize, Window getOwner, int getTextMode, color getTextColor) {
     name = getName;
     description = getDescription;
-    text = getDescription;
     localX = getX;
     localY = getY;
     owner = getOwner;
@@ -408,7 +440,6 @@ class TextDisplay extends UIElement {
   TextDisplay(String getName, String getDescription, int getX, int getY, int getSize, Window getOwner, int getTextMode) {
     name = getName;
     description = getDescription;
-    text = getDescription;
     localX = getX;
     localY = getY;
     owner = getOwner;
@@ -419,7 +450,6 @@ class TextDisplay extends UIElement {
   TextDisplay(String getName, String getDescription, int getX, int getY, int getSize, Window getOwner) {
     name = getName;
     description = getDescription;
-    text = getDescription;
     localX = getX;
     localY = getY;
     owner = getOwner;
@@ -430,6 +460,50 @@ class TextDisplay extends UIElement {
     textAlign(textMode);
     fill(textColor);
     textSize(textSize);
-    text(text, x, y);
+    text(description, x, y);
+  }
+}
+
+class ClassButton extends Button {
+  int buttonClassID;
+  ClassButton(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, int ClassID, Window getOwner) {
+    super(getName, getDescription, getX, getY, getSizeX, getSizeY, getOwner);
+    buttonClassID = ClassID;
+  }
+  void drawElement() {
+    textAlign(CENTER);
+    fill(255);
+    textSize(int(sizeY*0.8));
+    rect(x, y, sizeX, sizeY);
+    fill(0);
+    text(description, x+(sizeX/2), y+(sizeY*0.8));
+  }
+  void reactClickedOn() {
+    mainSession.currentClassID = buttonClassID;
+  }
+}
+
+
+class ElevTest extends UIElement {
+  ArrayList<Question> Questions = new ArrayList<Question>();
+  int CQuestionIndex = 0;
+  ElevTest() {
+    
+  }
+  void drawElement() {
+    
+  }
+}
+
+class Question extends UIElement {
+  int testID;
+  String question;
+  int rightAnswerIndex;
+  String[] possibleAnswers;
+  MultiChoice answers;
+  void drawElement() {
+    textSize(20);
+    text(question,300,300);
+    
   }
 }
