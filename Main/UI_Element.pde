@@ -483,6 +483,13 @@ class ElevTest extends UIElement {
 		name = getName;
 		description = getDescription;
 	}
+	void stepAlways() {
+		if (Questions.size() > 0) {
+			Question Q = Questions.get(CQuestionIndex);
+			Q.y = 360;
+			Q.step();
+		}
+	}
 	void drawElement() {
 		if (Questions.size() > 0) {
 			Question Q = Questions.get(CQuestionIndex);
@@ -511,7 +518,6 @@ class Question extends UIElement {
   void stepAlways() {
     answers.step();
   }
-	
 	void drawElement() {
     	fill(0);
 		textSize(30);
