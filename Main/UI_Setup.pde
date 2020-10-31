@@ -67,6 +67,7 @@ void setupTopMenu() {
   topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
       assignmentList.elements.clear();
+      ETest.Questions.clear();
     }
   }
   );

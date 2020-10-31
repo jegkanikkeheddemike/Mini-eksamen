@@ -63,6 +63,14 @@ class UIElement {
 
     return false;
   }
+  boolean mouseOn() {
+    if (within(x, mouseX, x + sizeX)) {
+        if (within(y, mouseY, y + sizeY)) {
+          return true;
+        }
+      }
+      return false;
+  }
   void reactEnter() {
   }
   void reactClickedOn() {
@@ -103,6 +111,9 @@ class Button extends UIElement {
 	if (isVisible) {
 		textAlign(CENTER);
 		fill(255);
+    if (mouseOn()) {
+      fill(200,200,255);
+    }
 		textSize(int(sizeY * 0.8));
 		rect(x, y, sizeX, sizeY);
 		fill(0);
@@ -128,6 +139,9 @@ class ScreenButton extends UIElement {
   void drawElement() {
     textAlign(CENTER);
     fill(255);
+    if (mouseOn()) {
+      fill(200,200,255);
+    }
     textSize(int(sizeY * 0.8));
     rect(x, y, sizeX, sizeY);
     fill(0);
@@ -218,6 +232,9 @@ class Assignment extends UIElement {
   }
   void drawElement() {
     fill(255);
+    if (mouseOn()) {
+      fill(200,200,255);
+    }
     rect(x, y, sizeX, 50);
     fill(0);
     textSize(20);
@@ -267,24 +284,12 @@ class HoriList extends UIElement {
 
 class MultiChoice extends UIElement {
   Choice Chosen;
-  boolean hasCorrectChoice;
-  String correctChocice;
-
   ArrayList<Choice> Choices = new ArrayList<Choice>();
   MultiChoice(String getName, String getDescription, int getX, int getY, Window getOwner) {
     name = getName;
     description = getDescription;
     localX = getX;
     localY = getY;
-    owner = getOwner;
-    calcXY();
-  }
-  MultiChoice(String getName, String getDescription, int getX, int getY, Window getOwner, String getCorrectChocice) {
-    name = getName;
-    description = getDescription;
-    localX = getX;
-    localY = getY;
-    correctChocice = getCorrectChocice;
     owner = getOwner;
     calcXY();
   }
@@ -332,7 +337,6 @@ class MultiChoice extends UIElement {
     Chosen = null;
   }
 }
-
 
 class Choice {
   String ChoiceName;
@@ -466,6 +470,9 @@ class ClassButton extends Button {
   void drawElement() {
     textAlign(CENTER);
     fill(255);
+    if (mouseOn()) {
+      fill(200,200,255);
+    }
     textSize(int(sizeY * 0.8));
     rect(x, y, sizeX, sizeY);
     fill(0);
