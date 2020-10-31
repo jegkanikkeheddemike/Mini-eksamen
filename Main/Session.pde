@@ -6,6 +6,7 @@ class Session{
   String userName;
   String login;
   String role;
+  int userID;
   //int studentClassID;
   String studentClass;
   Integer[] classIDs;
@@ -19,11 +20,12 @@ class Session{
     classIDs = new Integer[10];
   }
   
-  void updateStudent(String userName_, String login_, String role_, String class_){
+  void updateStudent(String userName_, String login_, String role_, String class_,int ID_){
    userName = userName_;
    login = login_;
    role = role_;
    studentClass = class_;
+   userID = ID_;
   }
   
   void updateTeacher(String userName_, String login_, String role_, Integer[] classIDs_){

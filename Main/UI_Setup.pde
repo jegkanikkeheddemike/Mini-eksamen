@@ -21,7 +21,7 @@ Window makeTest;
 TimedWindow errorWindow;
 TimedWindow successWindow;
 
-List asssignmentList;
+List assignmentList;
 ElevTest ETest;
 
 //SPLIT THISPERATE SETUP FUNCTIONS THAT ARE THEN CALLED IN HERE
@@ -66,7 +66,7 @@ void setupTopMenu() {
   topMenu.elements.add(new TextDisplay("Username", mainSession.userName, 20, 120, 30, topMenu));
   topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
-      //assignments.elements.clear(); //Hvis man logger ud og ind er det dobbelt. Men hvis koden er der ingen anden gang????
+      assignmentList.elements.clear();
     }
   }
   );
@@ -85,7 +85,7 @@ void setupTopMenu() {
           }
         }
         catch(Exception e) {
-          println(e);
+          //e.printStackTrace();
         }
       }
     }

@@ -100,12 +100,12 @@ void createLogin() {
                 createLoginSuccess();
               }
               catch(java.sql.SQLException e) {
-                println(e);
+                e.printStackTrace();
               }
             }
           }
           catch(java.sql.SQLException e) {
-            println(e);
+            e.printStackTrace();
           }
         } else {
           //Throw an ERROR on screen

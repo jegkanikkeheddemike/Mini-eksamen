@@ -57,7 +57,7 @@ void loginSuccess(String realName) {
     Statement st = db.createStatement();
     ResultSet rs = st.executeQuery("SELECT * FROM tests");
     while (rs.next()) {
-      asssignmentList.elements.add(new Assignment(rs.getString("TestName"),rs.getString("testSubject"),rs.getInt("TestID")));
+      assignmentList.elements.add(new Assignment(rs.getString("TestName"),rs.getString("testSubject"),rs.getInt("TestID")));
     }
   } 
   catch (Exception e) {
@@ -77,16 +77,16 @@ void login() {
         try {
           if (role.equals("Student")) {
             Statement st = db.createStatement();
-
-            ResultSet rs = st.executeQuery("SELECT Students.StudentName AS StudentName, Classes.ClassName AS ClassName, Students.Password AS Password FROM Students, Classes WHERE (Students.Login = '"+login+"') AND (Classes.ClassID = Students.ClassID);");
+            ResultSet rs = st.executeQuery("SELECT Students.studentid AS Studentid, Students.StudentName AS StudentName, Classes.ClassName AS ClassName, Students.Password AS Password FROM Students, Classes WHERE (Students.Login = '"+login+"') AND (Classes.ClassID = Students.ClassID);");
             if (rs.next()) {
               String actualPassword = rs.getString("Password");
               if (password.equals(actualPassword)) {
                 String realName = rs.getString("StudentName");
                 String className = rs.getString("ClassName");
+                int studentID = rs.getInt("studentid");
 
                 //UPDATE SESSION
-                mainSession.updateStudent(realName, login, role, className);
+                mainSession.updateStudent(realName, login, role, className,studentID);
 
                 loginSuccess(realName);
                 activeScreen = homeStudentScreen;
@@ -135,7 +135,7 @@ void login() {
           }
         }
         catch (Exception e) {
-          println(e);
+          e.printStackTrace();
         }
       } else {
         //Throw an ERROR on screen
