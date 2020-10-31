@@ -202,17 +202,9 @@ class Assignment extends UIElement {
 					Answers.add(ansRS.getString(2)); //GetString 1 er bare Indexet i resultsettet. Mens 2 er Værdien
 				}
 				readyQuestions.add(new Question(testID,Question,Answers,RAnsIn));
-				
-				/*
-				println(Question);
-				for (String s : Answers) {
-					print(s," ");
-				}
-				println("");
-				println("Correct Answer : ",Answers.get(RAnsIn));
-				println("__________________");*/
 			}
-      ETest.Questions.clear();
+			ETest.CQuestionIndex = 0;
+      		ETest.Questions.clear();
 			ETest.Questions.addAll(readyQuestions);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -294,7 +286,7 @@ class MultiChoice extends UIElement {
 	void drawElement() {
 		textAlign(LEFT);
 		fill(0);
-		textSize(30);
+		textSize(25);
 		text(description, x, y);
 		textSize(20);
 		int yy = 15;
@@ -492,36 +484,39 @@ class ElevTest extends UIElement {
 		description = getDescription;
 	}
 	void drawElement() {
-    int yy = 350;
-		for (Question Q : Questions) {
-      Q.y = yy;
+		if (Questions.size() > 0) {
+			Question Q = Questions.get(CQuestionIndex);
+			Q.y = 360;
 			Q.drawElement();
-      yy += 30;
 		}
 	}
 }
+
 
 class Question extends UIElement {
 	int testID;
 	String question;
 	int rightAnswerIndex;
 	ArrayList<String> AnswerList;
-	MultiChoice answers = new MultiChoice(question+"MC","Choose Your answer",100,0,takeTest);
+	MultiChoice answers = new MultiChoice(question+"MC","Choose Your answer",50,100,takeTest);
 	Question(int getTestID,String getQuestion,ArrayList<String> getAnswers,int getRAI) {
 		testID = getTestID;
 		question = getQuestion;
 		AnswerList = getAnswers;
 		rightAnswerIndex = getRAI;
-    
+		for (String A: getAnswers) {
+			answers.Choices.add(new Choice(A));
+		}
 	}
   void stepAlways() {
     answers.step();
   }
 	
 	void drawElement() {
-    fill(0);
-		textSize(20);
+    	fill(0);
+		textSize(30);
 		text(question,100,y);
-
+		textSize(25);
+		answers.drawElement();
 	}
 }

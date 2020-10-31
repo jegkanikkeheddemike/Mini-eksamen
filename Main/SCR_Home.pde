@@ -15,5 +15,13 @@ void setupHomeStudentScreen() {
   takeTest = new Window(50,300,width-550,height-400,"takeTestWindow");
   ETest = new ElevTest("ElevTest","Her tager du dine tests");
   takeTest.elements.add(ETest);
+  takeTest.elements.add(new Button("NQButton","Next",width-800,height-530,220,100,takeTest){
+    public void reactClickedOn() {
+      if (ETest.Questions.size() > ETest.CQuestionIndex+1)
+        ETest.CQuestionIndex++;
+    }
+  }
+  );
+
   homeStudentScreen.windows.add(takeTest);
 }

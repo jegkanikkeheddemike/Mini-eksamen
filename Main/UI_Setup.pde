@@ -66,6 +66,7 @@ void setupTopMenu() {
   topMenu.elements.add(new TextDisplay("Username", mainSession.userName, 20, 120, 30, topMenu));
   topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
+      //assignments.elements.clear(); //Hvis man logger ud og ind er det dobbelt. Men hvis koden er der ingen anden gang????
     }
   }
   );
