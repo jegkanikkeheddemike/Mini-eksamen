@@ -31,8 +31,7 @@ class Session{
    login = login_;
    role = role_;
    classIDs = classIDs_;
-  }  
-  
+  }
   
   void clear(){
    userName = "";
@@ -41,5 +40,4 @@ class Session{
    studentClass = "";
    classIDs = null;
   }
-  
 }

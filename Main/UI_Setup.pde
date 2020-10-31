@@ -22,6 +22,7 @@ TimedWindow errorWindow;
 TimedWindow successWindow;
 
 List asssignmentList;
+ElevTest ETest;
 
 //SPLIT THISPERATE SETUP FUNCTIONS THAT ARE THEN CALLED IN HERE
 void UI_Setup() {

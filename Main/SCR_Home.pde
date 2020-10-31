@@ -13,5 +13,7 @@ void setupHomeStudentScreen() {
   homeStudentScreen.windows.add(assignments);
   
   takeTest = new Window(50,300,width-550,height-400,"takeTestWindow");
+  ETest = new ElevTest("ElevTest","Her tager du dine tests");
+  takeTest.elements.add(ETest);
   homeStudentScreen.windows.add(takeTest);
 }
