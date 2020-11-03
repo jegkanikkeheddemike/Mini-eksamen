@@ -68,13 +68,27 @@ void updateAssignments(){
     try {
       Statement st = db.createStatement();
       //Give all the assignments that belong to the students class.
-      ResultSet rs = st.executeQuery("SELECT Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName as TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.ClassID = "+mainSession.studentClassID+");");
+      ResultSet rs = st.executeQuery("SELECT AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName as TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.ClassID = "+mainSession.studentClassID+");");
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
-        assignmentList.elements.add(new Assignment(rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
+        assignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
       }
     } 
     catch (Exception e) {
+      e.printStackTrace();
+    }
+  }else if(mainSession.role.equals("Teacher")){
+    try {
+      Statement st = db.createStatement();
+      //Give all the assignments that belong to the students class.
+      ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.TeacherID = "+mainSession.userID+") AND (Assigments.ClassID = "+mainSession.currentClassID+");");
+      while (rs.next()) {
+        //HANDLE THE DATE BETTER?
+        assignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
+      }
+    } 
+    catch (Exception e) {
+      println(e);
       e.printStackTrace();
     }
   }
@@ -118,24 +132,25 @@ void login() {
             }
           } else if (role.equals("Teacher")) {
             Statement st = db.createStatement();
-            ResultSet rs = st.executeQuery("SELECT TeacherName, Password, ClassIDs FROM Teachers WHERE (Login = '"+login+"');");
+            ResultSet rs = st.executeQuery("SELECT TeacherID, TeacherName, Password, ClassIDs FROM Teachers WHERE (Login = '"+login+"');");
             if (rs.next()) {
               String actualPassword = rs.getString("Password");
               if (password.equals(actualPassword)) {
                 String realName = rs.getString("TeacherName");
+                int ID = rs.getInt("TeacherID");
                 //We get the array of classIDs which is a sql Array which we then cast into an int array
                 java.sql.Array sqlClassIDs = rs.getArray("ClassIDs");
                 //We have to handle the case where the teachers doesn't yet have any classes
                 if (sqlClassIDs != null) {
                   Integer[] classIDs = (Integer[]) sqlClassIDs.getArray();
                   //UPDATE SESSION
-                  mainSession.updateTeacher(realName, login, role, classIDs);
+                  mainSession.updateTeacher(realName, login, role, classIDs, ID);
                   updateTopMenu();
                 } else {
                   Integer[] classIDs = new Integer[0];
                   
 
-                  mainSession.updateTeacher(realName, login, role, classIDs);
+                  mainSession.updateTeacher(realName, login, role, classIDs, ID);
                 }
                 loginSuccess(realName);
                 activeScreen = homeTeacherScreen;

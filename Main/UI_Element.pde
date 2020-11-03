@@ -219,7 +219,9 @@ class List extends UIElement {
 class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   Date dueDate;
   int testID;
-  Assignment(String getName, String getDescription, int getTestID) {
+  int assignmentID;
+  Assignment(int getAssignmentID, String getName, String getDescription, int getTestID) {
+    assignmentID = getAssignmentID;
     name = getName;
     description = getDescription;
     sizeY = 50;
@@ -251,6 +253,8 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       catch(Exception e) {
         e.printStackTrace();
       }
+    }else if(mainSession.role.equals("Teacher")){
+      println("SHOW RESULTS FOR TEST NAMED: ", name, " WITH ASSIGNMENTID: ",assignmentID);
     }
   }
   void drawElementInList(PGraphics window) {

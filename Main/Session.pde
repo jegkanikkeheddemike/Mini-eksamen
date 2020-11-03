@@ -27,11 +27,13 @@ class Session{
    userID = ID_;
   }
   
-  void updateTeacher(String userName_, String login_, String role_, Integer[] classIDs_){
+  void updateTeacher(String userName_, String login_, String role_, Integer[] classIDs_, int ID_){
    userName = userName_;
    login = login_;
    role = role_;
    classIDs = classIDs_;
+   userID = ID_;
+   currentClassID = classIDs[0];
   }
   
   void clear(){
