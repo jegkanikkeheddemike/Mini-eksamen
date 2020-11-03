@@ -57,7 +57,7 @@ void loginSuccess(String realName) {
     Statement st = db.createStatement();
     ResultSet rs = st.executeQuery("SELECT * FROM tests");
     while (rs.next()) {
-      assignmentList.elements.add(new Assignment(rs.getString("TestName"),rs.getString("testSubject"),rs.getInt("TestID")));
+      assignmentList.elements.add(new Assignment(rs.getString("TestName"), rs.getString("testSubject"), rs.getInt("TestID")));
     }
   } 
   catch (Exception e) {
@@ -86,7 +86,7 @@ void login() {
                 int studentID = rs.getInt("studentid");
 
                 //UPDATE SESSION
-                mainSession.updateStudent(realName, login, role, className,studentID);
+                mainSession.updateStudent(realName, login, role, className, studentID);
 
                 loginSuccess(realName);
                 activeScreen = homeStudentScreen;
@@ -115,8 +115,11 @@ void login() {
                   Integer[] classIDs = (Integer[]) sqlClassIDs.getArray();
                   //UPDATE SESSION
                   mainSession.updateTeacher(realName, login, role, classIDs);
+                  updateTopMenu();
                 } else {
                   Integer[] classIDs = new Integer[0];
+                  
+
                   mainSession.updateTeacher(realName, login, role, classIDs);
                 }
                 loginSuccess(realName);

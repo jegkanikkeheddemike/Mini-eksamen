@@ -72,6 +72,7 @@ void setupTopMenu() {
     }
   }
   );
+  /*
   topMenu.elements.add(new HoriList("Classes", "", 10, 160, 27, topMenu) {
     public void addElements() {
       if (mainSession.classIDs != null) {
@@ -93,6 +94,39 @@ void setupTopMenu() {
     }
   }
   );
+  */
   homeTeacherScreen.windows.add(topMenu);
   homeStudentScreen.windows.add(topMenu);
+}
+
+void updateTopMenu() {
+  topMenu.elements.remove("Classes");
+  topMenu.elements.add(new HoriList("Classes", "", 10, 160, 27, topMenu) {
+    public void addElements() {
+      if (mainSession.classIDs != null) {
+        try {
+          for (Integer ID : mainSession.classIDs) {
+            Statement st = db.createStatement();
+            ResultSet rs = st.executeQuery ("SELECT * FROM Classes WHERE ClassID = "+ID+";");
+            rs.next();
+            String className = rs.getString("ClassName");
+            elements.add(new ClassButton("CLASS", className, 0, 0, 60, 30, ID, topMenu));
+            rs.close();
+            st.close();
+          }
+        }
+        catch(Exception e) {
+          //e.printStackTrace();
+        }
+      }
+      elements.add(new Button("NEW CLASS","+", 0, 0, 30, 30, topMenu){
+      public void reactClickedOn(){
+        
+        
+        }
+      }
+      );
+    }
+  }
+  );
 }
