@@ -76,7 +76,6 @@ void setupTopMenu() {
       if (mainSession.classIDs != null) {
         try {
           for (Integer ID : mainSession.classIDs) {
-            println("hi");
             Statement st = db.createStatement();
             ResultSet rs = st.executeQuery ("SELECT * FROM Classes WHERE ClassID = "+ID+";");
             rs.next();
