@@ -221,7 +221,9 @@ class List extends UIElement {
 class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   Date dueDate;
   int testID;
-  Assignment(String getName, String getDescription, int getTestID) {
+  int assignmentID;
+  Assignment(int getAssignmentID, String getName, String getDescription, int getTestID) {
+    assignmentID = getAssignmentID;
     name = getName;
     description = getDescription;
     sizeY = 50;
@@ -254,6 +256,8 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       catch(Exception e) {
         e.printStackTrace();
       }
+    }else if(mainSession.role.equals("Teacher")){
+      println("SHOW RESULTS FOR TEST NAMED: ", name, " WITH ASSIGNMENTID: ",assignmentID);
     }
   }
   void drawElementInList(PGraphics window) {
@@ -434,7 +438,7 @@ class TextBox extends UIElement {
 
     if (isActive) {
       fill(255, 0, 0);
-      strokeWeight(2);
+      strokeWeight(4);
       float textBeforeCursor = textWidth(text.substring(0, cursorIndex));
       line(x + textBeforeCursor, owner.y + localY, x + textBeforeCursor, owner.y + localY + sizeY);
     }
@@ -513,6 +517,7 @@ class ClassButton extends Button {
   }
   void reactClickedOn() {
     mainSession.currentClassID = buttonClassID;
+    updateAssignments();
   }
 }
 
@@ -599,7 +604,6 @@ class Progressbar extends UIElement {
       rect(x, y, sizeX, sizeY);
       fill(0);
       rect(x, y, sizeValue*ETest.CQuestionIndex+1, sizeY);
-      println(sizeValue);
     }
   }
 }
