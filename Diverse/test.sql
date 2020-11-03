@@ -20,11 +20,11 @@ CREATE TABLE Classes(
 );
 
 CREATE TABLE Assignments (
-	AssignmentID SERIAL PRIMARY KEY,
-TeacherID INT NOT NULL,
-ClassID INT NOT NULL,
-TestID INT NOT NULL,
-DueDate TEXT NOT NULL
+   AssignmentID SERIAL PRIMARY KEY,
+   TeacherID INT NOT NULL,
+   ClassID INT NOT NULL,
+   TestID INT NOT NULL,
+   DueDate TEXT NOT NULL
 );
 
 

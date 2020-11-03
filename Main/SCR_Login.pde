@@ -53,15 +53,30 @@ void loginSuccess(String realName) {
   successWindow.show();
   clearLoginFields();
   topMenu.getElement("Username").description = realName;
-  try {
-    Statement st = db.createStatement();
-    ResultSet rs = st.executeQuery("SELECT * FROM tests");
-    while (rs.next()) {
-      assignmentList.elements.add(new Assignment(rs.getString("TestName"), rs.getString("testSubject"), rs.getInt("TestID")));
+  updateAssignments();
+}
+
+void updateAssignments(){
+      /*
+     AssignmentID SERIAL PRIMARY KEY,
+     TeacherID INT NOT NULL,
+     ClassID INT NOT NULL,
+     TestID INT NOT NULL,
+     DueDate TEXT NOT NULL
+    */
+  if(mainSession.role.equals("Student")){
+    try {
+      Statement st = db.createStatement();
+      //Give all the assignments that belong to the students class.
+      ResultSet rs = st.executeQuery("SELECT Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName as TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.ClassID = "+mainSession.studentClassID+");");
+      while (rs.next()) {
+        //HANDLE THE DATE BETTER?
+        assignmentList.elements.add(new Assignment(rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
+      }
+    } 
+    catch (Exception e) {
+      e.printStackTrace();
     }
-  } 
-  catch (Exception e) {
-    e.printStackTrace();
   }
 }
 
@@ -77,16 +92,16 @@ void login() {
         try {
           if (role.equals("Student")) {
             Statement st = db.createStatement();
-            ResultSet rs = st.executeQuery("SELECT Students.studentid AS Studentid, Students.StudentName AS StudentName, Classes.ClassName AS ClassName, Students.Password AS Password FROM Students, Classes WHERE (Students.Login = '"+login+"') AND (Classes.ClassID = Students.ClassID);");
+            ResultSet rs = st.executeQuery("SELECT Students.studentid AS Studentid, Students.StudentName AS StudentName, Classes.ClassName AS ClassName, Students.Password AS Password, Students.ClassID AS ClassID FROM Students, Classes WHERE (Students.Login = '"+login+"') AND (Classes.ClassID = Students.ClassID);");
             if (rs.next()) {
               String actualPassword = rs.getString("Password");
               if (password.equals(actualPassword)) {
                 String realName = rs.getString("StudentName");
                 String className = rs.getString("ClassName");
-                int studentID = rs.getInt("studentid");
-
+                int studentID = rs.getInt("StudentID");
+                int classID = rs.getInt("ClassID");
                 //UPDATE SESSION
-                mainSession.updateStudent(realName, login, role, className, studentID);
+                mainSession.updateStudent(realName, login, role, className, studentID, classID);
 
                 loginSuccess(realName);
                 activeScreen = homeStudentScreen;

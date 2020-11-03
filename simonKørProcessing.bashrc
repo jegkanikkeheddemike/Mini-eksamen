@@ -1,0 +1,1 @@
+processing-java --sketch="/Users/simon/Desktop/Skole/Teknikfag Digital Design/DB/Mini-eksamen/Main" --run

@@ -32,8 +32,24 @@ class Window {
     return null;
   }
 
-
   void stepWindow() {
+    if (keyTapped(9)){
+      for (int i = 0; i < elements.size(); i ++) {
+        UIElement e = elements.get(i);
+        if (e.isActive) {
+          e.isActive = false;
+          int nI = i+1;
+          if(nI == elements.size()) {
+            nI = 0;
+          }
+          UIElement n = elements.get(nI);
+          n.isActive = true;
+          break;
+        }
+      }
+    }
+
+
     for (UIElement element : elements) {
       element.step();
     }

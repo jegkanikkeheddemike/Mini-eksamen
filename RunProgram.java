@@ -1,6 +1,7 @@
 
 import java.io.IOException;
 //THORPATH = processing-java --sketch="C:\Users\Thor Skipper\OneDrive\Dokumenter\GitHub\Mini-eksamen\Main" --run
+//THORLAPTOP = processing-java --sketch="C:\GitHub\Mini-eksamen\Main" --run
 class Runprogram {
     public static void main(String[] args) {
         String myPath = System.getProperty("user.dir");

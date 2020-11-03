@@ -29,7 +29,7 @@ class UIElement {
     if (isActive) {
       stepActive();
     }
-    if (isActive && keyTapped(ENTER)) {
+    if (isActive && keyTapped(10)) {
       reactEnter();
     }
     stepAlways();
@@ -40,6 +40,13 @@ class UIElement {
     textSize(sizeY - 1);
     fill(0);
     text("NO TEXTURE", x, y + sizeY);
+  }
+  void drawElementInList(PGraphics window) {
+    window.fill(255, 150, 150);
+		window.rect(x, y, sizeX, sizeY);
+		window.textSize(sizeY - 1);
+		window.fill(0);
+		window.text("NO TEXTURE", x, y + sizeY);
   }
   boolean clickedOn() {
     if (mouseReleased) {
@@ -120,6 +127,9 @@ class Button extends UIElement {
       text(description, x + (sizeX / 2), y + (sizeY * 0.8));
     }
   }
+  void reactEnter() {
+    reactClickedOn();
+  }
 }
 
 
@@ -157,15 +167,16 @@ class ScreenButton extends UIElement {
 
 class List extends UIElement {
   PGraphics listRender;
-  int scrool = 0;
+  float scroll = 0;
   ArrayList<UIElement> elements = new ArrayList<UIElement>();
-  List(String getName, String getDescription, int getX, int getY, int getSizeX, Window getOwner) {
+  List(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, Window getOwner) {
     listRender = createGraphics(getSizeX, getOwner.sizeY - 20);
     name = getName;
     description = getDescription;
     localX = getX;
     localY = getY;
     sizeX = getSizeX;
+    sizeY = getSizeY;
     owner = getOwner;
     calcXY();
     addElements();
@@ -175,27 +186,36 @@ class List extends UIElement {
     for (UIElement element : elements) {
       element.step();
     }
+    if (mouseOn()) {
+
+      scroll += scrollAmount;
+    }
   }
 
   void drawElement() {
-
+    PGraphics windowRender = createGraphics(sizeX,sizeY-10);
     textSize(20);
     text(description, x, y);
-    int yy = 10 + scrool;
+    int yy = 10 + (int) scroll;
+    windowRender.beginDraw();
     for (UIElement i : elements) {
       i.x = x + 10;
       i.y = y + yy;
+      i.localX = 10;
+      i.localY = yy;
       i.sizeX = sizeX - 20;
-      i.drawElement();
+      i.drawElementInList(windowRender);
       yy += i.sizeY + 10;
     }
+    windowRender.endDraw();
+    image(windowRender, x, y+10);
   }
   void addElements() {
   }
 }
 
 
-class Assignment extends UIElement {
+class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   Date dueDate;
   int testID;
   Assignment(String getName, String getDescription, int getTestID) {
@@ -205,42 +225,44 @@ class Assignment extends UIElement {
     testID = getTestID;
   }
   void reactClickedOn() {
-    try {
-      Statement st = db.createStatement();
-      ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
-      ArrayList<Question> readyQuestions = new ArrayList<Question>();
-      while (rs.next()) {
-        String Question = rs.getString("question");
-        int RAnsIn = rs.getInt("rightanswerindex");
-        Array AnsArray = rs.getArray("possibleanswers");  //Arrayen kan ikke læses med det samme. 
-        ResultSet ansRS = AnsArray.getResultSet(); //Den skal omdannes til et Reslustset som kan læses og omdannes til en ArrayList
-        ArrayList<String> Answers = new ArrayList<String>();
-        int QID = rs.getInt("questionid");
-        while (ansRS.next()) {
-          Answers.add(ansRS.getString(2)); //GetString 1 er bare Indexet i resultsettet. Mens 2 er Værdien
+    if(mainSession.role.equals("Student")){
+      try {
+        Statement st = db.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
+        ArrayList<Question> readyQuestions = new ArrayList<Question>();
+        while (rs.next()) {
+          String Question = rs.getString("question");
+          int RAnsIn = rs.getInt("rightanswerindex");
+          Array AnsArray = rs.getArray("possibleanswers");  //Arrayen kan ikke læses med det samme. 
+          ResultSet ansRS = AnsArray.getResultSet(); //Den skal omdannes til et Reslustset som kan læses og omdannes til en ArrayList
+          ArrayList<String> Answers = new ArrayList<String>();
+          int QID = rs.getInt("questionid");
+          while (ansRS.next()) {
+            Answers.add(ansRS.getString(2)); //GetString 1 er bare Indexet i resultsettet. Mens 2 er Værdien
+          }
+          readyQuestions.add(new Question(testID, Question, Answers, RAnsIn, QID));
         }
-        readyQuestions.add(new Question(testID, Question, Answers, RAnsIn, QID));
+        ETest.CQuestionIndex = 0;
+        ETest.Questions.clear();
+        ETest.Questions.addAll(readyQuestions);
+        ETest.testID = testID;
+      } 
+      catch(Exception e) {
+        e.printStackTrace();
       }
-      ETest.CQuestionIndex = 0;
-      ETest.Questions.clear();
-      ETest.Questions.addAll(readyQuestions);
-      ETest.testID = testID;
-    } 
-    catch(Exception e) {
-      e.printStackTrace();
     }
   }
-  void drawElement() {
-    fill(255);
+  void drawElementInList(PGraphics window) {
+    window.fill(255);
     if (mouseOn()) {
-      fill(200, 200, 255);
+      window.fill(200,200,255);
     }
-    rect(x, y, sizeX, 50);
-    fill(0);
-    textSize(20);
-    text(name + " ID : " + testID, x, y + 20);
-    textSize(15);
-    text(description, x, y + 40);
+    window.rect(localX, localY, sizeX, 50);
+    window.fill(0);
+    window.textSize(20);
+    window.text(name + " ID : " + testID, localX, localY + 20);
+    window.textSize(15);
+    window.text(description, localX, localY + 40);
   }
   void updateProgress() {
   }
