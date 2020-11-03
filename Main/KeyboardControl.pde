@@ -5,16 +5,16 @@ boolean mouseReleased = false;
 float scrollAmount = 0;
 void keyPressed() {
   if (!downKeys.contains(key) &&  !ignoredChar.contains(key)) {
-    int k = key;
-    downKeys.add((Integer) k);
-    tappedKeys.add((Integer) k);
+    int k = (int) key;
+    downKeys.add(k);
+    tappedKeys.add(k);
   }
 }
 
 void keyReleased() {
   if (downKeys.contains(key)) {
-    int k = key;
-    downKeys.remove(downKeys.indexOf((Integer) k));
+    int k = (int) key;
+    downKeys.remove(downKeys.indexOf(k));
   }
 }
 
@@ -28,8 +28,20 @@ boolean keyDown(char input) {
   }
   return false;
 }
+boolean keyDown(int input) {
+  if (downKeys.contains(input)) {
+    return true;
+  }
+  return false;
+}
 
 boolean keyTapped(char input) {
+  if (tappedKeys.contains(input)) {
+    return true;
+  }
+  return false;
+}
+boolean keyTapped(int input) {
   if (tappedKeys.contains(input)) {
     return true;
   }
@@ -51,10 +63,8 @@ void cleanKeyboard() {
 void defineIgnoredChar(){
   int t = TAB;
   int d = DELETE;
-  int e = ENTER;
   int s = SHIFT;
   ignoredChar.add((Integer) t);
   ignoredChar.add((Integer) d);
-  ignoredChar.add((Integer) e);
   ignoredChar.add((Integer) s);
 }

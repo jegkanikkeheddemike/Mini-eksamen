@@ -29,7 +29,7 @@ class UIElement {
     if (isActive) {
       stepActive();
     }
-    if (isActive && keyTapped(ENTER)) {
+    if (isActive && keyTapped(10)) {
       reactEnter();
     }
     stepAlways();
