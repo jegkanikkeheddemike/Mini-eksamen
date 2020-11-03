@@ -1,5 +1,3 @@
-
-
 Session mainSession = new Session();
 
 class Session{
@@ -7,7 +5,7 @@ class Session{
   String login;
   String role;
   int userID;
-  //int studentClassID;
+  int studentClassID;
   String studentClass;
   Integer[] classIDs;
   //String[] classNames;
@@ -20,11 +18,12 @@ class Session{
     classIDs = new Integer[10];
   }
   
-  void updateStudent(String userName_, String login_, String role_, String class_,int ID_){
+  void updateStudent(String userName_, String login_, String role_, String class_, int ID_, int studentClassID_){
    userName = userName_;
    login = login_;
    role = role_;
    studentClass = class_;
+   studentClassID = studentClassID_;
    userID = ID_;
   }
   

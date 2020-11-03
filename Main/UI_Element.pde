@@ -223,30 +223,31 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     testID = getTestID;
   }
   void reactClickedOn() {
-    try {
-      Statement st = db.createStatement();
-      ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
-      ArrayList<Question> readyQuestions = new ArrayList<Question>();
-      while (rs.next()) {
-        String Question = rs.getString("question");
-        int RAnsIn = rs.getInt("rightanswerindex");
-        Array AnsArray = rs.getArray("possibleanswers");  //Arrayen kan ikke læses med det samme. 
-        ResultSet ansRS = AnsArray.getResultSet(); //Den skal omdannes til et Reslustset som kan læses og omdannes til en ArrayList
-        ArrayList<String> Answers = new ArrayList<String>();
-        int QID = rs.getInt("questionid");
-        
-        while (ansRS.next()) {
-          Answers.add(ansRS.getString(2)); //GetString 1 er bare Indexet i resultsettet. Mens 2 er Værdien
+    if(mainSession.role.equals("Student")){
+      try {
+        Statement st = db.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
+        ArrayList<Question> readyQuestions = new ArrayList<Question>();
+        while (rs.next()) {
+          String Question = rs.getString("question");
+          int RAnsIn = rs.getInt("rightanswerindex");
+          Array AnsArray = rs.getArray("possibleanswers");  //Arrayen kan ikke læses med det samme. 
+          ResultSet ansRS = AnsArray.getResultSet(); //Den skal omdannes til et Reslustset som kan læses og omdannes til en ArrayList
+          ArrayList<String> Answers = new ArrayList<String>();
+          int QID = rs.getInt("questionid");
+          while (ansRS.next()) {
+            Answers.add(ansRS.getString(2)); //GetString 1 er bare Indexet i resultsettet. Mens 2 er Værdien
+          }
+          readyQuestions.add(new Question(testID, Question, Answers, RAnsIn, QID));
         }
-        readyQuestions.add(new Question(testID, Question, Answers, RAnsIn, QID));
+        ETest.CQuestionIndex = 0;
+        ETest.Questions.clear();
+        ETest.Questions.addAll(readyQuestions);
+        ETest.testID = testID;
+      } 
+      catch(Exception e) {
+        e.printStackTrace();
       }
-      ETest.CQuestionIndex = 0;
-      ETest.Questions.clear();
-      ETest.Questions.addAll(readyQuestions);
-      ETest.testID = testID;
-    } 
-    catch(Exception e) {
-      e.printStackTrace();
     }
   }
   void drawElementInList(PGraphics window) {
