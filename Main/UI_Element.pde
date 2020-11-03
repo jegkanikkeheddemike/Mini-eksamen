@@ -118,7 +118,7 @@ class Button extends UIElement {
 	if (isVisible) {
 		textAlign(CENTER);
 		fill(255);
-    if (mouseOn()) {
+    if (mouseOn() || isActive) {
       fill(200,200,255);
     }
 		textSize(int(sizeY * 0.8));
@@ -127,6 +127,9 @@ class Button extends UIElement {
 		fill(0);
 		text(description, x + (sizeX / 2), y + (sizeY * 0.8));
   	}
+  }
+  void reactEnter() {
+    reactClickedOn();
   }
 }
 

@@ -63,8 +63,6 @@ void cleanKeyboard() {
 void defineIgnoredChar(){
   int t = TAB;
   int d = DELETE;
-  int s = SHIFT;
   ignoredChar.add((Integer) t);
   ignoredChar.add((Integer) d);
-  ignoredChar.add((Integer) s);
 }
