@@ -35,11 +35,11 @@ class UIElement {
     stepAlways();
   }
   void drawElement() {
-		fill(255, 150, 150);
-		rect(x, y, sizeX, sizeY);
-		textSize(sizeY - 1);
-		fill(0);
-		text("NO TEXTURE", x, y + sizeY);
+    fill(255, 150, 150);
+    rect(x, y, sizeX, sizeY);
+    textSize(sizeY - 1);
+    fill(0);
+    text("NO TEXTURE", x, y + sizeY);
   }
   boolean clickedOn() {
     if (mouseReleased) {
@@ -65,11 +65,11 @@ class UIElement {
   }
   boolean mouseOn() {
     if (within(x, mouseX, x + sizeX)) {
-        if (within(y, mouseY, y + sizeY)) {
-          return true;
-        }
+      if (within(y, mouseY, y + sizeY)) {
+        return true;
       }
-      return false;
+    }
+    return false;
   }
   void reactEnter() {
   }
@@ -108,17 +108,17 @@ class Button extends UIElement {
     calcXY();
   }
   void drawElement() {
-	if (isVisible) {
-		textAlign(CENTER);
-		fill(255);
-    if (mouseOn()) {
-      fill(200,200,255);
+    if (isVisible) {
+      textAlign(CENTER);
+      fill(255);
+      if (mouseOn()) {
+        fill(200, 200, 255);
+      }
+      textSize(int(sizeY * 0.8));
+      rect(x, y, sizeX, sizeY);
+      fill(0);
+      text(description, x + (sizeX / 2), y + (sizeY * 0.8));
     }
-		textSize(int(sizeY * 0.8));
-		rect(x, y, sizeX, sizeY);
-		fill(0);
-		text(description, x + (sizeX / 2), y + (sizeY * 0.8));
-  	}
   }
 }
 
@@ -140,7 +140,7 @@ class ScreenButton extends UIElement {
     textAlign(CENTER);
     fill(255);
     if (mouseOn()) {
-      fill(200,200,255);
+      fill(200, 200, 255);
     }
     textSize(int(sizeY * 0.8));
     rect(x, y, sizeX, sizeY);
@@ -233,7 +233,7 @@ class Assignment extends UIElement {
   void drawElement() {
     fill(255);
     if (mouseOn()) {
-      fill(200,200,255);
+      fill(200, 200, 255);
     }
     rect(x, y, sizeX, 50);
     fill(0);
@@ -241,6 +241,8 @@ class Assignment extends UIElement {
     text(name + " ID : " + testID, x, y + 20);
     textSize(15);
     text(description, x, y + 40);
+  }
+  void updateProgress() {
   }
 }
 
@@ -471,7 +473,7 @@ class ClassButton extends Button {
     textAlign(CENTER);
     fill(255);
     if (mouseOn()) {
-      fill(200,200,255);
+      fill(200, 200, 255);
     }
     textSize(int(sizeY * 0.8));
     rect(x, y, sizeX, sizeY);
@@ -540,5 +542,30 @@ class Question extends UIElement {
     text(question, 100, y);
     textSize(25);
     answers.drawElement();
+  }
+}
+
+class Progressbar extends UIElement {
+  float sizeValue;
+  Progressbar(String getName, int getX, int getY, int getSizeX, int getSizeY, Window getOwner) {
+    name = getName;
+    localX = getX;
+    localY = getY;
+    sizeX = getSizeX;
+    sizeY = getSizeY;
+    owner = getOwner;
+    calcXY();
+  }
+  void drawElement() {
+    if (ETest.Questions.size() != 0) {
+      sizeValue = sizeX/(ETest.Questions.size());
+    }
+    if (isVisible) {
+      fill(255);
+      rect(x, y, sizeX, sizeY);
+      fill(0);
+      rect(x, y, sizeValue*ETest.CQuestionIndex+1, sizeY);
+      println(sizeValue);
+    }
   }
 }

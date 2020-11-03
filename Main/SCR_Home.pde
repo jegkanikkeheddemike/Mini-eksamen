@@ -15,6 +15,20 @@ void setupHomeStudentScreen() {
   takeTest = new Window(50, 300, width-550, height-400, "takeTestWindow");
   ETest = new ElevTest("ElevTest", "Her tager du dine tests");
   takeTest.elements.add(ETest);
+  takeTest.elements.add(new Progressbar("PROGRESSBAR",width-800, height-830, 220, 40,takeTest){
+  public void stepAlways() {
+      if (ETest.Questions.size()-1 == ETest.CQuestionIndex) {
+        description = "Finish";
+        isVisible = true;
+      } else if (ETest.Questions.size() == 0) {
+        isVisible = false;
+      } else {
+        description = "Next";
+        isVisible = true;
+      }
+    }
+  }
+  );
   takeTest.elements.add(new Button("NQButton", "Next", width-800, height-530, 220, 100, takeTest) {
     public void reactClickedOn() {
       if (ETest.Questions.size() > ETest.CQuestionIndex) {
@@ -38,6 +52,7 @@ void setupHomeStudentScreen() {
         } else {
           ETest.Questions.clear();
         }
+        
       }
     }
     public void stepAlways() {
@@ -54,6 +69,6 @@ void setupHomeStudentScreen() {
     }
   }
   );
-
+  
   homeStudentScreen.windows.add(takeTest);
 }
