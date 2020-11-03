@@ -81,7 +81,10 @@ void updateAssignments(){
     try {
       Statement st = db.createStatement();
       //Give all the assignments that belong to the students class.
-      ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.TeacherID = "+mainSession.userID+") AND (Assigments.ClassID = "+mainSession.currentClassID+");");
+      //////////////////////
+      //Virker ikke.
+      ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.TeacherID = "+mainSession.userID+") AND (Assignments.ClassID = "+mainSession.currentClassID+");");
+      //////////////////////
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
         assignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));

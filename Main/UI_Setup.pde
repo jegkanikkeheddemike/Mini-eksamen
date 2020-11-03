@@ -122,7 +122,6 @@ void updateTopMenu() {
       elements.add(new Button("NEW CLASS","+", 0, 0, 30, 30, topMenu){
       public void reactClickedOn(){
         
-        
         }
       }
       );

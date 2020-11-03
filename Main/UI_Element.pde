@@ -508,6 +508,7 @@ class ClassButton extends Button {
   }
   void reactClickedOn() {
     mainSession.currentClassID = buttonClassID;
+    updateAssignments();
   }
 }
 
