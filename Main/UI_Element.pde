@@ -5,7 +5,7 @@ boolean within(float low, float middle, float high) {
 class UIElement {
   String name;
   String description;
-
+  String type;
   int localX;
   int localY;
   int sizeX;
@@ -113,6 +113,7 @@ class Button extends UIElement {
     sizeY = getSizeY;
     owner = getOwner;
     calcXY();
+    type = "Button";
   }
   void drawElement() {
     if (isVisible) {
@@ -145,6 +146,7 @@ class ScreenButton extends UIElement {
     owner = getOwner;
     location = getLocation;
     calcXY();
+    type = "ScreenButton";
   }
   void drawElement() {
     textAlign(CENTER);
@@ -180,6 +182,7 @@ class List extends UIElement {
     owner = getOwner;
     calcXY();
     addElements();
+    type = "List";
   }
 
   void stepAlways() {
@@ -223,6 +226,7 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     description = getDescription;
     sizeY = 50;
     testID = getTestID;
+    type = "Assignment";
   }
   void reactClickedOn() {
     if(mainSession.role.equals("Student")){
@@ -283,6 +287,7 @@ class HoriList extends UIElement {
     owner = getOwner;
     calcXY();
     addElements();
+    type = "HoriList";
   }
   void stepAlways() {
     for (UIElement element : elements) {
@@ -316,6 +321,7 @@ class MultiChoice extends UIElement {
     localY = getY;
     owner = getOwner;
     calcXY();
+    type = "MultiChoice";
   }
 
   void drawElement() {
@@ -382,6 +388,7 @@ class TextBox extends UIElement {
     sizeY = getSizeY;
     owner = getOwner;
     calcXY();
+    type = "TextBox";
   }
   void stepActive() {
 
@@ -457,6 +464,7 @@ class TextDisplay extends UIElement {
     textMode = getTextMode;
     textColor = getTextColor;
     calcXY();
+    type = "TextDisplay";
   }
   TextDisplay(String getName, String getDescription, int getX, int getY, int getSize, Window getOwner, int getTextMode) {
     name = getName;
@@ -490,6 +498,7 @@ class ClassButton extends Button {
   ClassButton(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, int ClassID, Window getOwner) {
     super(getName, getDescription, getX, getY, getSizeX, getSizeY, getOwner);
     buttonClassID = ClassID;
+    type = "ClassButton";
   }
   void drawElement() {
     textAlign(CENTER);
@@ -516,6 +525,7 @@ class ElevTest extends UIElement {
     name = getName;
     description = getDescription;
     Questions = getQuestions;
+    type = "ElevTest";
   }
   ElevTest(String getName, String getDescription) {
     name = getName;
@@ -554,6 +564,7 @@ class Question extends UIElement {
     for (String A : getAnswers) {
       answers.Choices.add(new Choice(A));
     }
+    type = "Question";
   }
   void stepAlways() {
     answers.step();
@@ -577,6 +588,7 @@ class Progressbar extends UIElement {
     sizeY = getSizeY;
     owner = getOwner;
     calcXY();
+    type = "Progressbar";
   }
   void drawElement() {
     if (ETest.Questions.size() != 0) {

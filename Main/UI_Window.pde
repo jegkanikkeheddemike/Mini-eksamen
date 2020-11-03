@@ -1,6 +1,7 @@
 class Window {
   String name;
   String description;
+
   int x;
   int y;
   int sizeX;
@@ -14,6 +15,7 @@ class Window {
 
   ArrayList<UIElement> elements = new ArrayList<UIElement>();
   ArrayList<UIElement> removeList = new ArrayList<UIElement>();
+  ArrayList<String> interacterable = new ArrayList<String>();
 
   Window(int getX, int getY, int getSizeX, int getSizeY, String getName) {
     x = getX;
@@ -21,6 +23,12 @@ class Window {
     sizeX = getSizeX;
     sizeY = getSizeY;
     name = getName;
+    interacterable.add("TextBox");
+    interacterable.add("Button");
+    interacterable.add("ScreenButton");
+    //interacterable.add("MultiChoice");
+
+    //["TextBox","Button","ScreenButton","MultiChoice"];
   }
 
   UIElement getElement(String elementName) {
@@ -33,17 +41,26 @@ class Window {
   }
 
   void stepWindow() {
-    if (keyTapped(9)){
+    if (keyTapped(9)) {
       for (int i = 0; i < elements.size(); i ++) {
         UIElement e = elements.get(i);
         if (e.isActive) {
+          println("PRE", e.type);
           e.isActive = false;
           int nI = i+1;
-          if(nI == elements.size()) {
+          if (nI == elements.size()) {
             nI = 0;
           }
           UIElement n = elements.get(nI);
+          while (!interacterable.contains(n.type)) {
+            nI++;
+            if (nI == elements.size()) {
+              nI = 0;
+            }
+            n = elements.get(nI);
+          }
           n.isActive = true;
+          println("POST", n.type);
           break;
         }
       }
@@ -88,7 +105,7 @@ class TimedWindow extends Window {
     time = millis();
     show = true;
   }
-  
+
   void stepWindow() {
     if (show) {  
       if (millis() > time + timeShown) {
@@ -100,7 +117,7 @@ class TimedWindow extends Window {
   }
 
   void drawWindow() {
-    if(show){
+    if (show) {
       super.drawWindow();
     }
   }
