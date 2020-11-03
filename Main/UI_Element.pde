@@ -427,7 +427,7 @@ class TextBox extends UIElement {
 
     if (isActive) {
       fill(255, 0, 0);
-      strokeWeight(2);
+      strokeWeight(4);
       float textBeforeCursor = textWidth(text.substring(0, cursorIndex));
       line(x + textBeforeCursor, owner.y + localY, x + textBeforeCursor, owner.y + localY + sizeY);
     }
@@ -587,7 +587,6 @@ class Progressbar extends UIElement {
       rect(x, y, sizeX, sizeY);
       fill(0);
       rect(x, y, sizeValue*ETest.CQuestionIndex+1, sizeY);
-      println(sizeValue);
     }
   }
 }
