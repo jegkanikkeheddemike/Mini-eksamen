@@ -1,4 +1,4 @@
-import java.io.File;
+
 import java.io.IOException;
 //THORPATH = processing-java --sketch="C:\Users\Thor Skipper\OneDrive\Dokumenter\GitHub\Mini-eksamen\Main" --run
 class Runprogram {
