@@ -35,11 +35,11 @@ class UIElement {
     stepAlways();
   }
   void drawElement() {
-		fill(255, 150, 150);
-		rect(x, y, sizeX, sizeY);
-		textSize(sizeY - 1);
-		fill(0);
-		text("NO TEXTURE", x, y + sizeY);
+    fill(255, 150, 150);
+    rect(x, y, sizeX, sizeY);
+    textSize(sizeY - 1);
+    fill(0);
+    text("NO TEXTURE", x, y + sizeY);
   }
   void drawElementInList(PGraphics window) {
     window.fill(255, 150, 150);
@@ -72,11 +72,11 @@ class UIElement {
   }
   boolean mouseOn() {
     if (within(x, mouseX, x + sizeX)) {
-        if (within(y, mouseY, y + sizeY)) {
-          return true;
-        }
+      if (within(y, mouseY, y + sizeY)) {
+        return true;
       }
-      return false;
+    }
+    return false;
   }
   void reactEnter() {
   }
@@ -115,18 +115,17 @@ class Button extends UIElement {
     calcXY();
   }
   void drawElement() {
-	if (isVisible) {
-		textAlign(CENTER);
-		fill(255);
-    if (mouseOn() || isActive) {
-      fill(200,200,255);
+    if (isVisible) {
+      textAlign(CENTER);
+      fill(255);
+      if (mouseOn() || isActive) {
+        fill(200, 200, 255);
+      }
+      textSize(int(sizeY * 0.8));
+      rect(x, y, sizeX, sizeY);
+      fill(0);
+      text(description, x + (sizeX / 2), y + (sizeY * 0.8));
     }
-		textSize(int(sizeY * 0.8));
-    strokeWeight(3);
-		rect(x, y, sizeX, sizeY);
-		fill(0);
-		text(description, x + (sizeX / 2), y + (sizeY * 0.8));
-  	}
   }
   void reactEnter() {
     reactClickedOn();
@@ -151,7 +150,7 @@ class ScreenButton extends UIElement {
     textAlign(CENTER);
     fill(255);
     if (mouseOn()) {
-      fill(200,200,255);
+      fill(200, 200, 255);
     }
     textSize(int(sizeY * 0.8));
     rect(x, y, sizeX, sizeY);
@@ -268,6 +267,8 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     window.text(name + " ID : " + testID, localX, localY + 20);
     window.textSize(15);
     window.text(description, localX, localY + 40);
+  }
+  void updateProgress() {
   }
 }
 
@@ -430,7 +431,7 @@ class TextBox extends UIElement {
 
     if (isActive) {
       fill(255, 0, 0);
-      strokeWeight(2);
+      strokeWeight(4);
       float textBeforeCursor = textWidth(text.substring(0, cursorIndex));
       line(x + textBeforeCursor, owner.y + localY, x + textBeforeCursor, owner.y + localY + sizeY);
     }
@@ -498,7 +499,7 @@ class ClassButton extends Button {
     textAlign(CENTER);
     fill(255);
     if (mouseOn()) {
-      fill(200,200,255);
+      fill(200, 200, 255);
     }
     textSize(int(sizeY * 0.8));
     rect(x, y, sizeX, sizeY);
@@ -567,5 +568,29 @@ class Question extends UIElement {
     text(question, 100, y);
     textSize(25);
     answers.drawElement();
+  }
+}
+
+class Progressbar extends UIElement {
+  float sizeValue;
+  Progressbar(String getName, int getX, int getY, int getSizeX, int getSizeY, Window getOwner) {
+    name = getName;
+    localX = getX;
+    localY = getY;
+    sizeX = getSizeX;
+    sizeY = getSizeY;
+    owner = getOwner;
+    calcXY();
+  }
+  void drawElement() {
+    if (ETest.Questions.size() != 0) {
+      sizeValue = sizeX/(ETest.Questions.size());
+    }
+    if (isVisible) {
+      fill(255);
+      rect(x, y, sizeX, sizeY);
+      fill(0);
+      rect(x, y, sizeValue*ETest.CQuestionIndex+1, sizeY);
+    }
   }
 }

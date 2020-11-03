@@ -18,7 +18,7 @@ void setupLoginScreen() {
     }
   }
   );
-
+  loginWindow.getElement("LoginName").isActive = true;
   loginWindow.elements.add(new TextBox("Password", "Password", 20, 300, 360, 40, loginWindow) {
     public void reactEnter() {
       owner.getElement("LoginButton").reactClickedOn();
