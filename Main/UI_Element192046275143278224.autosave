@@ -41,13 +41,6 @@ class UIElement {
 		fill(0);
 		text("NO TEXTURE", x, y + sizeY);
   }
-  void drawElementInList(PGraphics window) {
-    window.fill(255, 150, 150);
-		window.rect(x, y, sizeX, sizeY);
-		window.textSize(sizeY - 1);
-		window.fill(0);
-		window.text("NO TEXTURE", x, y + sizeY);
-  }
   boolean clickedOn() {
     if (mouseReleased) {
       if (within(x, mouseX, x + sizeX)) {
@@ -165,7 +158,7 @@ class ScreenButton extends UIElement {
 
 class List extends UIElement {
   PGraphics listRender;
-  float scroll = 0;
+  int scrool = 0;
   ArrayList<UIElement> elements = new ArrayList<UIElement>();
   List(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, Window getOwner) {
     listRender = createGraphics(getSizeX, getOwner.sizeY - 20);
@@ -184,29 +177,20 @@ class List extends UIElement {
     for (UIElement element : elements) {
       element.step();
     }
-    if (mouseOn()) {
-
-      scroll += scrollAmount;
-    }
   }
 
   void drawElement() {
-    PGraphics windowRender = createGraphics(sizeX,sizeY-10);
+    PGraphic windowRender = createGraphics(sizeX,sizeY);
     textSize(20);
-    text(description, x, y);
-    int yy = 10 + (int) scroll;
-    windowRender.beginDraw();
+    windowRender.text(description, x, y);
+    int yy = 10 + scrool;
     for (UIElement i : elements) {
       i.x = x + 10;
       i.y = y + yy;
-      i.localX = 10;
-      i.localY = yy;
       i.sizeX = sizeX - 20;
-      i.drawElementInList(windowRender);
+      i.drawElement();
       yy += i.sizeY + 10;
     }
-    windowRender.endDraw();
-    image(windowRender, x, y+10);
   }
   void addElements() {
   }
@@ -249,17 +233,17 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       e.printStackTrace();
     }
   }
-  void drawElementInList(PGraphics window) {
-    window.fill(255);
+  void drawElement(PGraphic window) {
+    fill(255);
     if (mouseOn()) {
-      window.fill(200,200,255);
+      fill(200,200,255);
     }
-    window.rect(localX, localY, sizeX, 50);
-    window.fill(0);
-    window.textSize(20);
-    window.text(name + " ID : " + testID, localX, localY + 20);
-    window.textSize(15);
-    window.text(description, localX, localY + 40);
+    rect(x, y, sizeX, 50);
+    fill(0);
+    textSize(20);
+    text(name + " ID : " + testID, x, y + 20);
+    textSize(15);
+    text(description, x, y + 40);
   }
 }
 

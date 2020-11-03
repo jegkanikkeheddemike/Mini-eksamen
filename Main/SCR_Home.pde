@@ -1,10 +1,12 @@
-void setupHomeTeacherScreen() {
+void setupAssignmentsWindow(){
   //HOMESCREEN
   assignments = new Window(width-450, 300, 400, height-400, "AssignmentsWindow");
   assignments.elements.add(new TextDisplay("AssignMentHeader", "Assignments", 20, 40, 40, assignments));
-  assignmentList = new List("Assignments", "", 10, 50, 380, assignments);
-
+  assignmentList = new List("Assignments", "", 10, 50, 380,height-(400+50), assignments);
   assignments.elements.add(assignmentList);
+}
+
+void setupHomeTeacherScreen() {
   homeTeacherScreen.windows.add(assignments);
 }
 

@@ -28,6 +28,7 @@ ElevTest ETest;
 void UI_Setup() {
   setupLoginScreen();
   setupCreateUserScreen();
+  setupAssignmentsWindow();
   setupHomeTeacherScreen();
   setupHomeStudentScreen();
   setupUniversalWindows();
