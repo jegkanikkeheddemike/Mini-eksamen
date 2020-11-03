@@ -71,6 +71,7 @@ void setupTopMenu() {
     }
   }
   );
+  /*
   topMenu.elements.add(new HoriList("Classes", "", 10, 160, 27, topMenu) {
     public void addElements() {
       if (mainSession.classIDs != null) {
@@ -92,6 +93,7 @@ void setupTopMenu() {
     }
   }
   );
+  */
   homeTeacherScreen.windows.add(topMenu);
   homeStudentScreen.windows.add(topMenu);
 }
@@ -116,6 +118,13 @@ void updateTopMenu() {
           //e.printStackTrace();
         }
       }
+      elements.add(new Button("NEW CLASS","+", 0, 0, 30, 30, topMenu){
+      public void reactClickedOn(){
+        
+        
+        }
+      }
+      );
     }
   }
   );
