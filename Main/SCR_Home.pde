@@ -21,6 +21,7 @@ void setupTeacherTestsWindow(){
   Button newTestButton = new Button("NewTest", "+", 400/2-40/2, height-400-60, 40, 40, teacherTests){//width-450 + 400/2, height-400 - 30, 30, 30, teacherAssignments){
     public void reactClickedOn(){
       println("HERE WE SHOULD SWITCH TO THE ADD A NEW TESTSTSTSTS SCREEN");
+      activeScreen = newTestScreen;
     }
   };
   teacherTests.elements.add(newTestButton);

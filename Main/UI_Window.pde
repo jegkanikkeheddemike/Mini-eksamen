@@ -13,6 +13,8 @@ class Window {
   color outlineColor = color(255);
   int outlineWeight = 2;
 
+  boolean isActive = true;
+
   ArrayList<UIElement> elements = new ArrayList<UIElement>();
   ArrayList<UIElement> removeList = new ArrayList<UIElement>();
   
@@ -52,62 +54,64 @@ class Window {
     }
   }
   void stepWindow() {
-    if (keyTapped(9)) { //SWITCHING BETWEEN ACTIVE WINDOWS USING SHIFT.
-    int direc = 1;
-    if (keyDown(-1)) {
-      direc = -1;
-    }
-      for (int i = 0; i < elements.size(); i ++) {
-        UIElement e = elements.get(i);
-        if (e.isActive) {
-          e.isActive = false;
-          int nI = i+direc;
-          if (nI == elements.size()) {
-              nI = 0;
-            } else if (nI < 0) {
-              nI = elements.size()-1;
-          }
-          println(nI);
-          UIElement n = elements.get(nI);
-          while (!interacterable.contains(n.type)) {
-            nI+=direc;
+    if(isActive){
+      if (keyTapped(9)) { //SWITCHING BETWEEN ACTIVE WINDOWS USING SHIFT.
+      int direc = 1;
+      if (keyDown(-1)) {
+        direc = -1;
+      }
+        for (int i = 0; i < elements.size(); i ++) {
+          UIElement e = elements.get(i);
+          if (e.isActive) {
+            e.isActive = false;
+            int nI = i+direc;
             if (nI == elements.size()) {
-              nI = 0;
-            } else if (nI == 0) {
-             nI = elements.size()-1;
+                nI = 0;
+              } else if (nI < 0) {
+                nI = elements.size()-1;
             }
-            n = elements.get(nI);
+            println(nI);
+            UIElement n = elements.get(nI);
+            while (!interacterable.contains(n.type)) {
+              nI+=direc;
+              if (nI == elements.size()) {
+                nI = 0;
+              } else if (nI == 0) {
+              nI = elements.size()-1;
+              }
+              n = elements.get(nI);
+            }
+            n.isActive = true;
+            
+            break;
           }
-          n.isActive = true;
-          
-          break;
         }
       }
-    }
-
-
-    for (int i = 0; i < elements.size();i ++) {
-      UIElement element = elements.get(i);
-      element.step();
-    }
-    for (UIElement element : removeList) {
-      elements.remove(element);
+      for (int i = 0; i < elements.size();i ++) {
+        UIElement element = elements.get(i);
+        element.step();
+      }
+      for (UIElement element : removeList) {
+        elements.remove(element);
+      }
     }
   }
   void drawWindow() {
-    if (hasBackdrop) {
-      fill(backdropColor);
-      if (hasOutline) {
-        stroke(outlineColor);
-        strokeWeight(outlineWeight);
-      } else {
-        noStroke();
-      }
+    if(isActive){
+      if (hasBackdrop) {
+        fill(backdropColor);
+        if (hasOutline) {
+          stroke(outlineColor);
+          strokeWeight(outlineWeight);
+        } else {
+          noStroke();
+        }
 
-      rect(x, y, sizeX, sizeY);
-    }
-    for (UIElement element : elements) {
-      element.drawElement();
+        rect(x, y, sizeX, sizeY);
+      }
+      for (UIElement element : elements) {
+        element.drawElement();
+      }
     }
   }
 }

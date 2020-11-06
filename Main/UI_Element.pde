@@ -501,7 +501,7 @@ class TextBox extends UIElement {
       } else if (tappedKey == -3 && cursorIndex < text.length()) {  //RIGHT ARROW KEY
         cursorIndex += 1;
         //}
-      } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122)) {
+      } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122) || (tappedKey == 32)) {
         text = text.substring(0, cursorIndex) + char(tappedKey) + text.substring(cursorIndex);
         cursorIndex += 1;
       }
@@ -646,7 +646,6 @@ class ElevTest extends UIElement {
     }
   }
 }
-
 
 class Question extends UIElement {
   int testID;
