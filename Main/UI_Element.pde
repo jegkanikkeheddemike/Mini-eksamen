@@ -199,7 +199,7 @@ class List extends UIElement {
     PGraphics windowRender = createGraphics(sizeX,sizeY-10);
     textSize(20);
     text(description, x, y);
-    int yy = 10 + (int) scroll;
+    int yy = 10+(int) scroll;
     windowRender.beginDraw();
     for (UIElement i : elements) {
       i.x = x + 10;
@@ -211,7 +211,7 @@ class List extends UIElement {
       yy += i.sizeY + 10;
     }
     windowRender.endDraw();
-    image(windowRender, x, y+10);
+    image(windowRender, x, y);
   }
   void addElements() {
   }
@@ -268,9 +268,9 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     window.rect(localX, localY, sizeX, 50);
     window.fill(0);
     window.textSize(20);
-    window.text(name + " ID : " + testID, localX, localY + 20);
+    window.text(name + " ID : " + testID, localX+3, localY + 20);
     window.textSize(15);
-    window.text(description, localX, localY + 40);
+    window.text(description, localX+3, localY + 40);
   }
   void updateProgress() {
   }
