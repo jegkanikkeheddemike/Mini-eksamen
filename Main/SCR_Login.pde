@@ -64,6 +64,7 @@ void updateAssignments(){
      TestID INT NOT NULL,
      DueDate TEXT NOT NULL
     */
+    assignmentList.elements.clear();
   if(mainSession.role.equals("Student")){
     try {
       Statement st = db.createStatement();
@@ -80,11 +81,7 @@ void updateAssignments(){
   }else if(mainSession.role.equals("Teacher")){
     try {
       Statement st = db.createStatement();
-      //Give all the assignments that belong to the students class.
-      //////////////////////
-      //Virker ikke.
       ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.TeacherID = "+mainSession.userID+") AND (Assignments.ClassID = "+mainSession.currentClassID+");");
-      //////////////////////
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
         assignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
