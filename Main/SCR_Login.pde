@@ -81,7 +81,6 @@ void updateAssignments(){
   }else if(mainSession.role.equals("Teacher")){
     try {
       Statement st = db.createStatement();
-      println(mainSession.currentClassID);
       ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.TeacherID = "+mainSession.userID+") AND (Assignments.ClassID = "+mainSession.currentClassID+");");
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
