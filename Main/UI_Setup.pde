@@ -100,7 +100,6 @@ void setupTopMenu() {
 }
 
 void updateTopMenu() {
-  println(mainSession.role);
   if (mainSession.role == "Teacher") {
     topMenu.removeElement("Classes");
     topMenu.elements.add(new HoriList("Classes", "", 10, 160, 27, topMenu) {
