@@ -89,7 +89,6 @@ void updateAssignments(){
       }
     } 
     catch (Exception e) {
-      println(e);
       e.printStackTrace();
     }
   }

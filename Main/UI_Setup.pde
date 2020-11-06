@@ -19,6 +19,7 @@ Window assignments;
 Window takeTest;
 Window makeTest;
 Window assignTeamWindow;
+Window existingTeams;
 
 TimedWindow errorWindow;
 TimedWindow successWindow;
@@ -95,7 +96,8 @@ void updateTopMenu() {
               ResultSet rs = st.executeQuery ("SELECT * FROM Classes WHERE ClassID = "+ID+";");
               rs.next();
               String className = rs.getString("ClassName");
-              elements.add(new ClassButton("CLASS", className, 0, 0, 60, 30, ID, topMenu));
+              textSize(30);
+              elements.add(new ClassButton("CLASS", className, 0, 0, (int) textWidth(className), 30, ID, topMenu));
               rs.close();
               st.close();
             }
@@ -104,7 +106,11 @@ void updateTopMenu() {
             //e.printStackTrace();
           }
         }
-        elements.add(new ScreenButton("NEW CLASS","+", 0, 0, 30, 30, topMenu,assignTeamScreen));
+        elements.add(new ScreenButton("NEW CLASS","+", 0, 0, 30, 30, topMenu,assignTeamScreen){
+          public void extraAction() {
+            existingTeams.getElement("TeamsList").customInput(); //DEFINED IN SCR_ASSIGNTEAMS
+          }
+        });
       }
     }
     );
