@@ -4,16 +4,41 @@ ArrayList<Integer> ignoredChar = new ArrayList<Integer>();
 boolean mouseReleased = false;
 float scrollAmount = 0;
 void keyPressed() {
-  if (!downKeys.contains(key) &&  !ignoredChar.contains(key)) {
-    int k = (int) key;
+  int k = (int) key;
+  if (key == CODED) {
+    if (keyCode == SHIFT) {
+      k = -1;
+    }
+    else if (keyCode == LEFT) {
+      k = -2;
+    }
+    else if (keyCode == RIGHT) {
+      k = -3;
+    }
+  }
+  if (!downKeys.contains(k) &&  !ignoredChar.contains(k)) {
+    
     downKeys.add(k);
     tappedKeys.add(k);
   }
 }
 
 void keyReleased() {
-  if (downKeys.contains(key)) {
-    int k = (int) key;
+  int k = (int) key;
+  if (key == CODED) {
+    if (keyCode == SHIFT) {
+      k = -1;
+    }
+    else if (keyCode == LEFT) {
+      k = -2;
+    }
+    else if (keyCode == RIGHT) {
+      k = -3;
+    }
+  } else {
+    k = (int) key;
+  }
+  if (downKeys.contains(k)) {
     downKeys.remove(downKeys.indexOf(k));
   }
 }
