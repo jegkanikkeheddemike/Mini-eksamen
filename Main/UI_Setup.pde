@@ -15,7 +15,10 @@ volatile Screen activeScreen = loginScreen;
 Window loginWindow;
 Window createUserWindow;
 Window topMenu;
-Window assignments;
+Window teacherAssignments;
+Window teacherTests;
+Window studentAssignments;
+
 Window takeTest;
 Window makeTest;
 Window assignTeamWindow;
@@ -23,15 +26,19 @@ Window assignTeamWindow;
 TimedWindow errorWindow;
 TimedWindow successWindow;
 
-List assignmentList;
+List studentAssignmentList;
+List teacherAssignmentList;
+List teacherTestList;
 ElevTest ETest;
 
 //SPLIT THISPERATE SETUP FUNCTIONS THAT ARE THEN CALLED IN HERE
 void UI_Setup() {
   setupLoginScreen();
   setupCreateUserScreen();
-  setupAssignmentsWindow();
+  setupTeacherAssignmentsWindow();
+  setupTeacherTestsWindow();
   setupHomeTeacherScreen();
+  setupStudentAssignmentsWindow();
   setupHomeStudentScreen();
   setupAssignTeamScreen();
   setupUniversalWindows();
@@ -72,7 +79,6 @@ void setupTopMenu() {
   topMenu.elements.add(new TextDisplay("Username", mainSession.userName, 20, 120, 30, topMenu));
   topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
-      assignmentList.elements.clear();
       ETest.Questions.clear();
     }
   }

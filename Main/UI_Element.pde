@@ -216,7 +216,34 @@ class List extends UIElement {
   void addElements() {
   }
 }
-
+class Test extends UIElement{
+  int testID;
+  String testSubject;
+  Test(int getTestID, String getTestName, String getTestSubject, String getTestDescription) {
+    testID = getTestID;
+    testSubject = getTestSubject;
+    name = getTestName;
+    description = getTestDescription;
+    sizeY = 50;
+    type = "Test";
+  }
+  void reactClickedOn() {
+    println("WHAT SHOULD THE TEACHER BE ABLE TO DO WITH THE ALREADY CREATED TESTS?");
+    println(name,"ID:", testID);
+  }
+  void drawElementInList(PGraphics window) {
+    window.fill(255);
+    if (mouseOn()) {
+      window.fill(200,200,255);
+    }
+    window.rect(localX, localY, sizeX, 50);
+    window.fill(0);
+    window.textSize(20);
+    window.text(name + " ID : " + testID, localX+3, localY + 20);
+    window.textSize(15);
+    window.text(description, localX+3, localY + 40);
+  }
+}
 
 class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   Date dueDate;

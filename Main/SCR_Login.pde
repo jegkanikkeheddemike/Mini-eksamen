@@ -55,6 +55,9 @@ void loginSuccess(String realName) {
   topMenu.getElement("Username").description = realName;
   updateAssignments();
   updateTopMenu();
+  if(mainSession.role.equals("Teacher")){
+    updateTeacherTests();
+  }
 }
 
 void updateAssignments(){
@@ -65,7 +68,8 @@ void updateAssignments(){
      TestID INT NOT NULL,
      DueDate TEXT NOT NULL
     */
-    assignmentList.elements.clear();
+  studentAssignmentList.elements.clear();
+  teacherAssignmentList.elements.clear();
   if(mainSession.role.equals("Student")){
     try {
       Statement st = db.createStatement();
@@ -73,7 +77,7 @@ void updateAssignments(){
       ResultSet rs = st.executeQuery("SELECT AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName as TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.ClassID = "+mainSession.studentClassID+");");
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
-        assignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
+        studentAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
       }
     } 
     catch (Exception e) {
@@ -85,7 +89,7 @@ void updateAssignments(){
       ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.TeacherID = "+mainSession.userID+") AND (Assignments.ClassID = "+mainSession.currentClassID+");");
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
-        assignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
+        teacherAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
       }
     } 
     catch (Exception e) {
@@ -93,6 +97,23 @@ void updateAssignments(){
       e.printStackTrace();
     }
   }
+}
+
+void updateTeacherTests(){
+  println("PUT SOME TESTS IN ME BRO");
+  teacherTestList.elements.clear();
+
+  try {
+      Statement st = db.createStatement();
+      //Give all the assignments that belong to the students class.
+      ResultSet rs = st.executeQuery("SELECT * FROM Tests;");
+      while (rs.next()) {
+        teacherTestList.elements.add(new Test(rs.getInt("TestID"), rs.getString("TestName"),rs.getString("TestSubject"), rs.getString("TestInfo")));
+      }
+    } 
+    catch (Exception e) {
+      e.printStackTrace();
+    }
 }
 
 void login() {
