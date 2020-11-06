@@ -4,6 +4,12 @@ void setupLoginScreen() {
   loginScreen.windows.add(loginWindow);
 
   loginWindow.elements.add(new TextDisplay("Login", "Login", 200, 80, 45, loginWindow, CENTER));
+  loginWindow.elements.add(new TextDisplay("LoadStatus", "Connecting to databse...", 20, loginWindow.sizeY-25, 20, loginWindow, LEFT){
+    public void stepAlways() {
+      description = connectionStatus;
+    }
+  }
+  );
 
   MultiChoice SelectRole = new MultiChoice("Role", "Role", 20, 100, loginWindow);   
     SelectRole.choices.add(new Choice("Student",SelectRole));  
@@ -92,7 +98,6 @@ void updateAssignments(){
       }
     } 
     catch (Exception e) {
-      println(e);
       e.printStackTrace();
     }
   }

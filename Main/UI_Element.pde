@@ -13,6 +13,7 @@ class UIElement {
   int x;
   int y;
 
+  String info;  //Kan bruges til at holde data der kun skal bruges i specifikke tilfælde.
 
   Window owner;
   boolean isActive = false;
@@ -92,6 +93,8 @@ class UIElement {
   void deleteMe() {
     owner.removeList.add(this);
   }
+  void customInput() {
+  }
 
   //TextBox
   void clearText() {
@@ -109,6 +112,7 @@ class UIElement {
 }
 
 class Button extends UIElement {
+  int textAlign = CENTER;
   Button(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, Window getOwner) {
     name = getName;
     description = getDescription;
@@ -120,9 +124,22 @@ class Button extends UIElement {
     calcXY();
     type = "Button";
   }
+  Button(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, Window getOwner, int getTextAlign) {
+    name = getName;
+    description = getDescription;
+    localX = getX;
+    localY = getY;
+    sizeX = getSizeX;
+    sizeY = getSizeY;
+    owner = getOwner;
+    this.textAlign = getTextAlign;
+    calcXY();
+    type = "Button";
+  }
   void drawElement() {
     if (isVisible) {
-      textAlign(CENTER);
+
+      textAlign(textAlign);
       fill(255);
       if (mouseOn() || isActive) {
         fill(200, 200, 255);
@@ -131,6 +148,23 @@ class Button extends UIElement {
       rect(x, y, sizeX, sizeY);
       fill(0);
       text(description, x + (sizeX / 2), y + (sizeY * 0.8));
+    }
+  }
+  void drawElementInList(PGraphics g) {
+    if (isVisible) {
+      int xOffset = 0;
+      if (textAlign == 37) {
+        xOffset = -sizeX/2 + 5;
+      }
+      g.textAlign(textAlign);
+      g.fill(255);
+      if (mouseOn() || isActive) {
+        g.fill(200, 200, 255);
+      }
+      g.textSize(int(sizeY * 0.8));
+      g.rect(localX, localY, sizeX, sizeY);
+      g.fill(0);
+      g.text(description, localX + (sizeX / 2)+xOffset, localY + (sizeY * 0.8));
     }
   }
   void reactEnter() {
