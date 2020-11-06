@@ -45,19 +45,28 @@ class Window {
 
   void stepWindow() {
     if (keyTapped(9)) { //SWITCHING BETWEEN ACTIVE WINDOWS USING SHIFT.
+    int direc = 1;
+    if (keyDown(-1)) {
+      direc = -1;
+    }
       for (int i = 0; i < elements.size(); i ++) {
         UIElement e = elements.get(i);
         if (e.isActive) {
           e.isActive = false;
-          int nI = i+1;
+          int nI = i+direc;
           if (nI == elements.size()) {
-            nI = 0;
+              nI = 0;
+            } else if (nI < 0) {
+              nI = elements.size()-1;
           }
+          println(nI);
           UIElement n = elements.get(nI);
           while (!interacterable.contains(n.type)) {
-            nI++;
+            nI+=direc;
             if (nI == elements.size()) {
               nI = 0;
+            } else if (nI == 0) {
+             nI = elements.size()-1;
             }
             n = elements.get(nI);
           }
