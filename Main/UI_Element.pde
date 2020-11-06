@@ -235,6 +235,12 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     
     if (mainSession.role.equals("Student")) {
       try {
+        try {
+        takeTest.elements.removeAll(ETest.Questions.get(ETest.CQuestionIndex).answers.Choices);
+        } catch (Exception e) {
+
+        }
+        
         Statement st = db.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
         ArrayList<Question> readyQuestions = new ArrayList<Question>();
@@ -455,9 +461,9 @@ class TextBox extends UIElement {
       if (tappedKey == BACKSPACE && text.substring(0, cursorIndex).length() > 0) {
         text = text.substring(0, cursorIndex - 1) + text.substring(cursorIndex);
         cursorIndex -= 1;
-      } else if (tappedKey == '=' && cursorIndex > 0) {
+      } else if (tappedKey == -2 && cursorIndex > 0) {  //LEFT ARROW KEY
         cursorIndex -= 1;
-      } else if (tappedKey == '?' && cursorIndex < text.length()) {
+      } else if (tappedKey == -3 && cursorIndex < text.length()) {  //RIGHT ARROW KEY
         cursorIndex += 1;
         //}
       } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122)) {

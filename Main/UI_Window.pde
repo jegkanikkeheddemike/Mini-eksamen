@@ -42,7 +42,15 @@ class Window {
     }
     return null;
   }
-
+  void removeElement(String elementName) {
+    for (int i = 0; i < elements.size(); i ++) {
+      UIElement e = elements.get(i);
+      if (e.name.equals(elementName)) {
+        elements.remove(e);
+        break;
+      }
+    }
+  }
   void stepWindow() {
     if (keyTapped(9)) { //SWITCHING BETWEEN ACTIVE WINDOWS USING SHIFT.
     int direc = 1;

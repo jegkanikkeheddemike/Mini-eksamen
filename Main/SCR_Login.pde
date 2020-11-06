@@ -54,6 +54,7 @@ void loginSuccess(String realName) {
   clearLoginFields();
   topMenu.getElement("Username").description = realName;
   updateAssignments();
+  updateTopMenu();
 }
 
 void updateAssignments(){
@@ -145,7 +146,7 @@ void login() {
                   Integer[] classIDs = (Integer[]) sqlClassIDs.getArray();
                   //UPDATE SESSION
                   mainSession.updateTeacher(realName, login, role, classIDs, ID);
-                  updateTopMenu();
+                  
                 } else {
                   Integer[] classIDs = new Integer[0];
                   
