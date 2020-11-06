@@ -7,8 +7,9 @@ void setupLoginScreen() {
 
   MultiChoice SelectRole = new MultiChoice("Role", "Role", 20, 100, loginWindow);  
   {//Select roles  
-    SelectRole.Choices.add(new Choice("Student"));  
-    SelectRole.Choices.add(new Choice("Teacher"));
+    SelectRole.Choices.add(new Choice("Student",SelectRole));  
+    SelectRole.Choices.add(new Choice("Teacher",SelectRole));
+    SelectRole.Choices.get(0).isActive = true;
   }  
   loginWindow.elements.add(SelectRole);
 
@@ -18,7 +19,6 @@ void setupLoginScreen() {
     }
   }
   );
-  loginWindow.getElement("LoginName").isActive = true;
   loginWindow.elements.add(new TextBox("Password", "Password", 20, 300, 360, 40, loginWindow) {
     public void reactEnter() {
       owner.getElement("LoginButton").reactClickedOn();

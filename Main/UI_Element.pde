@@ -335,9 +335,14 @@ class MultiChoice extends UIElement {
     text(description, x, y);
     textSize(20);
     
+    
+  }
+  void stepAlways() {
     int yy = 15;
-    for (Choice c: Choices) {
-      fill(255);
+    for (Choice c : Choices) {
+      if (!owner.elements.contains(c)) {
+        owner.elements.add(c);
+      }
       if (c == Chosen) {
         c.chosen = true;
       } else {
@@ -345,23 +350,7 @@ class MultiChoice extends UIElement {
       }
       c.x = x+10;
       c.y = y+yy;
-      c.drawElement();
-      yy += 30;
-    }
-  }
-  void stepAlways() {
-    int yy = 15;
-    for (Choice i : Choices) {
-      /*if (!owner.elements.contains(i)) {
-        owner.elements.add(i);
-      }*/
-      if (mouseReleased) {
-        if (within(x + 10, mouseX, x + 25)) {
-          if (within(y + yy, mouseY, y + yy + 15)) {
-            Chosen = i;
-          }
-        }
-      }
+      //DEN TEGNER SELV FRA WINDOW
       yy += 30;
     }
   }
@@ -380,16 +369,36 @@ class MultiChoice extends UIElement {
 class Choice extends UIElement {
   String ChoiceName;
   boolean chosen = false;
-  Choice(String getName) {
+  MultiChoice handler;
+  Choice(String getName, MultiChoice handler) {
     ChoiceName = getName;
+    this.handler = handler;
     name = "Choice";
+    type = "Choice";
     description = "";
+    sizeX = 15;
+    sizeY = 15;
   }
   void drawElement() {
+      textAlign(LEFT);
+      noStroke();
+      fill(255);
+      if (isActive) {
+        fill(200,200,255);
+      }
+      if (chosen) {
+        fill(0);
+      }
       rect(x, y, 15, 15);
       fill(0);
       textSize(15);
       text(ChoiceName, x + 30, y + 15);
+  }
+  void reactEnter() {
+    handler.Chosen = this;
+  }
+  void reactClickedOn() {
+    handler.Chosen = this;
   }
 }
 
@@ -581,7 +590,7 @@ class Question extends UIElement {
     rightAnswerIndex = getRAI;
     QID = getQID;
     for (String A : getAnswers) {
-      answers.Choices.add(new Choice(A));
+      answers.Choices.add(new Choice(A,answers));
     }
     type = "Question";
   }

@@ -30,6 +30,7 @@ class Window {
     interacterable.add("ScreenButton");
     interacterable.add("Choice");
 
+
     //["TextBox","Button","ScreenButton","MultiChoice"];
   }
 
