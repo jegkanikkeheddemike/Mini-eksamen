@@ -70,7 +70,6 @@ class Window {
               } else if (nI < 0) {
                 nI = elements.size()-1;
             }
-            println(nI);
             UIElement n = elements.get(nI);
             while (!interacterable.contains(n.type)) {
               nI+=direc;
