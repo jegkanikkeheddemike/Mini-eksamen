@@ -334,22 +334,27 @@ class MultiChoice extends UIElement {
     textSize(25);
     text(description, x, y);
     textSize(20);
+    
     int yy = 15;
-    for (Choice i : Choices) {
-      if (i == Chosen) {
-        fill(0);
+    for (Choice c: Choices) {
+      fill(255);
+      if (c == Chosen) {
+        c.chosen = true;
       } else {
-        fill(255);
+        c.chosen = false;
       }
-      rect(x + 10, y + yy, 15, 15);
-      fill(0);
-      text(i.ChoiceName, x + 30, y + yy + 15);
+      c.x = x+10;
+      c.y = y+yy;
+      c.drawElement();
       yy += 30;
     }
   }
   void stepAlways() {
     int yy = 15;
     for (Choice i : Choices) {
+      /*if (!owner.elements.contains(i)) {
+        owner.elements.add(i);
+      }*/
       if (mouseReleased) {
         if (within(x + 10, mouseX, x + 25)) {
           if (within(y + yy, mouseY, y + yy + 15)) {
@@ -372,10 +377,19 @@ class MultiChoice extends UIElement {
   }
 }
 
-class Choice {
+class Choice extends UIElement {
   String ChoiceName;
+  boolean chosen = false;
   Choice(String getName) {
     ChoiceName = getName;
+    name = "Choice";
+    description = "";
+  }
+  void drawElement() {
+      rect(x, y, 15, 15);
+      fill(0);
+      textSize(15);
+      text(ChoiceName, x + 30, y + 15);
   }
 }
 
