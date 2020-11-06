@@ -49,6 +49,7 @@ void setupHomeStudentScreen() {
         catch (Exception e) {
           e.printStackTrace();
         }
+        takeTest.elements.removeAll(ETest.Questions.get(ETest.CQuestionIndex).answers.Choices);
         if (ETest.Questions.size() > ETest.CQuestionIndex+1) {
           ETest.CQuestionIndex++;
         } else {

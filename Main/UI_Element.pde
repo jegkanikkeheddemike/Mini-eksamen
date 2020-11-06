@@ -233,6 +233,12 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   void reactClickedOn() {
     if(mainSession.role.equals("Student")){
       try {
+        try {
+        takeTest.elements.removeAll(ETest.Questions.get(ETest.CQuestionIndex).answers.Choices);
+        } catch (Exception e) {
+          
+        }
+        
         Statement st = db.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
         ArrayList<Question> readyQuestions = new ArrayList<Question>();
