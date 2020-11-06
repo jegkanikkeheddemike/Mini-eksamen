@@ -52,6 +52,8 @@ void setupHomeStudentScreen() {
           ETest.CQuestionIndex++;
         } else {
           ETest.Questions.clear();
+          ETest.cAssignment.updateRightness();
+          ETest.cAssignment = null;
         }
       }
     }

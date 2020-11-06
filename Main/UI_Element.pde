@@ -217,12 +217,13 @@ class List extends UIElement {
   }
 }
 
-ArrayList<Assignment> assignmentAList = new ArrayList<Assignment>();
+
 class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   Date dueDate;
   int testID;
   int assignmentID;
   float percentRightness;
+  boolean finished = false;
   Assignment(int getAssignmentID, String getName, String getDescription, int getTestID) {
     assignmentID = getAssignmentID;
     name = getName;
@@ -232,7 +233,7 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     type = "Assignment";
   }
   void reactClickedOn() {
-    
+    ETest.cAssignment = this;
     if (mainSession.role.equals("Student")) {
       try {
         try {
@@ -269,6 +270,9 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     }
   }
   void drawElementInList(PGraphics window) {
+    if (finished){
+      updateRightness(); 
+    }
     window.fill(255);
     if (mouseOn()) {
       window.fill(200, 200, 255);
@@ -280,7 +284,7 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     window.textSize(15);
     window.text(description, localX+3, localY + 40);
     window.textSize(20);
-    window.text(percentRightness + "%", localX+300, localY + 40);
+    window.text(percentRightness + "%", localX+280, localY + 40);
   }
   void updateProgress() {
   }
@@ -291,25 +295,29 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     int pending = 0;
     try {
       Statement st = db.createStatement();
-      ResultSet rs = st.executeQuery("SELECT correctness FROM Answers WHERE (studentID = "+mainSession.userID+") AND (AssignmentID = "+assignmentID+");");
-      println(mainSession.userID + " and " + assignmentID);
+      ResultSet rs = st.executeQuery("SELECT correctness FROM Answers WHERE (studentID = "+mainSession.userID+") AND (AssignmentID = "+testID+");");     
       while (rs.next()) {
-        if (rs.getString("Correctness")== "CORRECT") {
+        String correctness = rs.getString("Correctness");
+        if (correctness.equals("RIGHT")) {
           correct +=1;
-        } else if (rs.getString("Correctness")== "WRONG") {
+        } else if (correctness.equals("WRONG")) {
           wrong +=1;
         } else {
           pending +=1;
         }
       }
-      st.close();
       rs.close();
+      st.close();
     }
     catch (Exception e) {
       e.printStackTrace();
     }
+    
+    println(wrong, correct);
     if(correct+wrong+pending != 0){
-      percentRightness = correct/(correct+wrong+pending)*100;
+      percentRightness = (correct*100/(correct+wrong+pending));
+      println(correct,wrong,pending);
+      println(percentRightness);
     }
   }
 }
@@ -585,6 +593,7 @@ class ElevTest extends UIElement {
   ArrayList<Question> Questions = new ArrayList<Question>();
   int CQuestionIndex = 0;
   int testID;
+  Assignment cAssignment;
   ElevTest(String getName, String getDescription, ArrayList<Question> getQuestions) {
     name = getName;
     description = getDescription;
