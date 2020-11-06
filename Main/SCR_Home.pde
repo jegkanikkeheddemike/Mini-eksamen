@@ -51,9 +51,9 @@ void setupHomeStudentScreen() {
   takeTest.elements.add(ETest);
   takeTest.elements.add(new Progressbar("PROGRESSBAR", width-800, height-830, 220, 40, takeTest) {
     public void stepAlways() {
-      if (ETest.Questions.size()-1 == ETest.CQuestionIndex) {
+      if (ETest.questions.size()-1 == ETest.cQuestionIndex) {
         isVisible = true;
-      } else if (ETest.Questions.size() == 0) {
+      } else if (ETest.questions.size() == 0) {
         isVisible = false;
       } else {
         isVisible = true;
@@ -63,11 +63,11 @@ void setupHomeStudentScreen() {
   );
   takeTest.elements.add(new Button("NQButton", "Next", width-800, height-530, 220, 100, takeTest) {
     public void reactClickedOn() {
-      if (ETest.Questions.size() > ETest.CQuestionIndex) {
+      if (ETest.questions.size() > ETest.cQuestionIndex) {
         try {
           String correctness;
-          Question Q = ETest.Questions.get(ETest.CQuestionIndex);
-          if (Q.answers.getOutput() == Q.AnswerList.get(Q.rightAnswerIndex)) {
+          Question Q = ETest.questions.get(ETest.cQuestionIndex);
+          if (Q.answers.getOutput() == Q.answerList.get(Q.rightAnswerIndex)) {
             correctness = "RIGHT";
           } else {
             correctness = "WRONG";
@@ -79,21 +79,21 @@ void setupHomeStudentScreen() {
         catch (Exception e) {
           e.printStackTrace();
         }
-        takeTest.elements.removeAll(ETest.Questions.get(ETest.CQuestionIndex).answers.Choices);
-        if (ETest.Questions.size() > ETest.CQuestionIndex+1) {
-          ETest.CQuestionIndex++;
+        takeTest.elements.removeAll(ETest.questions.get(ETest.cQuestionIndex).answers.choices);
+        if (ETest.questions.size() > ETest.cQuestionIndex+1) {
+          ETest.cQuestionIndex++;
         } else {
-          ETest.Questions.clear();
+          ETest.questions.clear();
           ETest.cAssignment.updateRightness();
           ETest.cAssignment = null;
         }
       }
     }
     public void stepAlways() {
-      if (ETest.Questions.size()-1 == ETest.CQuestionIndex) {
+      if (ETest.questions.size()-1 == ETest.cQuestionIndex) {
         description = "Finish";
         isVisible = true;
-      } else if (ETest.Questions.size() == 0) {
+      } else if (ETest.questions.size() == 0) {
         isVisible = false;
       } else {
         description = "Next";

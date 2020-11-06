@@ -32,6 +32,8 @@ TimedWindow successWindow;
 List studentAssignmentList;
 List teacherAssignmentList;
 List teacherTestList;
+List makeQuestionAnswerList;
+MultiChoice answerRight;
 ElevTest ETest;
 
 //SPLIT THISPERATE SETUP FUNCTIONS THAT ARE THEN CALLED IN HERE
@@ -88,10 +90,9 @@ void setupTopMenu() {
   topMenu.elements.add(new TextDisplay("Username", mainSession.userName, 20, 120, 30, topMenu));
   topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
-      ETest.Questions.clear();
+      ETest.questions.clear();
     }
-  }
-  );
+  });
   homeTeacherScreen.windows.add(topMenu);
   homeStudentScreen.windows.add(topMenu);
   assignTeamScreen.windows.add(topMenu);

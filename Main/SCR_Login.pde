@@ -5,12 +5,11 @@ void setupLoginScreen() {
 
   loginWindow.elements.add(new TextDisplay("Login", "Login", 200, 80, 45, loginWindow, CENTER));
 
-  MultiChoice SelectRole = new MultiChoice("Role", "Role", 20, 100, loginWindow);  
-  {//Select roles  
-    SelectRole.Choices.add(new Choice("Student",SelectRole));  
-    SelectRole.Choices.add(new Choice("Teacher",SelectRole));
-    SelectRole.Choices.get(0).isActive = true;
-  }  
+  MultiChoice SelectRole = new MultiChoice("Role", "Role", 20, 100, loginWindow);   
+    SelectRole.choices.add(new Choice("Student",SelectRole));  
+    SelectRole.choices.add(new Choice("Teacher",SelectRole));
+    SelectRole.choices.get(0).isActive = true;
+  
   loginWindow.elements.add(SelectRole);
 
   loginWindow.elements.add(new TextBox("LoginName", "Login Name", 20, 200, 360, 40, loginWindow) {

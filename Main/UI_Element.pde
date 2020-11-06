@@ -96,7 +96,12 @@ class UIElement {
   //TextBox
   void clearText() {
   }
-
+  void makeVisible(){
+    isVisible = true;
+  }
+  void makeInvisible(){
+    isVisible = false;
+  }
   void calcXY() {
     x = owner.x + localX;
     y = owner.y + localY;
@@ -186,35 +191,53 @@ class List extends UIElement {
   }
 
   void stepAlways() {
-    for (UIElement element : elements) {
-      element.step();
-    }
-    if (mouseOn()) {
+    if(isVisible){
+      for (UIElement element : elements) {
+        element.step();
+      }
+      if (mouseOn()) {
 
-      scroll += scrollAmount;
+        scroll += scrollAmount;
+      }
     }
   }
 
   void drawElement() {
-    PGraphics windowRender = createGraphics(sizeX, sizeY-10);
-    textSize(20);
-    text(description, x, y);
-    int yy = 10+(int) scroll;
-    windowRender.beginDraw();
-    for (UIElement i : elements) {
-      i.x = x + 10;
-      i.y = y + yy;
-      i.localX = 10;
-      i.localY = yy;
-      i.sizeX = sizeX - 20;
-      i.drawElementInList(windowRender);
-      yy += i.sizeY + 10;
+    if(isVisible){
+      PGraphics windowRender = createGraphics(sizeX, sizeY-10);
+      textSize(20);
+      text(description, x, y);
+      int yy = 10+(int) scroll;
+      windowRender.beginDraw();
+      windowRender.background(0,0,0,100);
+      for (UIElement i : elements) {
+        i.x = x + 10;
+        i.y = y + yy;
+        i.localX = 10;
+        i.localY = yy;
+        i.sizeX = sizeX - 20;
+        i.drawElementInList(windowRender);
+        yy += i.sizeY + 10;
+      }
+      windowRender.endDraw();
+      image(windowRender, x, y);
     }
-    windowRender.endDraw();
-    image(windowRender, x, y);
   }
   void addElements() {
   }
+  void makeVisible(){
+    isVisible = true;
+    for(UIElement element : elements){
+      element.makeVisible();
+    }
+  }
+  void makeInvisible(){
+    isVisible = false;
+    for(UIElement element : elements){
+      element.makeInvisible();
+    }
+  }
+  
 }
 class Test extends UIElement{
   int testID;
@@ -264,7 +287,7 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     if (mainSession.role.equals("Student")) {
       try {
         try {
-        takeTest.elements.removeAll(ETest.Questions.get(ETest.CQuestionIndex).answers.Choices);
+        takeTest.elements.removeAll(ETest.questions.get(ETest.cQuestionIndex).answers.choices);
         } catch (Exception e) {
 
         }
@@ -284,9 +307,9 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
           }
           readyQuestions.add(new Question(testID, Question, Answers, RAnsIn, QID));
         }
-        ETest.CQuestionIndex = 0;
-        ETest.Questions.clear();
-        ETest.Questions.addAll(readyQuestions);
+        ETest.cQuestionIndex = 0;
+        ETest.questions.clear();
+        ETest.questions.addAll(readyQuestions);
         ETest.testID = testID;
       } 
       catch(Exception e) {
@@ -389,8 +412,8 @@ class HoriList extends UIElement {
 }
 
 class MultiChoice extends UIElement {
-  Choice Chosen;
-  ArrayList<Choice> Choices = new ArrayList<Choice>();
+  Choice chosen;
+  ArrayList<Choice> choices = new ArrayList<Choice>();
   MultiChoice(String getName, String getDescription, int getX, int getY, Window getOwner) {
     name = getName;
     description = getDescription;
@@ -402,47 +425,69 @@ class MultiChoice extends UIElement {
   }
 
   void drawElement() {
-    textAlign(LEFT);
-    fill(0);
-    textSize(25);
-    text(description, x, y);
-    textSize(20);
+    if(isVisible){
+      textAlign(LEFT);
+      fill(0);
+      textSize(25);
+      text(description, x, y);
+      textSize(20);
+    }
   }
   void stepAlways() {
-    int yy = 15;
-    for (Choice c : Choices) {
-      if (!owner.elements.contains(c)) {
-        owner.elements.add(c);
+    if(isVisible){
+      int yy = 15;
+      for (Choice c : choices) {
+        if (!owner.elements.contains(c)) {
+          owner.elements.add(c);
+        }
+        if (c == chosen) {
+          c.chosen = true;
+        } else {
+          c.chosen = false;
+        }
+        c.x = x+10;
+        c.y = y+yy;
+        //DEN TEGNER SELV FRA WINDOW
+        yy += 30;
       }
-      if (c == Chosen) {
-        c.chosen = true;
-      } else {
-        c.chosen = false;
-      }
-      c.x = x+10;
-      c.y = y+yy;
-      //DEN TEGNER SELV FRA WINDOW
-      yy += 30;
+    }
+  }
+  void choose(Choice c){
+    if (choices.contains(c)){
+      chosen = c;
     }
   }
   String getOutput() {
-    if (Chosen != null) {
-      return Chosen.ChoiceName;
+    if (chosen != null) {
+      return chosen.choiceName;
     } else {
       return null;
     }
   }
   void clearText() {
-    Chosen = null;
+    chosen = null;
+  }
+
+  void makeVisible(){
+    isVisible = true;
+    for(Choice c : choices){
+      c.makeVisible();
+    }
+  }
+
+  void makeInvisible(){
+    isVisible = false;
+    for(Choice c : choices){
+      c.makeInvisible();
+    }
   }
 }
-
 class Choice extends UIElement {
-  String ChoiceName;
+  String choiceName;
   boolean chosen = false;
   MultiChoice handler;
   Choice(String getName, MultiChoice handler) {
-    ChoiceName = getName;
+    choiceName = getName;
     this.handler = handler;
     name = "Choice";
     type = "Choice";
@@ -451,25 +496,27 @@ class Choice extends UIElement {
     sizeY = 15;
   }
   void drawElement() {
-    textAlign(LEFT);
-    noStroke();
-    fill(255);
-    if (isActive) {
-      fill(200, 200, 255);
-    }
-    if (chosen) {
+    if(isVisible){
+      textAlign(LEFT);
+      noStroke();
+      fill(255);
+      if (isActive) {
+        fill(200, 200, 255);
+      }
+      if (chosen) {
+        fill(0);
+      }
+      rect(x, y, 15, 15);
       fill(0);
+      textSize(15);
+      text(choiceName, x + 30, y + 15);
     }
-    rect(x, y, 15, 15);
-    fill(0);
-    textSize(15);
-    text(ChoiceName, x + 30, y + 15);
   }
   void reactEnter() {
-    handler.Chosen = this;
+    handler.choose(this);
   }
   void reactClickedOn() {
-    handler.Chosen = this;
+    handler.choose(this);
   }
 }
 
@@ -489,21 +536,22 @@ class TextBox extends UIElement {
     type = "TextBox";
   }
   void stepActive() {
+    if(isVisible){
+      for (Integer tappedKey : tappedKeys) {
 
-    for (Integer tappedKey : tappedKeys) {
 
-
-      if (tappedKey == BACKSPACE && text.substring(0, cursorIndex).length() > 0) {
-        text = text.substring(0, cursorIndex - 1) + text.substring(cursorIndex);
-        cursorIndex -= 1;
-      } else if (tappedKey == -2 && cursorIndex > 0) {  //LEFT ARROW KEY
-        cursorIndex -= 1;
-      } else if (tappedKey == -3 && cursorIndex < text.length()) {  //RIGHT ARROW KEY
-        cursorIndex += 1;
-        //}
-      } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122) || (tappedKey == 32)) {
-        text = text.substring(0, cursorIndex) + char(tappedKey) + text.substring(cursorIndex);
-        cursorIndex += 1;
+        if (tappedKey == BACKSPACE && text.substring(0, cursorIndex).length() > 0) {
+          text = text.substring(0, cursorIndex - 1) + text.substring(cursorIndex);
+          cursorIndex -= 1;
+        } else if (tappedKey == -2 && cursorIndex > 0) {  //LEFT ARROW KEY
+          cursorIndex -= 1;
+        } else if (tappedKey == -3 && cursorIndex < text.length()) {  //RIGHT ARROW KEY
+          cursorIndex += 1;
+          //}
+        } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122) || (tappedKey == 32)) {
+          text = text.substring(0, cursorIndex) + char(tappedKey) + text.substring(cursorIndex);
+          cursorIndex += 1;
+        }
       }
     }
   }
@@ -513,33 +561,67 @@ class TextBox extends UIElement {
   }
 
   void drawElement() {
-    textAlign(LEFT);
-    stroke(0);
-    strokeWeight(sizeY / 10);
-    if (isActive) {
-      fill(200, 200, 255);
-    } else {
-      fill(255);
+    if(isVisible){
+      textAlign(LEFT);
+      stroke(0);
+      strokeWeight(sizeY / 10);
+      if (isActive) {
+        fill(200, 200, 255);
+      } else {
+        fill(255);
+      }
+      //WE HAVE TO "SCROLL" THE TEXT WHEN IT IS LONGER THAN THE ACTUAL TEXTBOX!
+      //The textbox
+      rect(x, owner.y + localY, sizeX, sizeY);
+      fill(0);
+      textSize(sizeY * 0.8);
+      text(text, x + 3, y + sizeY * 0.8);
+
+      //The cursor
+
+      if (isActive) {
+        fill(255, 0, 0);
+        strokeWeight(4);
+        float textBeforeCursor = textWidth(text.substring(0, cursorIndex));
+        line(x + textBeforeCursor, owner.y + localY, x + textBeforeCursor, owner.y + localY + sizeY);
+      }
+
+      //The description
+      fill(0);
+      text(description, x + 1, y - 4);
+   }
+  }
+
+  void drawElementInList(PGraphics window) {
+    if(isVisible){
+      window.textAlign(LEFT);
+      window.stroke(0);
+      window.strokeWeight(sizeY / 10);
+      if (isActive) {
+        window.fill(200, 200, 255);
+      } else {
+        window.fill(255);
+      }
+      //WE HAVE TO "SCROLL" THE TEXT WHEN IT IS LONGER THAN THE ACTUAL TEXTBOX!
+      //The textbox
+      window.rect(localX, localY, sizeX, sizeY);
+      window.fill(0);
+      window.textSize(sizeY * 0.8);
+      window.text(text, localX + 3, localY + sizeY * 0.8);
+
+      //The cursor
+
+      if (isActive) {
+        window.fill(255, 0, 0);
+        window.strokeWeight(4);
+        float textBeforeCursor = window.textWidth(text.substring(0, cursorIndex));
+        window.line(localX + textBeforeCursor, localY, localX + textBeforeCursor, localY + sizeY);
+      }
+
+      //The description
+      window.fill(0);
+      window.text(description, localX + 1, localX - 4);
     }
-    //WE HAVE TO "SCROLL" THE TEXT WHEN IT IS LONGER THAN THE ACTUAL TEXTBOX!
-    //The textbox
-    rect(x, owner.y + localY, sizeX, sizeY);
-    fill(0);
-    textSize(sizeY * 0.8);
-    text(text, x + 3, y + sizeY * 0.8);
-
-    //The cursor
-
-    if (isActive) {
-      fill(255, 0, 0);
-      strokeWeight(4);
-      float textBeforeCursor = textWidth(text.substring(0, cursorIndex));
-      line(x + textBeforeCursor, owner.y + localY, x + textBeforeCursor, owner.y + localY + sizeY);
-    }
-
-    //The description
-    fill(0);
-    text(description, x + 1, y - 4);
   }
 
   String getOutput() {
@@ -584,10 +666,21 @@ class TextDisplay extends UIElement {
     calcXY();
   }
   void drawElement() {
-    textAlign(textMode);
-    fill(textColor);
-    textSize(textSize);
-    text(description, x, y);
+    if(isVisible){
+      textAlign(textMode);
+      fill(textColor);
+      textSize(textSize);
+      text(description, x, y);
+    }
+  }
+
+  void drawElementInList(PGraphics window){
+    if(isVisible){
+      window.textAlign(textMode);
+      window.fill(textColor);
+      window.textSize(textSize);
+      window.text(description, localX, localY);
+    }
   }
 }
 
@@ -617,14 +710,14 @@ class ClassButton extends Button {
 
 
 class ElevTest extends UIElement {
-  ArrayList<Question> Questions = new ArrayList<Question>();
-  int CQuestionIndex = 0;
+  ArrayList<Question> questions = new ArrayList<Question>();
+  int cQuestionIndex = 0;
   int testID;
   Assignment cAssignment;
   ElevTest(String getName, String getDescription, ArrayList<Question> getQuestions) {
     name = getName;
     description = getDescription;
-    Questions = getQuestions;
+    questions = getQuestions;
     type = "ElevTest";
   }
   ElevTest(String getName, String getDescription) {
@@ -632,15 +725,15 @@ class ElevTest extends UIElement {
     description = getDescription;
   }
   void stepAlways() {
-    if (Questions.size() > 0) {
-      Question Q = Questions.get(CQuestionIndex);
+    if (questions.size() > 0) {
+      Question Q = questions.get(cQuestionIndex);
       Q.y = 360;
       Q.step();
     }
   }
   void drawElement() {
-    if (Questions.size() > 0) {
-      Question Q = Questions.get(CQuestionIndex);
+    if (questions.size() > 0) {
+      Question Q = questions.get(cQuestionIndex);
       Q.y = 360;
       Q.drawElement();
     }
@@ -652,16 +745,16 @@ class Question extends UIElement {
   int QID;
   String question;
   int rightAnswerIndex;
-  ArrayList<String> AnswerList;
+  ArrayList<String> answerList;
   MultiChoice answers = new MultiChoice(question+"MC", "Choose Your answer", 50, 100, takeTest);
   Question(int getTestID, String getQuestion, ArrayList<String> getAnswers, int getRAI, int getQID) {
     testID = getTestID;
     question = getQuestion;
-    AnswerList = getAnswers;
+    answerList = getAnswers;
     rightAnswerIndex = getRAI;
     QID = getQID;
     for (String A : getAnswers) {
-      answers.Choices.add(new Choice(A, answers));
+      answers.choices.add(new Choice(A, answers));
     }
     type = "Question";
   }
@@ -690,14 +783,14 @@ class Progressbar extends UIElement {
     type = "Progressbar";
   }
   void drawElement() {
-    if (ETest.Questions.size() != 0) {
-      sizeValue = sizeX/(ETest.Questions.size());
+    if (ETest.questions.size() != 0) {
+      sizeValue = sizeX/(ETest.questions.size());
     }
     if (isVisible) {
       fill(255);
       rect(x, y, sizeX, sizeY);
       fill(0);
-      rect(x, y, sizeValue*ETest.CQuestionIndex+1, sizeY);
+      rect(x, y, sizeValue*ETest.cQuestionIndex+1, sizeY);
     }
   }
 }
