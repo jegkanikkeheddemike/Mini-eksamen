@@ -43,10 +43,10 @@ class UIElement {
   }
   void drawElementInList(PGraphics window) {
     window.fill(255, 150, 150);
-		window.rect(x, y, sizeX, sizeY);
-		window.textSize(sizeY - 1);
-		window.fill(0);
-		window.text("NO TEXTURE", x, y + sizeY);
+    window.rect(x, y, sizeX, sizeY);
+    window.textSize(sizeY - 1);
+    window.fill(0);
+    window.text("NO TEXTURE", x, y + sizeY);
   }
   boolean clickedOn() {
     if (mouseReleased) {
@@ -196,7 +196,7 @@ class List extends UIElement {
   }
 
   void drawElement() {
-    PGraphics windowRender = createGraphics(sizeX,sizeY-10);
+    PGraphics windowRender = createGraphics(sizeX, sizeY-10);
     textSize(20);
     text(description, x, y);
     int yy = 10+(int) scroll;
@@ -217,11 +217,12 @@ class List extends UIElement {
   }
 }
 
-
+ArrayList<Assignment> assignmentAList = new ArrayList<Assignment>();
 class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   Date dueDate;
   int testID;
   int assignmentID;
+  float percentRightness;
   Assignment(int getAssignmentID, String getName, String getDescription, int getTestID) {
     assignmentID = getAssignmentID;
     name = getName;
@@ -231,7 +232,8 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     type = "Assignment";
   }
   void reactClickedOn() {
-    if(mainSession.role.equals("Student")){
+    
+    if (mainSession.role.equals("Student")) {
       try {
         Statement st = db.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
@@ -256,14 +258,14 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       catch(Exception e) {
         e.printStackTrace();
       }
-    }else if(mainSession.role.equals("Teacher")){
-      println("SHOW RESULTS FOR TEST NAMED: ", name, " WITH ASSIGNMENTID: ",assignmentID);
+    } else if (mainSession.role.equals("Teacher")) {
+      println("SHOW RESULTS FOR TEST NAMED: ", name, " WITH ASSIGNMENTID: ", assignmentID);
     }
   }
   void drawElementInList(PGraphics window) {
     window.fill(255);
     if (mouseOn()) {
-      window.fill(200,200,255);
+      window.fill(200, 200, 255);
     }
     window.rect(localX, localY, sizeX, 50);
     window.fill(0);
@@ -271,8 +273,38 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     window.text(name + " ID : " + testID, localX+3, localY + 20);
     window.textSize(15);
     window.text(description, localX+3, localY + 40);
+    window.textSize(20);
+    window.text(percentRightness + "%", localX+300, localY + 40);
   }
   void updateProgress() {
+  }
+
+  void updateRightness() {
+    int correct = 0;
+    int wrong = 0;
+    int pending = 0;
+    try {
+      Statement st = db.createStatement();
+      ResultSet rs = st.executeQuery("SELECT correctness FROM Answers WHERE (studentID = "+mainSession.userID+") AND (AssignmentID = "+assignmentID+");");
+      println(mainSession.userID + " and " + assignmentID);
+      while (rs.next()) {
+        if (rs.getString("Correctness")== "CORRECT") {
+          correct +=1;
+        } else if (rs.getString("Correctness")== "WRONG") {
+          wrong +=1;
+        } else {
+          pending +=1;
+        }
+      }
+      st.close();
+      rs.close();
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+    if(correct+wrong+pending != 0){
+      percentRightness = correct/(correct+wrong+pending)*100;
+    }
   }
 }
 
@@ -334,8 +366,6 @@ class MultiChoice extends UIElement {
     textSize(25);
     text(description, x, y);
     textSize(20);
-    
-    
   }
   void stepAlways() {
     int yy = 15;
@@ -380,19 +410,19 @@ class Choice extends UIElement {
     sizeY = 15;
   }
   void drawElement() {
-      textAlign(LEFT);
-      noStroke();
-      fill(255);
-      if (isActive) {
-        fill(200,200,255);
-      }
-      if (chosen) {
-        fill(0);
-      }
-      rect(x, y, 15, 15);
+    textAlign(LEFT);
+    noStroke();
+    fill(255);
+    if (isActive) {
+      fill(200, 200, 255);
+    }
+    if (chosen) {
       fill(0);
-      textSize(15);
-      text(ChoiceName, x + 30, y + 15);
+    }
+    rect(x, y, 15, 15);
+    fill(0);
+    textSize(15);
+    text(ChoiceName, x + 30, y + 15);
   }
   void reactEnter() {
     handler.Chosen = this;
@@ -590,7 +620,7 @@ class Question extends UIElement {
     rightAnswerIndex = getRAI;
     QID = getQID;
     for (String A : getAnswers) {
-      answers.Choices.add(new Choice(A,answers));
+      answers.Choices.add(new Choice(A, answers));
     }
     type = "Question";
   }

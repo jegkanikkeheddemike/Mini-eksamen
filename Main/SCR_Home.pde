@@ -1,8 +1,8 @@
-void setupAssignmentsWindow(){
+void setupAssignmentsWindow() {
   //HOMESCREEN
   assignments = new Window(width-450, 300, 400, height-400, "AssignmentsWindow");
   assignments.elements.add(new TextDisplay("AssignMentHeader", "Assignments", 20, 40, 40, assignments));
-  assignmentList = new List("Assignments", "", 10, 50, 380,height-(400+50), assignments);
+  assignmentList = new List("Assignments", "", 10, 50, 380, height-(400+50), assignments);
   assignments.elements.add(assignmentList);
 }
 
@@ -17,15 +17,13 @@ void setupHomeStudentScreen() {
   takeTest = new Window(50, 300, width-550, height-400, "takeTestWindow");
   ETest = new ElevTest("ElevTest", "Her tager du dine tests");
   takeTest.elements.add(ETest);
-  takeTest.elements.add(new Progressbar("PROGRESSBAR",width-800, height-830, 220, 40,takeTest){
-  public void stepAlways() {
+  takeTest.elements.add(new Progressbar("PROGRESSBAR", width-800, height-830, 220, 40, takeTest) {
+    public void stepAlways() {
       if (ETest.Questions.size()-1 == ETest.CQuestionIndex) {
-        description = "Finish";
         isVisible = true;
       } else if (ETest.Questions.size() == 0) {
         isVisible = false;
       } else {
-        description = "Next";
         isVisible = true;
       }
     }
@@ -54,7 +52,6 @@ void setupHomeStudentScreen() {
         } else {
           ETest.Questions.clear();
         }
-        
       }
     }
     public void stepAlways() {
@@ -67,10 +64,9 @@ void setupHomeStudentScreen() {
         description = "Next";
         isVisible = true;
       }
-      
     }
   }
   );
-  
+
   homeStudentScreen.windows.add(takeTest);
 }
