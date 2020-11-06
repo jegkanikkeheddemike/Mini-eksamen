@@ -10,7 +10,6 @@ class Session{
   Integer[] classIDs;
   //String[] classNames;
   Integer currentClassID;
-  
   Session(){
     userName = "";
     login = "";

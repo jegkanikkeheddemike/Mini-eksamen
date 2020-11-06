@@ -10,31 +10,44 @@ Screen createUserScreen = new Screen();
 Screen homeTeacherScreen = new Screen();
 Screen homeStudentScreen = new Screen();
 Screen assignTeamScreen = new Screen();
+Screen newTestScreen = new Screen();
 volatile Screen activeScreen = loginScreen;
 
 Window loginWindow;
 Window createUserWindow;
 Window topMenu;
-Window assignments;
+Window studentAssignments;
+
+Window teacherAssignments;
+Window teacherTests;
 Window takeTest;
 Window makeTest;
+Window makeQuestion;
+
 Window assignTeamWindow;
 Window existingTeams;
 
 TimedWindow errorWindow;
 TimedWindow successWindow;
 
-List assignmentList;
+List studentAssignmentList;
+List teacherAssignmentList;
+List teacherTestList;
 ElevTest ETest;
 
 //SPLIT THISPERATE SETUP FUNCTIONS THAT ARE THEN CALLED IN HERE
 void UI_Setup() {
   setupLoginScreen();
   setupCreateUserScreen();
-  setupAssignmentsWindow();
+  setupTeacherAssignmentsWindow();
+  setupTeacherTestsWindow();
   setupHomeTeacherScreen();
+  setupStudentAssignmentsWindow();
   setupHomeStudentScreen();
   setupAssignTeamScreen();
+  setupMakeTestWindow();
+  setupMakeQuestionWindow();
+  setupNewTestScreen();
   setupUniversalWindows();
 }
 
@@ -58,11 +71,14 @@ void setupUniversalWindows() {
   homeTeacherScreen.windows.add(errorWindow);
   homeStudentScreen.windows.add(errorWindow);
   assignTeamScreen.windows.add(errorWindow);
+  newTestScreen.windows.add(errorWindow);
+
   loginScreen.windows.add(successWindow);
   createUserScreen.windows.add(successWindow);
   homeTeacherScreen.windows.add(successWindow);
   homeStudentScreen.windows.add(successWindow);
   assignTeamScreen.windows.add(successWindow);
+  newTestScreen.windows.add(successWindow);
 }
 
 
@@ -73,7 +89,6 @@ void setupTopMenu() {
   topMenu.elements.add(new TextDisplay("Username", mainSession.userName, 20, 120, 30, topMenu));
   topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
-      assignmentList.elements.clear();
       ETest.Questions.clear();
     }
   }
@@ -81,6 +96,7 @@ void setupTopMenu() {
   homeTeacherScreen.windows.add(topMenu);
   homeStudentScreen.windows.add(topMenu);
   assignTeamScreen.windows.add(topMenu);
+  newTestScreen.windows.add(topMenu);
 }
 
 void updateTopMenu() {

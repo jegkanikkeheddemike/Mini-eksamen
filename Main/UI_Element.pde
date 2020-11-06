@@ -44,10 +44,10 @@ class UIElement {
   }
   void drawElementInList(PGraphics window) {
     window.fill(255, 150, 150);
-		window.rect(x, y, sizeX, sizeY);
-		window.textSize(sizeY - 1);
-		window.fill(0);
-		window.text("NO TEXTURE", x, y + sizeY);
+    window.rect(x, y, sizeX, sizeY);
+    window.textSize(sizeY - 1);
+    window.fill(0);
+    window.text("NO TEXTURE", x, y + sizeY);
   }
   boolean clickedOn() {
     if (mouseReleased) {
@@ -230,7 +230,7 @@ class List extends UIElement {
   }
 
   void drawElement() {
-    PGraphics windowRender = createGraphics(sizeX,sizeY-10);
+    PGraphics windowRender = createGraphics(sizeX, sizeY-10);
     textSize(20);
     text(description, x, y);
     int yy = 10+(int) scroll;
@@ -250,12 +250,41 @@ class List extends UIElement {
   void addElements() {
   }
 }
-
+class Test extends UIElement{
+  int testID;
+  String testSubject;
+  Test(int getTestID, String getTestName, String getTestSubject, String getTestDescription) {
+    testID = getTestID;
+    testSubject = getTestSubject;
+    name = getTestName;
+    description = getTestDescription;
+    sizeY = 50;
+    type = "Test";
+  }
+  void reactClickedOn() {
+    println("WHAT SHOULD THE TEACHER BE ABLE TO DO WITH THE ALREADY CREATED TESTS?");
+    println(name,"ID:", testID);
+  }
+  void drawElementInList(PGraphics window) {
+    window.fill(255);
+    if (mouseOn()) {
+      window.fill(200,200,255);
+    }
+    window.rect(localX, localY, sizeX, 50);
+    window.fill(0);
+    window.textSize(20);
+    window.text(name + " ID : " + testID, localX+3, localY + 20);
+    window.textSize(15);
+    window.text(description, localX+3, localY + 40);
+  }
+}
 
 class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   Date dueDate;
   int testID;
   int assignmentID;
+  float percentRightness;
+  boolean finished = false;
   Assignment(int getAssignmentID, String getName, String getDescription, int getTestID) {
     assignmentID = getAssignmentID;
     name = getName;
@@ -265,7 +294,8 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     type = "Assignment";
   }
   void reactClickedOn() {
-    if(mainSession.role.equals("Student")){
+    ETest.cAssignment = this;
+    if (mainSession.role.equals("Student")) {
       try {
         try {
         takeTest.elements.removeAll(ETest.Questions.get(ETest.CQuestionIndex).answers.Choices);
@@ -296,14 +326,17 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       catch(Exception e) {
         e.printStackTrace();
       }
-    }else if(mainSession.role.equals("Teacher")){
-      println("SHOW RESULTS FOR TEST NAMED: ", name, " WITH ASSIGNMENTID: ",assignmentID);
+    } else if (mainSession.role.equals("Teacher")) {
+      println("SHOW RESULTS FOR TEST NAMED: ", name, " WITH ASSIGNMENTID: ", assignmentID);
     }
   }
   void drawElementInList(PGraphics window) {
+    if (finished){
+      updateRightness(); 
+    }
     window.fill(255);
     if (mouseOn()) {
-      window.fill(200,200,255);
+      window.fill(200, 200, 255);
     }
     window.rect(localX, localY, sizeX, 50);
     window.fill(0);
@@ -311,8 +344,42 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     window.text(name + " ID : " + testID, localX+3, localY + 20);
     window.textSize(15);
     window.text(description, localX+3, localY + 40);
+    window.textSize(20);
+    window.text(percentRightness + "%", localX+280, localY + 40);
   }
   void updateProgress() {
+  }
+
+  void updateRightness() {
+    int correct = 0;
+    int wrong = 0;
+    int pending = 0;
+    try {
+      Statement st = db.createStatement();
+      ResultSet rs = st.executeQuery("SELECT correctness FROM Answers WHERE (studentID = "+mainSession.userID+") AND (AssignmentID = "+testID+");");     
+      while (rs.next()) {
+        String correctness = rs.getString("Correctness");
+        if (correctness.equals("RIGHT")) {
+          correct +=1;
+        } else if (correctness.equals("WRONG")) {
+          wrong +=1;
+        } else {
+          pending +=1;
+        }
+      }
+      rs.close();
+      st.close();
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    println(wrong, correct);
+    if(correct+wrong+pending != 0){
+      percentRightness = (correct*100/(correct+wrong+pending));
+      println(correct,wrong,pending);
+      println(percentRightness);
+    }
   }
 }
 
@@ -374,8 +441,6 @@ class MultiChoice extends UIElement {
     textSize(25);
     text(description, x, y);
     textSize(20);
-    
-    
   }
   void stepAlways() {
     int yy = 15;
@@ -420,19 +485,19 @@ class Choice extends UIElement {
     sizeY = 15;
   }
   void drawElement() {
-      textAlign(LEFT);
-      noStroke();
-      fill(255);
-      if (isActive) {
-        fill(200,200,255);
-      }
-      if (chosen) {
-        fill(0);
-      }
-      rect(x, y, 15, 15);
+    textAlign(LEFT);
+    noStroke();
+    fill(255);
+    if (isActive) {
+      fill(200, 200, 255);
+    }
+    if (chosen) {
       fill(0);
-      textSize(15);
-      text(ChoiceName, x + 30, y + 15);
+    }
+    rect(x, y, 15, 15);
+    fill(0);
+    textSize(15);
+    text(ChoiceName, x + 30, y + 15);
   }
   void reactEnter() {
     handler.Chosen = this;
@@ -470,7 +535,7 @@ class TextBox extends UIElement {
       } else if (tappedKey == -3 && cursorIndex < text.length()) {  //RIGHT ARROW KEY
         cursorIndex += 1;
         //}
-      } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122)) {
+      } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122) || (tappedKey == 32)) {
         text = text.substring(0, cursorIndex) + char(tappedKey) + text.substring(cursorIndex);
         cursorIndex += 1;
       }
@@ -589,6 +654,7 @@ class ElevTest extends UIElement {
   ArrayList<Question> Questions = new ArrayList<Question>();
   int CQuestionIndex = 0;
   int testID;
+  Assignment cAssignment;
   ElevTest(String getName, String getDescription, ArrayList<Question> getQuestions) {
     name = getName;
     description = getDescription;
@@ -615,7 +681,6 @@ class ElevTest extends UIElement {
   }
 }
 
-
 class Question extends UIElement {
   int testID;
   int QID;
@@ -630,7 +695,7 @@ class Question extends UIElement {
     rightAnswerIndex = getRAI;
     QID = getQID;
     for (String A : getAnswers) {
-      answers.Choices.add(new Choice(A,answers));
+      answers.Choices.add(new Choice(A, answers));
     }
     type = "Question";
   }
