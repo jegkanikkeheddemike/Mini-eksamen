@@ -15,7 +15,9 @@ class Window {
 
   ArrayList<UIElement> elements = new ArrayList<UIElement>();
   ArrayList<UIElement> removeList = new ArrayList<UIElement>();
+  
   ArrayList<String> interacterable = new ArrayList<String>();
+  int multiChoiceIndex = -1;
 
   Window(int getX, int getY, int getSizeX, int getSizeY, String getName) {
     x = getX;
@@ -26,7 +28,8 @@ class Window {
     interacterable.add("TextBox");
     interacterable.add("Button");
     interacterable.add("ScreenButton");
-    //interacterable.add("MultiChoice");
+    interacterable.add("Choice");
+
 
     //["TextBox","Button","ScreenButton","MultiChoice"];
   }
@@ -41,11 +44,10 @@ class Window {
   }
 
   void stepWindow() {
-    if (keyTapped(9)) {
+    if (keyTapped(9)) { //SWITCHING BETWEEN ACTIVE WINDOWS USING SHIFT.
       for (int i = 0; i < elements.size(); i ++) {
         UIElement e = elements.get(i);
         if (e.isActive) {
-          println("PRE", e.type);
           e.isActive = false;
           int nI = i+1;
           if (nI == elements.size()) {
@@ -60,14 +62,15 @@ class Window {
             n = elements.get(nI);
           }
           n.isActive = true;
-          println("POST", n.type);
+          
           break;
         }
       }
     }
 
 
-    for (UIElement element : elements) {
+    for (int i = 0; i < elements.size();i ++) {
+      UIElement element = elements.get(i);
       element.step();
     }
     for (UIElement element : removeList) {
