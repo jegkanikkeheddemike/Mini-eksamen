@@ -209,6 +209,7 @@ class ScreenButton extends UIElement {
 class List extends UIElement {
   PGraphics listRender;
   float scroll = 0;
+  float maxScroll = 0;  //KOMMER ALDRIG TIL AT VÆRE 0!!
   ArrayList<UIElement> elements = new ArrayList<UIElement>();
   List(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, Window getOwner) {
     listRender = createGraphics(getSizeX, getOwner.sizeY - 20);
@@ -230,8 +231,13 @@ class List extends UIElement {
         element.step();
       }
       if (mouseOn()) {
-
         scroll += scrollAmount;
+        if (scroll > 0) {
+          scroll = 0;
+        }
+        if (scroll < maxScroll) {
+          scroll = maxScroll;
+        }
       }
     }
   }
@@ -242,6 +248,8 @@ class List extends UIElement {
       textSize(20);
       text(description, x, y);
       int yy = 10+(int) scroll;
+      int height = 0;
+
       windowRender.beginDraw();
       windowRender.background(0,0,0,100);
       for (UIElement i : elements) {
@@ -252,6 +260,10 @@ class List extends UIElement {
         i.sizeX = sizeX - 20;
         i.drawElementInList(windowRender);
         yy += i.sizeY + 10;
+        height += i.sizeY+10;
+      }
+      if (height > sizeY) {
+        maxScroll = -(height-sizeY)-20;
       }
       windowRender.endDraw();
       image(windowRender, x, y);

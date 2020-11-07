@@ -44,7 +44,7 @@ void keyReleased() {
 }
 
 void mouseWheel(MouseEvent e) {
-  scrollAmount = 8*e.getCount();
+  scrollAmount = -8*e.getCount();
 }
 
 boolean keyDown(char input) {
