@@ -99,10 +99,10 @@ class UIElement {
   //TextBox
   void clearText() {
   }
-  void makeVisible(){
+  void makeVisible() {
     isVisible = true;
   }
-  void makeInvisible(){
+  void makeInvisible() {
     isVisible = false;
   }
   void calcXY() {
@@ -226,7 +226,7 @@ class List extends UIElement {
   }
 
   void stepAlways() {
-    if(isVisible){
+    if (isVisible) {
       for (UIElement element : elements) {
         element.step();
       }
@@ -243,7 +243,7 @@ class List extends UIElement {
   }
 
   void drawElement() {
-    if(isVisible){
+    if (isVisible) {
       PGraphics windowRender = createGraphics(sizeX, sizeY-10);
       textSize(20);
       text(description, x, y);
@@ -251,7 +251,7 @@ class List extends UIElement {
       int height = 0;
 
       windowRender.beginDraw();
-      windowRender.background(0,0,0,100);
+      windowRender.background(0, 0, 0, 100);
       for (UIElement i : elements) {
         i.x = x + 10;
         i.y = y + yy;
@@ -271,21 +271,20 @@ class List extends UIElement {
   }
   void addElements() {
   }
-  void makeVisible(){
+  void makeVisible() {
     isVisible = true;
-    for(UIElement element : elements){
+    for (UIElement element : elements) {
       element.makeVisible();
     }
   }
-  void makeInvisible(){
+  void makeInvisible() {
     isVisible = false;
-    for(UIElement element : elements){
+    for (UIElement element : elements) {
       element.makeInvisible();
     }
   }
-  
 }
-class Test extends UIElement{
+class Test extends UIElement {
   int testID;
   String testSubject;
   Test(int getTestID, String getTestName, String getTestSubject, String getTestDescription) {
@@ -298,12 +297,12 @@ class Test extends UIElement{
   }
   void reactClickedOn() {
     println("WHAT SHOULD THE TEACHER BE ABLE TO DO WITH THE ALREADY CREATED TESTS?");
-    println(name,"ID:", testID);
+    println(name, "ID:", testID);
   }
   void drawElementInList(PGraphics window) {
     window.fill(255);
     if (mouseOn()) {
-      window.fill(200,200,255);
+      window.fill(200, 200, 255);
     }
     window.rect(localX, localY, sizeX, 50);
     window.fill(0);
@@ -333,11 +332,11 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     if (mainSession.role.equals("Student")) {
       try {
         try {
-        takeTest.elements.removeAll(ETest.questions.get(ETest.cQuestionIndex).answers.choices);
-        } catch (Exception e) {
-
+          takeTest.elements.removeAll(ETest.questions.get(ETest.cQuestionIndex).answers.choices);
+        } 
+        catch (Exception e) {
         }
-        
+
         Statement st = db.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
         ArrayList<Question> readyQuestions = new ArrayList<Question>();
@@ -353,10 +352,25 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
           }
           readyQuestions.add(new Question(testID, Question, Answers, RAnsIn, QID));
         }
+
         ETest.cQuestionIndex = 0;
         ETest.questions.clear();
         ETest.questions.addAll(readyQuestions);
         ETest.testID = testID;
+        ETest.isFinished = ETest.testFinished();
+        for (Question Q : readyQuestions) {
+          for (Choice C: Q.answers.choices){
+            if(C.choiceName.equals(ETest.qAnswered(Q))){
+              C.chosen = true;
+            }
+          }
+          
+          
+          //if(Q.description.equals(ETest.qAnswered(Q))){
+          //  Q.isActive = true;
+          //  println("hi");
+          //}
+        }
       } 
       catch(Exception e) {
         e.printStackTrace();
@@ -366,8 +380,8 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     }
   }
   void drawElementInList(PGraphics window) {
-    if (finished){
-      updateRightness(); 
+    if (finished) {
+      updateRightness();
     }
     window.fill(255);
     if (mouseOn()) {
@@ -408,12 +422,9 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     catch (Exception e) {
       e.printStackTrace();
     }
-    
-    println(wrong, correct);
-    if(correct+wrong+pending != 0){
+
+    if (correct+wrong+pending != 0) {
       percentRightness = (correct*100/(correct+wrong+pending));
-      println(correct,wrong,pending);
-      println(percentRightness);
     }
   }
 }
@@ -471,7 +482,7 @@ class MultiChoice extends UIElement {
   }
 
   void drawElement() {
-    if(isVisible){
+    if (isVisible) {
       textAlign(LEFT);
       fill(0);
       textSize(25);
@@ -480,7 +491,7 @@ class MultiChoice extends UIElement {
     }
   }
   void stepAlways() {
-    if(isVisible){
+    if (isVisible) {
       int yy = 15;
       for (Choice c : choices) {
         if (!owner.elements.contains(c)) {
@@ -498,8 +509,8 @@ class MultiChoice extends UIElement {
       }
     }
   }
-  void choose(Choice c){
-    if (choices.contains(c)){
+  void choose(Choice c) {
+    if (choices.contains(c)) {
       chosen = c;
     }
   }
@@ -514,16 +525,16 @@ class MultiChoice extends UIElement {
     chosen = null;
   }
 
-  void makeVisible(){
+  void makeVisible() {
     isVisible = true;
-    for(Choice c : choices){
+    for (Choice c : choices) {
       c.makeVisible();
     }
   }
 
-  void makeInvisible(){
+  void makeInvisible() {
     isVisible = false;
-    for(Choice c : choices){
+    for (Choice c : choices) {
       c.makeInvisible();
     }
   }
@@ -542,7 +553,7 @@ class Choice extends UIElement {
     sizeY = 15;
   }
   void drawElement() {
-    if(isVisible){
+    if (isVisible) {
       textAlign(LEFT);
       noStroke();
       fill(255);
@@ -582,7 +593,7 @@ class TextBox extends UIElement {
     type = "TextBox";
   }
   void stepActive() {
-    if(isVisible){
+    if (isVisible) {
       for (Integer tappedKey : tappedKeys) {
 
 
@@ -607,7 +618,7 @@ class TextBox extends UIElement {
   }
 
   void drawElement() {
-    if(isVisible){
+    if (isVisible) {
       textAlign(LEFT);
       stroke(0);
       strokeWeight(sizeY / 10);
@@ -635,11 +646,11 @@ class TextBox extends UIElement {
       //The description
       fill(0);
       text(description, x + 1, y - 4);
-   }
+    }
   }
 
   void drawElementInList(PGraphics window) {
-    if(isVisible){
+    if (isVisible) {
       window.textAlign(LEFT);
       window.stroke(0);
       window.strokeWeight(sizeY / 10);
@@ -712,7 +723,7 @@ class TextDisplay extends UIElement {
     calcXY();
   }
   void drawElement() {
-    if(isVisible){
+    if (isVisible) {
       textAlign(textMode);
       fill(textColor);
       textSize(textSize);
@@ -720,8 +731,8 @@ class TextDisplay extends UIElement {
     }
   }
 
-  void drawElementInList(PGraphics window){
-    if(isVisible){
+  void drawElementInList(PGraphics window) {
+    if (isVisible) {
       window.textAlign(textMode);
       window.fill(textColor);
       window.textSize(textSize);
@@ -759,6 +770,8 @@ class ElevTest extends UIElement {
   ArrayList<Question> questions = new ArrayList<Question>();
   int cQuestionIndex = 0;
   int testID;
+  boolean isFinished = false;
+  boolean isAnswered = false;
   Assignment cAssignment;
   ElevTest(String getName, String getDescription, ArrayList<Question> getQuestions) {
     name = getName;
@@ -771,18 +784,74 @@ class ElevTest extends UIElement {
     description = getDescription;
   }
   void stepAlways() {
-    if (questions.size() > 0) {
-      Question Q = questions.get(cQuestionIndex);
-      Q.y = 360;
-      Q.step();
+    if (!isFinished) {
+      if (questions.size() > 0) {
+        Question Q = questions.get(cQuestionIndex);
+        Q.y = 360;
+        Q.step();
+      }
+    } else {
+      if (questions.size() > 0) {
+        Question Q = questions.get(cQuestionIndex);
+        Q.y = 360;
+        Q.step();
+      }
     }
   }
   void drawElement() {
-    if (questions.size() > 0) {
-      Question Q = questions.get(cQuestionIndex);
-      Q.y = 360;
-      Q.drawElement();
+    if (!isFinished) {
+      if (questions.size() > 0) {
+        Question Q = questions.get(cQuestionIndex);
+        Q.y = 360;
+        Q.drawElement();
+      }
+    } else {
+      if (questions.size() > 0) {
+        Question Q = questions.get(cQuestionIndex);
+        Q.y = 360;
+        Q.isActive = true;
+        Q.drawElement();
+      }
     }
+  }
+  boolean testFinished() {
+    int i=0;
+    try {
+      Statement st = db.createStatement();
+      ResultSet rs = st.executeQuery("SELECT correctness FROM Answers WHERE (studentID = "+mainSession.userID+") AND (AssignmentID = "+ETest.testID+");"); 
+      while (rs.next()) {
+        String correctness = rs.getString("correctness");
+        if (correctness.equals("RIGHT") || correctness.equals("WRONG")) {
+          i++;
+        }
+      }
+      rs.close();
+      st.close();
+    }
+    catch(Exception e) {
+      println(e);
+    }
+    if (i >= ETest.questions.size()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  String qAnswered(Question Q) {
+    String answered = null;
+    try {
+      Statement st = db.createStatement();
+      ResultSet rs = st.executeQuery("SELECT * FROM answers WHERE (studentID = "+mainSession.userID+") AND (AssignmentID = "+ETest.testID+") AND (questionID = "+ Q.QID +");");
+      while (rs.next()) {
+        answered = rs.getString("answer");
+      }
+      rs.close();
+      st.close();
+    }
+    catch(Exception e) {
+      println(e);
+    }
+    return answered;
   }
 }
 

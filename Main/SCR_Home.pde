@@ -47,10 +47,12 @@ void setupHomeStudentScreen() {
   homeStudentScreen.windows.add(studentAssignments);
 
   takeTest = new Window(50, 300, width-550, height-400, "takeTestWindow");
+  
+  
   ETest = new ElevTest("ElevTest", "Her tager du dine tests");
+  
   takeTest.elements.add(ETest);
   takeTest.elements.add(new Progressbar("PROGRESSBAR", width-800, 30, 220, 40, takeTest) {
-    
     public void stepAlways() {
       if (ETest.questions.size()-1 == ETest.cQuestionIndex) {
         isVisible = true;
