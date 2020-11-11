@@ -7,12 +7,13 @@ import java.io.IOException;
 ArrayList<Elev> Elever = new ArrayList<Elev>();
 static BufferedReader DATA;
 
-void addcsvToDb(String cName, String fName) {
+boolean addcsvToDb(String cName, String fName) {
   Elever.clear();
   String dirpath = dataPath("");
   loadEleverFromDb();
   String Line = "";
   String Split = ";";
+  boolean returnThis = true;
 
   try {
     String file = dirpath+"\\"+fName;
@@ -22,8 +23,8 @@ void addcsvToDb(String cName, String fName) {
 
 
     //println("DATA EXISTS");
-    while ((Line = DATA.readLine()) != null) {
       String[] LineData = Line.split(Split);
+    while ((Line = DATA.readLine()) != null) {
       try {
         if (LineData[1].equals("Elev")) {
           String Name = LineData[3];
@@ -55,11 +56,14 @@ void addcsvToDb(String cName, String fName) {
     }
   } 
   catch (FileNotFoundException e) {
-    System.out.println(e.getMessage());
+    //System.out.println(e.getMessage());
+    returnThis = false;
   } 
   catch (IOException e) {
     System.out.println(e);
+    returnThis = false;
   }
+  return returnThis;
 }
 
 

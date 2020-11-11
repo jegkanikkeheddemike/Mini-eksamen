@@ -13,15 +13,23 @@ void setupAssignTeamScreen() {
         Statement stCheck = db.createStatement();
         ResultSet rsCheck = stCheck.executeQuery("SELECT * FROM CLASSES WHERE(classname = '" + className + "')");
         if (rsCheck.next()) {
-          errorWindow.getElement("ErrorMessage").description = "Class already exist";
-          errorWindow.show();
-          return;
+          successWindow.getElement("SuccessMessage").description = "Added students to existing class"; 
+          //successWindow.show();   //DONT REMOVE COMMENT THINGY
+        } else {
+          successWindow.getElement("SuccessMessage").description = "Created new class and added students";
+          //successWindow.show();   //DONT REMOVE COMMENT THINGY
         }
 
         Statement st = db.createStatement();
         st.executeUpdate("INSERT INTO classes (classname) VALUES('" + className + "')");
         st.close(); //*/
-        addcsvToDb(className,fName);
+        if (addcsvToDb(className,fName)) {
+          successWindow.show();
+        } else {
+          println("FILE NOT FOUND");
+          errorWindow.getElement("ErrorMessage").description = "File not found";
+          errorWindow.show();
+        }
         ((List) existingTeams.getElement("TeamsList")).customInput();
       }
       catch (Exception e) {
@@ -94,4 +102,5 @@ void setupAssignTeamScreen() {
 
   assignTeamScreen.windows.add(assignTeamWindow);
   assignTeamScreen.windows.add(existingTeams);
+  
 }
