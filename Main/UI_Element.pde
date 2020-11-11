@@ -5,7 +5,7 @@ boolean within(float low, float middle, float high) {
 class UIElement {
   String name;
   String description;
-  String type;
+  String type = "";
   int localX;
   int localY;
   int sizeX;
@@ -283,7 +283,6 @@ class List extends UIElement {
       element.makeInvisible();
     }
   }
-  
 }
 class Test extends UIElement{
   int testID;

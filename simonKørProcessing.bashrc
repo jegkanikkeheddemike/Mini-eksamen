@@ -1,1 +1,2 @@
-processing-java --sketch="/Users/simon/Desktop/Skole/Teknikfag Digital Design/DB/Mini-eksamen/Main" --run
+P=$(pwd)
+processing-java --sketch="$P/Main" --run
