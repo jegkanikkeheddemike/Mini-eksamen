@@ -39,14 +39,11 @@ void setup() {
 
           Statement ElevSt = db.createStatement();
           ElevSt.executeUpdate("INSERT INTO students (studentname,classid,login,password) VALUES('"+e.Name+"','"+ClassID+"','"+e.Login+"','"+e.Pass+"')");
+          println("Added:",e.Name,",",ClassID,",",e.Login,",",e.Pass,"To Database");
         }
       } 
       catch (Exception e) {
       }
-    }
-    println("____");
-    for (Elev e : Elever) {
-      System.out.println(e.Login + " " + e.Pass);
     }
   } 
   catch (FileNotFoundException e) {
@@ -80,7 +77,7 @@ class Elev {
       boolean foundMatch = false;
       for (Elev e : Elever) {
         if (e.Login.equals(Login)) {
-          println(Name + " found match with", e.Name);
+          //println(Name + " found match with", e.Name);
           nameNr++;
           foundMatch = true;
         }

@@ -16,12 +16,12 @@ void addcsvToDb(String cName, String fName) {
 
   try {
     String file = dirpath+"\\"+fName;
-    println(file);
+    //println(file);
     DATA = new BufferedReader(new FileReader(file));
     //println(DATA.);
 
 
-    println("DATA EXISTS");
+    //println("DATA EXISTS");
     while ((Line = DATA.readLine()) != null) {
       String[] LineData = Line.split(Split);
       try {
@@ -47,23 +47,15 @@ void addcsvToDb(String cName, String fName) {
           Statement ElevSt = db.createStatement();  //Koden nedenunder bliver åbenbart ikke kørt??????
           ElevSt.executeUpdate("INSERT INTO students (studentname,classid,login,password) VALUES('"+e.Name+"','"+ClassID+"','"+e.Login+"','"+e.Pass+"')");
           ElevSt.close();
-        } else {
-          for (int i = 0; i < LineData.length; i ++) {
-            print(LineData[i]);
-          }
+          println("Added:",e.Name,",",ClassID,",",e.Login,",",e.Pass,"To Database");
         }
       } 
       catch (Exception e) {
       }
     }
-    println("____");
-    for (Elev e : Elever) {
-      System.out.println(e.Login + " " + e.Pass);
-    }
   } 
   catch (FileNotFoundException e) {
     System.out.println(e.getMessage());
-    println("FILE NOT FOUND");
   } 
   catch (IOException e) {
     System.out.println(e);
@@ -94,7 +86,7 @@ class Elev {
       boolean foundMatch = false;
       for (Elev e : Elever) {
         if (e.Login.equals(Login)) {
-          println(Name + " found match with", e.Name);
+          //println(Name + " found match with", e.Name);
           nameNr++;
           foundMatch = true;
         }
@@ -131,13 +123,13 @@ void loadEleverFromDb() {
       rs2.next();
       Elev e = new Elev(rs.getString("studentname"), rs2.getString("classname") );
       e.Pass = rs.getString("password");
-      println("Loaded", rs.getString("studentname") , rs2.getString("classname"));
+      //println("Loaded", rs.getString("studentname") , rs2.getString("classname"));
       loadedElever ++;
     }
     st.close();
     rs.close();
-    println("Loaded", loadedElever, "elever");
-    println("Antal elever", Elever.size());
+    //println("Loaded", loadedElever, "elever");
+    //println("Antal elever", Elever.size());
   } 
   catch (Exception e) {
     e.printStackTrace();
