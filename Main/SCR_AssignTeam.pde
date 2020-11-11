@@ -17,12 +17,13 @@ void setupAssignTeamScreen() {
           //successWindow.show();   //DONT REMOVE COMMENT THINGY
         } else {
           successWindow.getElement("SuccessMessage").description = "Created new class and added students";
+          Statement st = db.createStatement();
+          st.executeUpdate("INSERT INTO classes (classname) VALUES('" + className + "')");
+          st.close(); //*/
           //successWindow.show();   //DONT REMOVE COMMENT THINGY
         }
 
-        Statement st = db.createStatement();
-        st.executeUpdate("INSERT INTO classes (classname) VALUES('" + className + "')");
-        st.close(); //*/
+        
         if (addcsvToDb(className,fName)) {
           successWindow.show();
         } else {
