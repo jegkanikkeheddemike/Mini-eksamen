@@ -1,19 +1,25 @@
 void setupAssignTeamScreen() {
   assignTeamWindow = new Window(50, 300, width-550, height-400, "assignTeamWindow");
   assignTeamWindow.elements.add(new TextDisplay("AssignTeamHeader", "Make new Class", 20, 40, 40, assignTeamWindow, LEFT));
-  assignTeamWindow.elements.add(new TextBox("CLASSNAME","New Classname",20,100,500,40,assignTeamWindow));
-  assignTeamWindow.elements.add(new Button("CREATECLASS","Create Class",20,150,200,40,assignTeamWindow){
-      public void reactClickedOn() {
-          try {
-              String className = assignTeamWindow.getElement("CLASSNAME").getOutput();
-              Statement st = db.createStatement();
-              st.executeUpdate("INSERT INTO classes (classname) VALUES('" + className + "')");
-              st.close();
-              ((List) existingTeams.getElement("TeamsList") ).customInput();
-          }catch (Exception e) {
-              e.printStackTrace();
-          }
+  assignTeamWindow.elements.add(new TextBox("CLASSNAME", "New Classname",   20, 100,  500,  40, assignTeamWindow));
+  assignTeamWindow.elements.add(new TextBox("PATH","CSV filename. Must be in DATA folder",20, 200,  800,  40, assignTeamWindow));
+  assignTeamWindow.elements.add(new Button("CREATECLASS", "Create Class",   20, 250,  200,  40, assignTeamWindow) {
+    public void reactClickedOn() {
+      try {
+        String className = assignTeamWindow.getElement("CLASSNAME").getOutput();
+        String fName = assignTeamWindow.getElement("PATH").getOutput();
+        println(fName);
+        
+        Statement st = db.createStatement();
+        st.executeUpdate("INSERT INTO classes (classname) VALUES('" + className + "')");
+        st.close(); //*/
+        addcsvToDb(className,fName);
+        ((List) existingTeams.getElement("TeamsList")).customInput();
       }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
   }
   );
   existingTeams = new Window(width-450, 300, 400, height-400, "existingTeamsWindow");
