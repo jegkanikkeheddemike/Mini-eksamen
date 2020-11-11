@@ -10,6 +10,14 @@ void setupAssignTeamScreen() {
         String fName = assignTeamWindow.getElement("PATH").getOutput();
         println(fName);
         
+        Statement stCheck = db.createStatement();
+        ResultSet rsCheck = stCheck.executeQuery("SELECT * FROM CLASSES WHERE(classname = '" + className + "')");
+        if (rsCheck.next()) {
+          errorWindow.getElement("ErrorMessage").description = "Class already exist";
+          errorWindow.show();
+          return;
+        }
+
         Statement st = db.createStatement();
         st.executeUpdate("INSERT INTO classes (classname) VALUES('" + className + "')");
         st.close(); //*/
