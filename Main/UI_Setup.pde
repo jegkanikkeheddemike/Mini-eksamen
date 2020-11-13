@@ -97,21 +97,22 @@ void setupTopMenu() {
   topMenu = new Window(0, 0, width, 200, "TopMenu");
   topMenu.elements.add(new TextDisplay("Header", "The New Lectio", 20, 60, 60, topMenu));
   topMenu.elements.add(new TextDisplay("Username", mainSession.userName, 20, 120, 30, topMenu));
-  topMenu.elements.add(new Button("Backbutton", "Back", width-210,160,60,25,topMenu){
-  public void reactClickedOn(){
-    if (mainSession.role.equals("Student")){
-      activeScreen = homeStudentScreen;
-    }else{
-      activeScreen = homeTeacherScreen;
+  topMenu.elements.add(new Button("Backbutton", "Back", width-210, 160, 60, 25, topMenu) {
+    public void reactClickedOn() {
+      if (mainSession.role.equals("Student")) {
+        activeScreen = homeStudentScreen;
+      } else {
+        activeScreen = homeTeacherScreen;
+      }
     }
-    
   }
-  });
+  );
   topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
       ETest.questions.clear();
     }
-  });
+  }
+  );
   homeTeacherScreen.windows.add(topMenu);
   homeStudentScreen.windows.add(topMenu);
   assignTeamScreen.windows.add(topMenu);
@@ -124,30 +125,27 @@ void updateTopMenu() {
     topMenu.removeElement("Classes");
     topMenu.elements.add(new HoriList("Classes", "", 10, 160, 27, topMenu) {
       public void addElements() {
-        if (mainSession.classIDs != null) {
-    ArrayList<String> classNames = new ArrayList<String>();
-    try {
-      Statement st = db.createStatement();
-      ResultSet rs = st.executeQuery ("SELECT * FROM Classes;");
-      while(rs.next()){
-        classNames.add(rs.getString("ClassName"));
-      }
-      for (Integer ID : mainSession.classIDs) {
-        textSize(30);
-        elements.add(new ClassButton("CLASS", classNames.get(ID), 0, 0, (int) textWidth(classNames.get(ID)), 30, ID, topMenu));
-      }
-      rs.close();
-      st.close();
-    }
-    catch(Exception e) {
-      //e.printStackTrace();
-    }
-  }
-        elements.add(new ScreenButton("NEW CLASS","+", 0, 0, 30, 30, topMenu,assignTeamScreen){
+        try {
+          for (Integer ID : mainSession.classIDs) {
+            Statement st = db.createStatement();
+            ResultSet rs = st.executeQuery ("SELECT * FROM Classes WHERE ClassID = "+ID+";");
+            rs.next();
+            String className = rs.getString("ClassName");
+            textSize(30);
+            elements.add(new ClassButton("CLASS", className, 0, 0, (int) textWidth(className), 30, ID, topMenu));
+            rs.close();
+            st.close();
+          }
+        }
+        catch(Exception e) {
+          //e.printStackTrace();
+        }
+        elements.add(new ScreenButton("NEW CLASS", "+", 0, 0, 30, 30, topMenu, assignTeamScreen) {
           public void extraAction() {
             existingTeams.getElement("TeamsList").customInput(); //DEFINED IN SCR_ASSIGNTEAMS
           }
-        });
+        }
+        );
       }
     }
     );

@@ -733,6 +733,7 @@ class ClassButton extends Button {
     type = "ClassButton";
   }
   void reactClickedOn() {
+    println(buttonClassID);
     mainSession.currentClassID = buttonClassID;
     updateAssignments();
   }
@@ -747,6 +748,7 @@ class ClassIDButton extends Button {
     type = "ClassButton";
   }
   void reactClickedOn() {
+    println(ID);
     if (!pickedClassIDs.contains(this)) {
       pickedClassIDs.add(this);
       Color = 100;
@@ -786,7 +788,7 @@ class TestIDButton extends Button {
     type = "ClassButton";
   }
   void reactClickedOn() {
-
+    println(ID);
     if (!pickedTestIDs.contains(this)) {
       pickedTestIDs.add(this);
       Color = 100;

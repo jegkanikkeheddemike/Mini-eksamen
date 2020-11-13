@@ -5,25 +5,24 @@ void setupCreateAssignmentScreen() {
   createAssignmentWindow.elements.add(createAssClassList);
   createAssTestList = new List("AssignTest", "Tests", width-(width-1000+120), 80, width-1000, 300, createAssignmentWindow);
   createAssignmentWindow.elements.add(createAssTestList);
-  createAssignmentWindow.elements.add(new Button("AssignAssignment", "Assign", width/2-120, 160, 120, 40, createAssignmentWindow){
-    public void reactClickedOn(){
-      
-      for (ClassIDButton CB: pickedClassIDs){
-        for (ClassIDButton TB: pickedClassIDs){
-          try{
+  createAssignmentWindow.elements.add(new Button("AssignAssignment", "Assign", width/2-120, 160, 120, 40, createAssignmentWindow) {
+    public void reactClickedOn() {
+
+      for (ClassIDButton CB : pickedClassIDs) {
+        for (TestIDButton TB : pickedTestIDs) {
+          try {
             Statement st = db.createStatement();
-            st.executeUpdate("INSERT INTO Assignments (teacherid, classid, testid, duedate) VALUES ('"+mainSession.userID+"',´"+CB.ID+"´,'"+TB.ID+"','imorgen')");
+            st.executeUpdate("INSERT INTO Assignments (teacherid, classid, testid, duedate) VALUES ("+mainSession.userID+","+CB.ID+","+TB.ID+",'imorgen')");
             st.close();
           }
-        catch(Exception e){
-          println(e);
-        }
-        
+          catch(Exception e) {
+            println(e);
+          }
         }
       }
     }
-    
-  });
+  }
+  );
 
 
   createAssignmentScreen.windows.add(createAssignmentWindow);
@@ -50,23 +49,19 @@ void updateCreateAssLists() {
   catch (Exception e) {
     e.printStackTrace();
   }
-  if (mainSession.classIDs != null) {
-    ArrayList<String> classNames = new ArrayList<String>();
-    try {
+  try {
+    for (Integer ID : mainSession.classIDs) {
       Statement st = db.createStatement();
-      ResultSet rs = st.executeQuery ("SELECT * FROM Classes;");
-      while (rs.next()) {
-        classNames.add(rs.getString("ClassName"));
-      }
-      for (Integer ID : mainSession.classIDs) {
-        textSize(30);
-        createAssClassList.elements.add(new ClassIDButton("CLASS", classNames.get(ID), 0, 0, (int) textWidth(classNames.get(ID)), 30, ID, createAssignmentWindow));
-      }
+      ResultSet rs = st.executeQuery ("SELECT * FROM Classes WHERE ClassID = "+ID+";");
+      rs.next();
+      String className = rs.getString("ClassName");
+      textSize(30);
+      createAssClassList.elements.add(new ClassIDButton("CLASS", className, 0, 0, (int) textWidth(className), 30, ID, topMenu));
       rs.close();
       st.close();
     }
-    catch(Exception e) {
-      //e.printStackTrace();
-    }
+  }
+  catch(Exception e) {
+    //e.printStackTrace();
   }
 }
