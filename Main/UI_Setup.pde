@@ -11,6 +11,7 @@ Screen homeTeacherScreen = new Screen();
 Screen homeStudentScreen = new Screen();
 Screen assignTeamScreen = new Screen();
 Screen newTestScreen = new Screen();
+Screen createAssignmentScreen = new Screen();
 volatile Screen activeScreen = loginScreen;
 
 Window loginWindow;
@@ -26,6 +27,8 @@ Window makeQuestion;
 
 Window assignTeamWindow;
 Window existingTeams;
+
+Window createAssignmentWindow;
 
 TimedWindow errorWindow;
 TimedWindow successWindow;
@@ -50,6 +53,7 @@ void UI_Setup() {
   setupMakeTestWindow();
   setupMakeQuestionWindow();
   setupNewTestScreen();
+  setupCreateAssignmentScreen();
   setupUniversalWindows();
 }
 
@@ -74,6 +78,7 @@ void setupUniversalWindows() {
   homeStudentScreen.windows.add(errorWindow);
   assignTeamScreen.windows.add(errorWindow);
   newTestScreen.windows.add(errorWindow);
+  createAssignmentScreen.windows.add(errorWindow);
 
   loginScreen.windows.add(successWindow);
   createUserScreen.windows.add(successWindow);
@@ -81,6 +86,7 @@ void setupUniversalWindows() {
   homeStudentScreen.windows.add(successWindow);
   assignTeamScreen.windows.add(successWindow);
   newTestScreen.windows.add(successWindow);
+  createAssignmentScreen.windows.add(successWindow);
 }
 
 
@@ -98,6 +104,7 @@ void setupTopMenu() {
   homeStudentScreen.windows.add(topMenu);
   assignTeamScreen.windows.add(topMenu);
   newTestScreen.windows.add(topMenu);
+  createAssignmentScreen.windows.add(topMenu);
 }
 
 void updateTopMenu() {
