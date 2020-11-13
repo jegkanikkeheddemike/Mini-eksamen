@@ -4,11 +4,7 @@ void setupTeacherAssignmentsWindow(){
   teacherAssignments.elements.add(new TextDisplay("TeacherAssignmentHeader", "Assignments", 20, 40, 40, teacherAssignments));
   teacherAssignmentList = new List("TeacherAssignments", "", 10, 50, 380,height-(400+50+60), teacherAssignments);
   teacherAssignments.elements.add(teacherAssignmentList);
-  Button newAssignmentButton = new Button("NewAssignment", "+", 400/2-40/2, height-400-60, 40, 40, teacherAssignments){//width-450 + 400/2, height-400 - 30, 30, 30, teacherAssignments){
-    public void reactClickedOn(){
-      println("HERE WE SHOULD SWITCH TO THE ADD A NEW ASSIGMENT SCREEN");
-    }
-  };
+  ScreenButton newAssignmentButton = new ScreenButton("NewAssignment", "+", 400/2-40/2, height-400-60, 40, 40, teacherAssignments,createAssignmentScreen);
   teacherAssignments.elements.add(newAssignmentButton);
 }
 
