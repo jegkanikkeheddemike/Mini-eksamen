@@ -5,7 +5,7 @@ boolean within(float low, float middle, float high) {
 class UIElement {
   String name;
   String description;
-  String type;
+  String type = "";
   int localX;
   int localY;
   int sizeX;
@@ -283,7 +283,6 @@ class List extends UIElement {
       element.makeInvisible();
     }
   }
-  
 }
 class Test extends UIElement{
   int testID;
@@ -594,7 +593,7 @@ class TextBox extends UIElement {
         } else if (tappedKey == -3 && cursorIndex < text.length()) {  //RIGHT ARROW KEY
           cursorIndex += 1;
           //}
-        } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122) || (tappedKey == 32)) {
+        } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122) || (tappedKey >= 32 && tappedKey <= 63)) {
           text = text.substring(0, cursorIndex) + char(tappedKey) + text.substring(cursorIndex);
           cursorIndex += 1;
         }

@@ -1,19 +1,42 @@
 void setupAssignTeamScreen() {
   assignTeamWindow = new Window(50, 300, width-550, height-400, "assignTeamWindow");
   assignTeamWindow.elements.add(new TextDisplay("AssignTeamHeader", "Make new Class", 20, 40, 40, assignTeamWindow, LEFT));
-  assignTeamWindow.elements.add(new TextBox("CLASSNAME","New Classname",20,100,500,40,assignTeamWindow));
-  assignTeamWindow.elements.add(new Button("CREATECLASS","Create Class",20,150,200,40,assignTeamWindow){
-      public void reactClickedOn() {
-          try {
-              String className = assignTeamWindow.getElement("CLASSNAME").getOutput();
-              Statement st = db.createStatement();
-              st.executeUpdate("INSERT INTO classes (classname) VALUES('" + className + "')");
-              st.close();
-              ((List) existingTeams.getElement("TeamsList") ).customInput();
-          }catch (Exception e) {
-              e.printStackTrace();
-          }
+  assignTeamWindow.elements.add(new TextBox("CLASSNAME", "New Classname",   20, 100,  500,  40, assignTeamWindow));
+  assignTeamWindow.elements.add(new TextBox("PATH","CSV filename. Must be in DATA folder",20, 200,  800,  40, assignTeamWindow));
+  assignTeamWindow.elements.add(new Button("CREATECLASS", "Create Class",   20, 250,  200,  40, assignTeamWindow) {
+    public void reactClickedOn() {
+      try {
+        String className = assignTeamWindow.getElement("CLASSNAME").getOutput();
+        String fName = assignTeamWindow.getElement("PATH").getOutput();
+        println(fName);
+        
+        Statement stCheck = db.createStatement();
+        ResultSet rsCheck = stCheck.executeQuery("SELECT * FROM CLASSES WHERE(classname = '" + className + "')");
+        if (rsCheck.next()) {
+          successWindow.getElement("SuccessMessage").description = "Added students to existing class"; 
+          //successWindow.show();   //DONT REMOVE COMMENT THINGY
+        } else {
+          successWindow.getElement("SuccessMessage").description = "Created new class and added students";
+          Statement st = db.createStatement();
+          st.executeUpdate("INSERT INTO classes (classname) VALUES('" + className + "')");
+          st.close(); //*/
+          //successWindow.show();   //DONT REMOVE COMMENT THINGY
+        }
+
+        
+        if (addcsvToDb(className,fName)) {
+          successWindow.show();
+        } else {
+          println("FILE NOT FOUND");
+          errorWindow.getElement("ErrorMessage").description = "File not found";
+          errorWindow.show();
+        }
+        ((List) existingTeams.getElement("TeamsList")).customInput();
       }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
   }
   );
   existingTeams = new Window(width-450, 300, 400, height-400, "existingTeamsWindow");
@@ -80,4 +103,5 @@ void setupAssignTeamScreen() {
 
   assignTeamScreen.windows.add(assignTeamWindow);
   assignTeamScreen.windows.add(existingTeams);
+  
 }

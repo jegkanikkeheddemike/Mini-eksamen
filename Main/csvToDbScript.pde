@@ -3,26 +3,34 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-static BufferedReader DATA;
-static ArrayList<Elev> Elever;
 
-void setup() {
-  Elever = new ArrayList<Elev>();
-  connectToDatabase();
+ArrayList<Elev> Elever = new ArrayList<Elev>();
+static BufferedReader DATA;
+
+boolean addcsvToDb(String cName, String fName) {
+  Elever.clear();
+  String dirpath = dataPath("");
   loadEleverFromDb();
   String Line = "";
   String Split = ";";
+  boolean returnThis = true;
 
   try {
-    DATA = new BufferedReader(new FileReader("C:\\GitHub\\Mini-eksamen\\LOADDATA\\LoadData\\DATA.csv"));
-    while ((Line = DATA.readLine()) != null) {
+    String file = dirpath+"\\"+fName;
+    //println(file);
+    DATA = new BufferedReader(new FileReader(file));
+    //println(DATA.);
+
+
+    //println("DATA EXISTS");
       String[] LineData = Line.split(Split);
+    while ((Line = DATA.readLine()) != null) {
       try {
         if (LineData[1].equals("Elev")) {
           String Name = LineData[3];
           String Klasse = LineData[2];
           Klasse = Klasse.substring(2, 5);
-          Elev e = new Elev(Name, "DDU");
+          Elev e = new Elev(Name, cName);
 
           Statement ClassSt = db.createStatement();
           ResultSet ClassRs = ClassSt.executeQuery("SELECT * FROM classes WHERE(classname = '"+e.Klasse+"');");
@@ -37,8 +45,9 @@ void setup() {
             ClassID = ClassRs.getInt("classid");
           }
 
-          Statement ElevSt = db.createStatement();
+          Statement ElevSt = db.createStatement();  //Koden nedenunder bliver åbenbart ikke kørt??????
           ElevSt.executeUpdate("INSERT INTO students (studentname,classid,login,password) VALUES('"+e.Name+"','"+ClassID+"','"+e.Login+"','"+e.Pass+"')");
+          ElevSt.close();
           println("Added:",e.Name,",",ClassID,",",e.Login,",",e.Pass,"To Database");
         }
       } 
@@ -47,12 +56,16 @@ void setup() {
     }
   } 
   catch (FileNotFoundException e) {
-    System.out.println(e);
+    //System.out.println(e.getMessage());
+    returnThis = false;
   } 
   catch (IOException e) {
     System.out.println(e);
+    returnThis = false;
   }
+  return returnThis;
 }
+
 
 class Elev {
   String Name;
@@ -90,10 +103,39 @@ class Elev {
   }
   String makePass() {
     String Pass = "";
-    Pass += ""+char(int(random(101,122)));
-    Pass += ""+char(int(random(101,122)));
-    Pass += ""+char(int(random(101,122)));
-    Pass += ""+char(int(random(101,122)));
+    Pass += ""+char(int(random(101, 122)));
+    Pass += ""+char(int(random(101, 122)));
+    Pass += ""+char(int(random(101, 122)));
+    Pass += ""+char(int(random(101, 122)));
     return Pass;
+  }
+}
+
+
+
+void loadEleverFromDb() {
+  try {
+    Statement st = db.createStatement();
+    ResultSet rs = st.executeQuery("SELECT * FROM students");
+    int loadedElever = 0;
+
+    
+
+    while (rs.next()) {
+      Statement st2 = db.createStatement();
+      ResultSet rs2 = st2.executeQuery("SELECT * FROM classes WHERE(classid = '" + rs.getInt("classid") + "')");
+      rs2.next();
+      Elev e = new Elev(rs.getString("studentname"), rs2.getString("classname") );
+      e.Pass = rs.getString("password");
+      //println("Loaded", rs.getString("studentname") , rs2.getString("classname"));
+      loadedElever ++;
+    }
+    st.close();
+    rs.close();
+    //println("Loaded", loadedElever, "elever");
+    //println("Antal elever", Elever.size());
+  } 
+  catch (Exception e) {
+    e.printStackTrace();
   }
 }
