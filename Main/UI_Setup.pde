@@ -89,6 +89,16 @@ void setupTopMenu() {
   topMenu = new Window(0, 0, width, 200, "TopMenu");
   topMenu.elements.add(new TextDisplay("Header", "The New Lectio", 20, 60, 60, topMenu));
   topMenu.elements.add(new TextDisplay("Username", mainSession.userName, 20, 120, 30, topMenu));
+  topMenu.elements.add(new Button("Backbutton", "Back", width-210,160,60,25,topMenu){
+  public void reactClickedOn(){
+    if (mainSession.role.equals("Student")){
+      activeScreen = homeStudentScreen;
+    }else{
+      activeScreen = homeTeacherScreen;
+    }
+    
+  }
+  });
   topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
       ETest.questions.clear();

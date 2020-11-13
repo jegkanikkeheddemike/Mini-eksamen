@@ -408,11 +408,8 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       e.printStackTrace();
     }
     
-    println(wrong, correct);
     if(correct+wrong+pending != 0){
       percentRightness = (correct*100/(correct+wrong+pending));
-      println(correct,wrong,pending);
-      println(percentRightness);
     }
   }
 }
