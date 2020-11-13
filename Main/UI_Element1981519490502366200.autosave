@@ -336,10 +336,13 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   void reactClickedOn() {
     List answerList = (List) takeTest.getElement("CheckCorrect");
     if (finished) {
-
+      try {
+        takeTest.elements.removeAll(ETest.questions.get(ETest.cQuestionIndex).answers.choices);
+      } 
+      catch (Exception e) {
+      }
       takeTest.getElement("NQButton").isVisible = false;
       ETest.isVisible = false;
-      ETest.questions.clear();
       answerList.isVisible = true;
       answerList.elements.clear();
       try {
@@ -367,6 +370,12 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       ETest.cAssignment = this;
       if (mainSession.role.equals("Student")) {
         try {
+          try {
+            takeTest.elements.removeAll(ETest.questions.get(ETest.cQuestionIndex).answers.choices);
+          } 
+          catch (Exception e) {
+          }
+
           Statement st = db.createStatement();
           ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
           ArrayList<Question> readyQuestions = new ArrayList<Question>();
@@ -884,8 +893,8 @@ class Answer extends UIElement {
     type = "Answer";
     localX = 0;
     localY = 0;
-    sizeX = takeTest.sizeX-120;
-    sizeY = 60;
+    sizeX = 800;
+    sizeY = 50;
   }
   void drawElementInList(PGraphics g) {
     if (answer.equals(correctAnswer)) {
@@ -899,7 +908,7 @@ class Answer extends UIElement {
     g.text(question, localX+3, localY+27);
     g.textSize(20);
     if (answer.equals(correctAnswer)) {
-      g.text(answer, localX+3, localY+50);
+      g.text(answer, localX+3, localY+48);
     } else {
       g.text(answer + " // " + correctAnswer, localX+3, localY+48);
     }

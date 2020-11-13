@@ -108,6 +108,9 @@ void setupTopMenu() {
   topMenu.elements.add(new ScreenButton("Logout", "Logout", width-130, 160, 100, 25, topMenu, loginScreen) {
     public void extraAction() {
       ETest.questions.clear();
+      List answerList = (List) takeTest.getElement("CheckCorrect");
+      answerList.elements.clear();
+      takeTest.getElement("CheckCorrect").isVisible = false;
     }
   });
   homeTeacherScreen.windows.add(topMenu);
