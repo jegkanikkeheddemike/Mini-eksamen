@@ -317,7 +317,7 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   Date dueDate;
   int testID;
   int assignmentID;
-  float percentRightness;
+  float percentCorrect;
   boolean finished = false;
   Assignment(int getAssignmentID, String getName, String getDescription, int getTestID) {
     assignmentID = getAssignmentID;
@@ -328,15 +328,12 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     type = "Assignment";
   }
   void reactClickedOn() {
+    if (finished) {
+      return;
+    }
     ETest.cAssignment = this;
     if (mainSession.role.equals("Student")) {
       try {
-        try {
-          takeTest.elements.removeAll(ETest.questions.get(ETest.cQuestionIndex).answers.choices);
-        } 
-        catch (Exception e) {
-        }
-
         Statement st = db.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
         ArrayList<Question> readyQuestions = new ArrayList<Question>();
@@ -350,7 +347,7 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
           while (ansRS.next()) {
             Answers.add(ansRS.getString(2)); //GetString 1 er bare Indexet i resultsettet. Mens 2 er Værdien
           }
-          readyQuestions.add(new Question(testID, Question, Answers, RAnsIn, QID));
+          readyQuestions.add(new Question(testID, assignmentID, Question, Answers, RAnsIn, QID));
         }
         ETest.cQuestionIndex = 0;
         ETest.questions.clear();
@@ -365,12 +362,12 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     }
   }
   void drawElementInList(PGraphics window) {
-    if (finished) {
-      updateRightness();
-    }
     window.fill(255);
     if (mouseOn()) {
       window.fill(200, 200, 255);
+    }
+    if (finished) {
+      window.fill(200,255,200);
     }
     window.rect(localX, localY, sizeX, 50);
     window.fill(0);
@@ -378,38 +375,36 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     window.text(name + " ID : " + testID, localX+3, localY + 20);
     window.textSize(15);
     window.text(description, localX+3, localY + 40);
-    window.textSize(20);
-    window.text(percentRightness + "%", localX+280, localY + 40);
+    if (finished) {
+      window.textSize(20);
+      window.text(percentCorrect + "%", localX+280, localY + 40);
+    }
   }
-  void updateProgress() {
-  }
-
   void updateRightness() {
     int correct = 0;
-    int wrong = 0;
-    int pending = 0;
+    int qAmout = 0;
     try {
+      //FIRST GET AMOUNT OF QUESTIONS!!!!
+      Statement getQs = db.createStatement();
+      ResultSet getQr = getQs.executeQuery("SELECT * FROM questions WHERE testid = " + testID + ";");
+      while(getQr.next()) {
+        qAmout++;
+      }
+      getQr.close();
+      getQs.close();
       Statement st = db.createStatement();
-      ResultSet rs = st.executeQuery("SELECT correctness FROM Answers WHERE (studentID = "+mainSession.userID+") AND (AssignmentID = "+testID+");");     
+      ResultSet rs = st.executeQuery("SELECT * FROM answers WHERE(assignmentid = " + assignmentID + " and studentid = " + mainSession.userID + ")");
       while (rs.next()) {
-        String correctness = rs.getString("Correctness");
-        if (correctness.equals("RIGHT")) {
-          correct +=1;
-        } else if (correctness.equals("WRONG")) {
-          wrong +=1;
-        } else {
-          pending +=1;
+        finished = true;
+        if (rs.getString("correctness").equals("RIGHT")) {
+          correct++;
         }
       }
       rs.close();
       st.close();
-    }
-    catch (Exception e) {
+      percentCorrect = 100 * correct / qAmout; 
+    } catch (Exception e) {
       e.printStackTrace();
-    }
-
-    if (correct+wrong+pending != 0) {
-      percentRightness = (correct*100/(correct+wrong+pending));
     }
   }
 }
@@ -473,6 +468,9 @@ class MultiChoice extends UIElement {
       textSize(25);
       text(description, x, y);
       textSize(20);
+      for (Choice c: choices) {
+        c.drawElement();
+      }
     }
   }
   void stepAlways() {
@@ -491,6 +489,7 @@ class MultiChoice extends UIElement {
         c.y = y+yy;
         //DEN TEGNER SELV FRA WINDOW
         yy += 30;
+        c.step();
       }
     }
   }
@@ -851,13 +850,15 @@ class ElevTest extends UIElement {
 
 class Question extends UIElement {
   int testID;
+  int assignmentID;
   int QID;
   String question;
   int rightAnswerIndex;
   ArrayList<String> answerList;
   MultiChoice answers = new MultiChoice(question+"MC", "Choose Your answer", 50, 100, takeTest);
-  Question(int getTestID, String getQuestion, ArrayList<String> getAnswers, int getRAI, int getQID) {
+  Question(int getTestID, int getAssignmentID, String getQuestion, ArrayList<String> getAnswers, int getRAI, int getQID) {
     testID = getTestID;
+    assignmentID = getAssignmentID;
     question = getQuestion;
     answerList = getAnswers;
     rightAnswerIndex = getRAI;

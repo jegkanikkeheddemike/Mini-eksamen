@@ -88,7 +88,9 @@ class Window {
       }
       for (int i = 0; i < elements.size();i ++) {
         UIElement element = elements.get(i);
-        element.step();
+        if (!element.type.equals("Choice")) {
+          element.step();
+        }
       }
       for (UIElement element : removeList) {
         elements.remove(element);
@@ -109,7 +111,8 @@ class Window {
         rect(x, y, sizeX, sizeY);
       }
       for (UIElement element : elements) {
-        element.drawElement();
+        if (!element.type.equals("Choice")){
+        element.drawElement();}
       }
     }
   }

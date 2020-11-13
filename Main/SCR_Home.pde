@@ -76,7 +76,7 @@ void setupHomeStudentScreen() {
             correctness = "WRONG";
           }
           Statement st = db.createStatement();
-          st.executeUpdate("INSERT INTO answers (studentid,assignmentid,questionid,answer,correctness) VALUES("+mainSession.userID+","+ETest.testID+","+ Q.QID+",'" +Q.answers.getOutput()+"','" + correctness+"')");
+          st.executeUpdate("INSERT INTO answers (studentid,assignmentid,questionid,answer,correctness) VALUES("+mainSession.userID+","+Q.assignmentID+","+ Q.QID+",'" +Q.answers.getOutput()+"','" + correctness+"')");
           st.close();
         } 
         catch (Exception e) {
