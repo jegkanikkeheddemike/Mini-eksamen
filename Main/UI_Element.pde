@@ -99,10 +99,10 @@ class UIElement {
   //TextBox
   void clearText() {
   }
-  void makeVisible(){
+  void makeVisible() {
     isVisible = true;
   }
-  void makeInvisible(){
+  void makeInvisible() {
     isVisible = false;
   }
   void calcXY() {
@@ -226,7 +226,7 @@ class List extends UIElement {
   }
 
   void stepAlways() {
-    if(isVisible){
+    if (isVisible) {
       for (UIElement element : elements) {
         element.step();
       }
@@ -243,7 +243,7 @@ class List extends UIElement {
   }
 
   void drawElement() {
-    if(isVisible){
+    if (isVisible) {
       PGraphics windowRender = createGraphics(sizeX, sizeY-10);
       textSize(20);
       text(description, x, y);
@@ -251,7 +251,7 @@ class List extends UIElement {
       int height = 0;
 
       windowRender.beginDraw();
-      windowRender.background(0,0,0,100);
+      windowRender.background(0, 0, 0, 100);
       for (UIElement i : elements) {
         i.x = x + 10;
         i.y = y + yy;
@@ -271,20 +271,20 @@ class List extends UIElement {
   }
   void addElements() {
   }
-  void makeVisible(){
+  void makeVisible() {
     isVisible = true;
-    for(UIElement element : elements){
+    for (UIElement element : elements) {
       element.makeVisible();
     }
   }
-  void makeInvisible(){
+  void makeInvisible() {
     isVisible = false;
-    for(UIElement element : elements){
+    for (UIElement element : elements) {
       element.makeInvisible();
     }
   }
 }
-class Test extends UIElement{
+class Test extends UIElement {
   int testID;
   String testSubject;
   Test(int getTestID, String getTestName, String getTestSubject, String getTestDescription) {
@@ -297,12 +297,12 @@ class Test extends UIElement{
   }
   void reactClickedOn() {
     println("WHAT SHOULD THE TEACHER BE ABLE TO DO WITH THE ALREADY CREATED TESTS?");
-    println(name,"ID:", testID);
+    println(name, "ID:", testID);
   }
   void drawElementInList(PGraphics window) {
     window.fill(255);
     if (mouseOn()) {
-      window.fill(200,200,255);
+      window.fill(200, 200, 255);
     }
     window.rect(localX, localY, sizeX, 50);
     window.fill(0);
@@ -332,11 +332,11 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     if (mainSession.role.equals("Student")) {
       try {
         try {
-        takeTest.elements.removeAll(ETest.questions.get(ETest.cQuestionIndex).answers.choices);
-        } catch (Exception e) {
-
+          takeTest.elements.removeAll(ETest.questions.get(ETest.cQuestionIndex).answers.choices);
+        } 
+        catch (Exception e) {
         }
-        
+
         Statement st = db.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM questions WHERE(testid = " + testID + ");");
         ArrayList<Question> readyQuestions = new ArrayList<Question>();
@@ -365,8 +365,8 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     }
   }
   void drawElementInList(PGraphics window) {
-    if (finished){
-      updateRightness(); 
+    if (finished) {
+      updateRightness();
     }
     window.fill(255);
     if (mouseOn()) {
@@ -407,8 +407,8 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     catch (Exception e) {
       e.printStackTrace();
     }
-    
-    if(correct+wrong+pending != 0){
+
+    if (correct+wrong+pending != 0) {
       percentRightness = (correct*100/(correct+wrong+pending));
     }
   }
@@ -467,7 +467,7 @@ class MultiChoice extends UIElement {
   }
 
   void drawElement() {
-    if(isVisible){
+    if (isVisible) {
       textAlign(LEFT);
       fill(0);
       textSize(25);
@@ -476,7 +476,7 @@ class MultiChoice extends UIElement {
     }
   }
   void stepAlways() {
-    if(isVisible){
+    if (isVisible) {
       int yy = 15;
       for (Choice c : choices) {
         if (!owner.elements.contains(c)) {
@@ -494,8 +494,8 @@ class MultiChoice extends UIElement {
       }
     }
   }
-  void choose(Choice c){
-    if (choices.contains(c)){
+  void choose(Choice c) {
+    if (choices.contains(c)) {
       chosen = c;
     }
   }
@@ -510,16 +510,16 @@ class MultiChoice extends UIElement {
     chosen = null;
   }
 
-  void makeVisible(){
+  void makeVisible() {
     isVisible = true;
-    for(Choice c : choices){
+    for (Choice c : choices) {
       c.makeVisible();
     }
   }
 
-  void makeInvisible(){
+  void makeInvisible() {
     isVisible = false;
-    for(Choice c : choices){
+    for (Choice c : choices) {
       c.makeInvisible();
     }
   }
@@ -538,7 +538,7 @@ class Choice extends UIElement {
     sizeY = 15;
   }
   void drawElement() {
-    if(isVisible){
+    if (isVisible) {
       textAlign(LEFT);
       noStroke();
       fill(255);
@@ -578,7 +578,7 @@ class TextBox extends UIElement {
     type = "TextBox";
   }
   void stepActive() {
-    if(isVisible){
+    if (isVisible) {
       for (Integer tappedKey : tappedKeys) {
 
 
@@ -603,7 +603,7 @@ class TextBox extends UIElement {
   }
 
   void drawElement() {
-    if(isVisible){
+    if (isVisible) {
       textAlign(LEFT);
       stroke(0);
       strokeWeight(sizeY / 10);
@@ -631,11 +631,11 @@ class TextBox extends UIElement {
       //The description
       fill(0);
       text(description, x + 1, y - 4);
-   }
+    }
   }
 
   void drawElementInList(PGraphics window) {
-    if(isVisible){
+    if (isVisible) {
       window.textAlign(LEFT);
       window.stroke(0);
       window.strokeWeight(sizeY / 10);
@@ -708,7 +708,7 @@ class TextDisplay extends UIElement {
     calcXY();
   }
   void drawElement() {
-    if(isVisible){
+    if (isVisible) {
       textAlign(textMode);
       fill(textColor);
       textSize(textSize);
@@ -716,8 +716,8 @@ class TextDisplay extends UIElement {
     }
   }
 
-  void drawElementInList(PGraphics window){
-    if(isVisible){
+  void drawElementInList(PGraphics window) {
+    if (isVisible) {
       window.textAlign(textMode);
       window.fill(textColor);
       window.textSize(textSize);
@@ -733,23 +733,90 @@ class ClassButton extends Button {
     buttonClassID = ClassID;
     type = "ClassButton";
   }
-  void drawElement() {
-    textAlign(CENTER);
-    fill(255);
-    if (mouseOn()) {
-      fill(200, 200, 255);
-    }
-    textSize(int(sizeY * 0.8));
-    rect(x, y, sizeX, sizeY);
-    fill(0);
-    text(description, x + (sizeX / 2), y + (sizeY * 0.8));
-  }
   void reactClickedOn() {
     mainSession.currentClassID = buttonClassID;
     updateAssignments();
   }
 }
 
+class ClassIDButton extends Button {
+  int ID;
+  float Color = 255;
+  ClassIDButton(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, int ID_, Window getOwner) {
+    super(getName, getDescription, getX, getY, getSizeX, getSizeY, getOwner);
+    ID = ID_;
+    type = "ClassButton";
+  }
+  void reactClickedOn() {
+    if (!pickedClassIDs.contains(this)) {
+      pickedClassIDs.add(this);
+      Color = 100;
+    } else {
+      pickedClassIDs.remove(this);
+
+      Color = 255;
+    }
+    updateAssignments();
+  }
+  void isActive() {
+  }
+  void drawElementInList(PGraphics g) {
+    if (isVisible) {
+      int xOffset = 0;
+      if (textAlign == 37) {
+        xOffset = -sizeX/2 + 5;
+      }
+      g.textAlign(textAlign);
+      g.fill(Color);
+      if (mouseOn() || isActive) {
+        g.fill(-255/2+Color/2+200, -255/2+Color/2+200, -255/2+Color/2+255);
+      }
+      g.textSize(int(sizeY * 0.8));
+      g.rect(localX, localY, sizeX, sizeY);
+      g.fill(0);
+      g.text(description, localX + (sizeX / 2)+xOffset, localY + (sizeY * 0.8));
+    }
+  }
+}
+class TestIDButton extends Button {
+  int ID;
+  float Color = 255;
+  TestIDButton(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, int ID_, Window getOwner) {
+    super(getName, getDescription, getX, getY, getSizeX, getSizeY, getOwner);
+    ID = ID_;
+    type = "ClassButton";
+  }
+  void reactClickedOn() {
+
+    if (!pickedTestIDs.contains(this)) {
+      pickedTestIDs.add(this);
+      Color = 100;
+    } else {
+      pickedTestIDs.remove(this);
+      Color = 255;
+    }
+    updateAssignments();
+  }
+  void isActive() {
+  }
+  void drawElementInList(PGraphics g) {
+    if (isVisible) {
+      int xOffset = 0;
+      if (textAlign == 37) {
+        xOffset = -sizeX/2 + 5;
+      }
+      g.textAlign(textAlign);
+      g.fill(Color);
+      if (mouseOn() || isActive) {
+        g.fill(-255/2+Color/2+200, -255/2+Color/2+200, -255/2+Color/2+255);
+      }
+      g.textSize(int(sizeY * 0.8));
+      g.rect(localX, localY, sizeX, sizeY);
+      g.fill(0);
+      g.text(description, localX + (sizeX / 2)+xOffset, localY + (sizeY * 0.8));
+    }
+  }
+}
 
 class ElevTest extends UIElement {
   ArrayList<Question> questions = new ArrayList<Question>();

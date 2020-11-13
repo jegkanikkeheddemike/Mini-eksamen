@@ -37,6 +37,8 @@ List studentAssignmentList;
 List teacherAssignmentList;
 List teacherTestList;
 List makeQuestionAnswerList;
+List createAssTestList;
+List createAssClassList;
 MultiChoice answerRight;
 ElevTest ETest;
 
@@ -123,22 +125,24 @@ void updateTopMenu() {
     topMenu.elements.add(new HoriList("Classes", "", 10, 160, 27, topMenu) {
       public void addElements() {
         if (mainSession.classIDs != null) {
-          try {
-            for (Integer ID : mainSession.classIDs) {
-              Statement st = db.createStatement();
-              ResultSet rs = st.executeQuery ("SELECT * FROM Classes WHERE ClassID = "+ID+";");
-              rs.next();
-              String className = rs.getString("ClassName");
-              textSize(30);
-              elements.add(new ClassButton("CLASS", className, 0, 0, (int) textWidth(className), 30, ID, topMenu));
-              rs.close();
-              st.close();
-            }
-          }
-          catch(Exception e) {
-            //e.printStackTrace();
-          }
-        }
+    ArrayList<String> classNames = new ArrayList<String>();
+    try {
+      Statement st = db.createStatement();
+      ResultSet rs = st.executeQuery ("SELECT * FROM Classes;");
+      while(rs.next()){
+        classNames.add(rs.getString("ClassName"));
+      }
+      for (Integer ID : mainSession.classIDs) {
+        textSize(30);
+        elements.add(new ClassButton("CLASS", classNames.get(ID), 0, 0, (int) textWidth(classNames.get(ID)), 30, ID, topMenu));
+      }
+      rs.close();
+      st.close();
+    }
+    catch(Exception e) {
+      //e.printStackTrace();
+    }
+  }
         elements.add(new ScreenButton("NEW CLASS","+", 0, 0, 30, 30, topMenu,assignTeamScreen){
           public void extraAction() {
             existingTeams.getElement("TeamsList").customInput(); //DEFINED IN SCR_ASSIGNTEAMS
