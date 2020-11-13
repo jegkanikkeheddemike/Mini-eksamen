@@ -42,6 +42,4 @@ class Session{
    studentClass = "";
    classIDs = null;
   }
-  
-  
 }
