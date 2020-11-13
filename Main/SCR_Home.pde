@@ -49,6 +49,9 @@ void setupHomeStudentScreen() {
   homeStudentScreen.windows.add(studentAssignments);
 
   takeTest = new Window(50, 300, width-550, height-400, "takeTestWindow");
+  takeTest.elements.add(new List("CheckCorrect","Your answers",50,50,takeTest.sizeX-100,takeTest.sizeY-100,takeTest));
+  takeTest.getElement("CheckCorrect").isVisible = false;
+
   ETest = new ElevTest("ElevTest", "Her tager du dine tests");
   takeTest.elements.add(ETest);
   takeTest.elements.add(new Progressbar("PROGRESSBAR", width-800, 30, 220, 40, takeTest) {

@@ -55,7 +55,7 @@ class Window {
   }
   void stepWindow() {
     if(isActive){
-      if (keyTapped(9)) { //SWITCHING BETWEEN ACTIVE WINDOWS USING SHIFT.
+      if (keyTapped(9)) { //SWITCHING BETWEEN ACTIVE ELEMENTS USING SHIFT.
       int direc = 1;
       if (keyDown(-1)) {
         direc = -1;
@@ -97,6 +97,7 @@ class Window {
       }
     }
   }
+  
   void drawWindow() {
     if(isActive){
       if (hasBackdrop) {
