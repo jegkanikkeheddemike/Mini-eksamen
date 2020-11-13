@@ -4,7 +4,7 @@ void setupLoginScreen() {
   loginScreen.windows.add(loginWindow);
 
   loginWindow.elements.add(new TextDisplay("Login", "Login", 200, 80, 45, loginWindow, CENTER));
-  loginWindow.elements.add(new TextDisplay("LoadStatus", "Connecting to databse...", 20, loginWindow.sizeY-25, 20, loginWindow, LEFT){
+  loginWindow.elements.add(new TextDisplay("LoadStatus", "Connecting to databse...", 20, loginWindow.sizeY-25, 20, loginWindow, LEFT) {
     public void stepAlways() {
       description = connectionStatus;
     }
@@ -12,10 +12,10 @@ void setupLoginScreen() {
   );
 
   MultiChoice SelectRole = new MultiChoice("Role", "Role", 20, 100, loginWindow);   
-    SelectRole.choices.add(new Choice("Student",SelectRole));  
-    SelectRole.choices.add(new Choice("Teacher",SelectRole));
-    SelectRole.choices.get(0).isActive = true;
-  
+  SelectRole.choices.add(new Choice("Student", SelectRole));  
+  SelectRole.choices.add(new Choice("Teacher", SelectRole));
+  SelectRole.choices.get(0).isActive = true;
+
   loginWindow.elements.add(SelectRole);
 
   loginWindow.elements.add(new TextBox("LoginName", "Login Name", 20, 200, 360, 40, loginWindow) {
@@ -60,41 +60,46 @@ void loginSuccess(String realName) {
   topMenu.getElement("Username").description = realName;
   updateAssignments();
   updateTopMenu();
-  if(mainSession.role.equals("Teacher")){
+  if (mainSession.role.equals("Teacher")) {
     updateTeacherTests();
   }
+  for (UIElement u : studentAssignmentList.elements) {
+    Assignment a = (Assignment) u;
+    a.updateRightness();
+  }
+  println("USERID: " + mainSession.userID);
 }
 
-void updateAssignments(){
-      /*
+void updateAssignments() {
+  /*
      AssignmentID SERIAL PRIMARY KEY,
-     TeacherID INT NOT NULL,
-     ClassID INT NOT NULL,
-     TestID INT NOT NULL,
-     DueDate TEXT NOT NULL
-    */
+   TeacherID INT NOT NULL,
+   ClassID INT NOT NULL,
+   TestID INT NOT NULL,
+   DueDate TEXT NOT NULL
+   */
   studentAssignmentList.elements.clear();
   teacherAssignmentList.elements.clear();
-  if(mainSession.role.equals("Student")){
+  if (mainSession.role.equals("Student")) {
     try {
       Statement st = db.createStatement();
       //Give all the assignments that belong to the students class.
       ResultSet rs = st.executeQuery("SELECT AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName as TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.ClassID = "+mainSession.studentClassID+");");
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
-        studentAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
+        studentAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"), rs.getString("TestSubject"), rs.getInt("TestID")));
       }
     } 
     catch (Exception e) {
       e.printStackTrace();
     }
-  }else if(mainSession.role.equals("Teacher")){
+  } else if (mainSession.role.equals("Teacher")) {
     try {
       Statement st = db.createStatement();
       ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.TeacherID = "+mainSession.userID+") AND (Assignments.ClassID = "+mainSession.currentClassID+");");
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
-        teacherAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"),rs.getString("TestSubject"),rs.getInt("TestID")));
+        teacherAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"), rs.getString("TestSubject"), rs.getInt("TestID")));
       }
     } 
     catch (Exception e) {
@@ -103,21 +108,20 @@ void updateAssignments(){
   }
 }
 
-void updateTeacherTests(){
-  println("PUT SOME TESTS IN ME BRO");
+void updateTeacherTests() {
   teacherTestList.elements.clear();
 
   try {
-      Statement st = db.createStatement();
-      //Give all the assignments that belong to the students class.
-      ResultSet rs = st.executeQuery("SELECT * FROM Tests;");
-      while (rs.next()) {
-        teacherTestList.elements.add(new Test(rs.getInt("TestID"), rs.getString("TestName"),rs.getString("TestSubject"), rs.getString("TestInfo")));
-      }
-    } 
-    catch (Exception e) {
-      e.printStackTrace();
+    Statement st = db.createStatement();
+    //Give all the assignments that belong to the students class.
+    ResultSet rs = st.executeQuery("SELECT * FROM Tests;");
+    while (rs.next()) {
+      teacherTestList.elements.add(new Test(rs.getInt("TestID"), rs.getString("TestName"), rs.getString("TestSubject"), rs.getString("TestInfo")));
     }
+  } 
+  catch (Exception e) {
+    e.printStackTrace();
+  }
 }
 
 void login() {
@@ -171,10 +175,9 @@ void login() {
                   Integer[] classIDs = (Integer[]) sqlClassIDs.getArray();
                   //UPDATE SESSION
                   mainSession.updateTeacher(realName, login, role, classIDs, ID);
-                  
                 } else {
                   Integer[] classIDs = new Integer[0];
-                  
+
 
                   mainSession.updateTeacher(realName, login, role, classIDs, ID);
                 }
