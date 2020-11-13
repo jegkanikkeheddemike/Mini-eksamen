@@ -768,23 +768,90 @@ class ClassButton extends Button {
     buttonClassID = ClassID;
     type = "ClassButton";
   }
-  void drawElement() {
-    textAlign(CENTER);
-    fill(255);
-    if (mouseOn()) {
-      fill(200, 200, 255);
-    }
-    textSize(int(sizeY * 0.8));
-    rect(x, y, sizeX, sizeY);
-    fill(0);
-    text(description, x + (sizeX / 2), y + (sizeY * 0.8));
-  }
   void reactClickedOn() {
     mainSession.currentClassID = buttonClassID;
     updateAssignments();
   }
 }
 
+class ClassIDButton extends Button {
+  int ID;
+  float Color = 255;
+  ClassIDButton(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, int ID_, Window getOwner) {
+    super(getName, getDescription, getX, getY, getSizeX, getSizeY, getOwner);
+    ID = ID_;
+    type = "ClassButton";
+  }
+  void reactClickedOn() {
+    if (!pickedClassIDs.contains(this)) {
+      pickedClassIDs.add(this);
+      Color = 100;
+    } else {
+      pickedClassIDs.remove(this);
+
+      Color = 255;
+    }
+    updateAssignments();
+  }
+  void isActive() {
+  }
+  void drawElementInList(PGraphics g) {
+    if (isVisible) {
+      int xOffset = 0;
+      if (textAlign == 37) {
+        xOffset = -sizeX/2 + 5;
+      }
+      g.textAlign(textAlign);
+      g.fill(Color);
+      if (mouseOn() || isActive) {
+        g.fill(-255/2+Color/2+200, -255/2+Color/2+200, -255/2+Color/2+255);
+      }
+      g.textSize(int(sizeY * 0.8));
+      g.rect(localX, localY, sizeX, sizeY);
+      g.fill(0);
+      g.text(description, localX + (sizeX / 2)+xOffset, localY + (sizeY * 0.8));
+    }
+  }
+}
+class TestIDButton extends Button {
+  int ID;
+  float Color = 255;
+  TestIDButton(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, int ID_, Window getOwner) {
+    super(getName, getDescription, getX, getY, getSizeX, getSizeY, getOwner);
+    ID = ID_;
+    type = "ClassButton";
+  }
+  void reactClickedOn() {
+
+    if (!pickedTestIDs.contains(this)) {
+      pickedTestIDs.add(this);
+      Color = 100;
+    } else {
+      pickedTestIDs.remove(this);
+      Color = 255;
+    }
+    updateAssignments();
+  }
+  void isActive() {
+  }
+  void drawElementInList(PGraphics g) {
+    if (isVisible) {
+      int xOffset = 0;
+      if (textAlign == 37) {
+        xOffset = -sizeX/2 + 5;
+      }
+      g.textAlign(textAlign);
+      g.fill(Color);
+      if (mouseOn() || isActive) {
+        g.fill(-255/2+Color/2+200, -255/2+Color/2+200, -255/2+Color/2+255);
+      }
+      g.textSize(int(sizeY * 0.8));
+      g.rect(localX, localY, sizeX, sizeY);
+      g.fill(0);
+      g.text(description, localX + (sizeX / 2)+xOffset, localY + (sizeY * 0.8));
+    }
+  }
+}
 
 class ElevTest extends UIElement {
   ArrayList<Question> questions = new ArrayList<Question>();
