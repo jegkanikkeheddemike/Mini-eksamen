@@ -1,2 +1,1 @@
-P=$(pwd)
-processing-java --sketch="$P/Main" --run
+processing-java --sketch="$(pwd)/Main/" --run
