@@ -12,6 +12,7 @@ Screen homeStudentScreen = new Screen();
 Screen assignTeamScreen = new Screen();
 Screen newTestScreen = new Screen();
 Screen createAssignmentScreen = new Screen();
+Screen assignmentAnswersScreen = new Screen();
 volatile Screen activeScreen = loginScreen;
 
 Window loginWindow;
@@ -30,6 +31,9 @@ Window existingTeams;
 
 Window createAssignmentWindow;
 
+Window assignmentAnswers;
+Window assignmentStudentAnswers;
+
 TimedWindow errorWindow;
 TimedWindow successWindow;
 
@@ -39,6 +43,9 @@ List teacherTestList;
 List makeQuestionAnswerList;
 List createAssTestList;
 List createAssClassList;
+List assignmentAnswersStudents;
+List assignmentAnswersSpecificStudent;
+
 MultiChoice answerRight;
 ElevTest ETest;
 
@@ -56,6 +63,7 @@ void UI_Setup() {
   setupMakeQuestionWindow();
   setupNewTestScreen();
   setupCreateAssignmentScreen();
+  setupAssignmentAnswersScreen();
   setupUniversalWindows();
 }
 
@@ -81,6 +89,7 @@ void setupUniversalWindows() {
   assignTeamScreen.windows.add(errorWindow);
   newTestScreen.windows.add(errorWindow);
   createAssignmentScreen.windows.add(errorWindow);
+  assignmentAnswersScreen.windows.add(errorWindow);
 
   loginScreen.windows.add(successWindow);
   createUserScreen.windows.add(successWindow);
@@ -89,6 +98,7 @@ void setupUniversalWindows() {
   assignTeamScreen.windows.add(successWindow);
   newTestScreen.windows.add(successWindow);
   createAssignmentScreen.windows.add(successWindow);
+  assignmentAnswersScreen.windows.add(successWindow);
 }
 
 
@@ -123,6 +133,7 @@ void setupTopMenu() {
   assignTeamScreen.windows.add(topMenu);
   newTestScreen.windows.add(topMenu);
   createAssignmentScreen.windows.add(topMenu);
+  assignmentAnswersScreen.windows.add(topMenu);
 }
 
 void updateTopMenu() {

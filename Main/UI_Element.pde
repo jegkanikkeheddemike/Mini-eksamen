@@ -407,6 +407,8 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       } else if (mainSession.role.equals("Teacher")) {
         //This is where we should change to specific assignment view/window
         println("SHOW RESULTS FOR TEST NAMED: ", name, " WITH ASSIGNMENTID: ", assignmentID);
+        updateAssignmentAnswers(testID, classID, assignmentID);
+        activeScreen = assignmentAnswersScreen;
       }
     }
   }
@@ -571,7 +573,7 @@ class MultiChoice extends UIElement {
     if (isVisible) {
       textAlign(LEFT);
       fill(0);
-      textSize(25);
+      textSize(20);
       text(description, x, y);
       textSize(20);
       for (Choice c : choices) {
