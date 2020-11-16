@@ -104,6 +104,8 @@ void setupTopMenu() {
       } else {
         activeScreen = homeTeacherScreen;
       }
+      pickedClassIDs.clear();
+      pickedTestIDs.clear();
     }
   }
   );
