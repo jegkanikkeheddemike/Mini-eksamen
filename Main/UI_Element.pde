@@ -323,7 +323,10 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   Date dueDate;
   int testID;
   int assignmentID;
+  int classID;
+  String className;
   float percentCorrect;
+  float percentPending;
   boolean finished = false;
   Assignment(int getAssignmentID, String getName, String getDescription, int getTestID) {
     assignmentID = getAssignmentID;
@@ -333,10 +336,21 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     testID = getTestID;
     type = "Assignment";
   }
+  //This is the constructor the teachers will use
+  Assignment(int getAssignmentID, String getName, String getDescription, int getTestID, int getClassID, String getClassName) {
+    assignmentID = getAssignmentID;
+    name = getName;
+    description = getDescription;
+    sizeY = 50;
+    testID = getTestID;
+    type = "Assignment";
+    classID = getClassID;
+    className = getClassName;
+    updateRightnessTeacher();
+  }
   void reactClickedOn() {
     List answerList = (List) takeTest.getElement("CheckCorrect");
     if (finished) {
-
       takeTest.getElement("NQButton").isVisible = false;
       ETest.isVisible = false;
       ETest.questions.clear();
@@ -391,6 +405,7 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
           e.printStackTrace();
         }
       } else if (mainSession.role.equals("Teacher")) {
+        //This is where we should change to specific assignment view/window
         println("SHOW RESULTS FOR TEST NAMED: ", name, " WITH ASSIGNMENTID: ", assignmentID);
       }
     }
@@ -405,24 +420,34 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     }
     window.rect(localX, localY, sizeX, 50);
     window.fill(0);
-    window.textSize(20);
-    window.text(name + " ID : " + testID, localX+3, localY + 20);
-    window.textSize(15);
-    window.text(description, localX+3, localY + 40);
-    if (finished) {
+    if(mainSession.role.equals("Student")){
       window.textSize(20);
-      window.text(percentCorrect + "%", localX+280, localY + 40);
+      window.text(name + " ID : " + testID, localX+3, localY + 20);
+      window.textSize(15);
+      window.text(description, localX+3, localY + 40);
+      if (finished) {
+        window.textSize(20);
+        window.text(percentCorrect + "%", localX+280, localY + 40);
+      }
+    }else if(mainSession.role.equals("Teacher")){
+      window.textSize(20);
+      window.text(name+" CLASS: "+className, localX+3, localY + 20);
+      window.textSize(15);
+      window.fill(0,255,0);
+      window.text("RIGHT: "+percentCorrect+"% ", localX+3, localY + 40);
+      window.fill(200,100,0);
+      window.text("PENDING: "+percentPending+"%", localX+3+(textWidth("RIGHT: "+percentCorrect+"% ")/2), localY + 40);
     }
   }
   void updateRightness() {
     int correct = 0;
-    int qAmout = 0;
+    int qAmount = 0;
     try {
       //FIRST GET AMOUNT OF QUESTIONS!!!!
       Statement getQs = db.createStatement();
       ResultSet getQr = getQs.executeQuery("SELECT * FROM questions WHERE testid = " + testID + ";");
       while (getQr.next()) {
-        qAmout++;
+        qAmount++;
       }
       getQr.close();
       getQs.close();
@@ -436,7 +461,52 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       }
       rs.close();
       st.close();
-      percentCorrect = 100 * correct / qAmout;
+      percentCorrect = 100 * correct / qAmount;
+    } 
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  void updateRightnessTeacher() {
+    int numberOfQuestions = 0;
+    int numberOfStudents = 0;
+    int numberOfCorrect = 0;
+    int numberOfPending = 0;
+    try {
+      //FIRST GET AMOUNT OF QUESTIONS!!!!
+      Statement getQs = db.createStatement();
+      ResultSet getQr = getQs.executeQuery("SELECT * FROM Questions WHERE TestID = " + testID + ";");
+      while (getQr.next()) {
+        numberOfQuestions++;
+      }
+      getQr.close();
+      getQs.close();
+
+      //THEN GET THE NUMBER OF STUDENTS IN THE CLASS     
+      Statement getSs = db.createStatement();
+      ResultSet getSrs = getSs.executeQuery("SELECT * FROM Students WHERE ClassID = " + classID + ";");
+      while (getSrs.next()) {
+        numberOfStudents++;
+      }
+      getSrs.close();
+      getSs.close();
+
+      //THEN GET THE NUMBER OF CORRECT ANSWERS AND PENDING ONES
+      Statement st = db.createStatement();
+      ResultSet rs = st.executeQuery("SELECT * FROM Answers WHERE AssignmentID = " + assignmentID + ";");
+      while (rs.next()) {
+        String correctness = rs.getString("Correctness");
+        if (correctness.equals("RIGHT")) {
+          numberOfCorrect++;
+        }else if(correctness.equals("PENDING")){
+          numberOfPending++;
+        }
+      }
+      rs.close();
+      st.close();
+      //THANK YOU JAVA FOR BEING VERY GOOD AT FLOATING POINT ARITHMETIC!!!AHHH
+      percentCorrect = ((float) numberOfCorrect / ((float) numberOfStudents * (float) numberOfQuestions))*100.;
+      percentPending = ((float) numberOfPending / ((float) numberOfStudents * (float) numberOfQuestions))*100.;
     } 
     catch (Exception e) {
       e.printStackTrace();

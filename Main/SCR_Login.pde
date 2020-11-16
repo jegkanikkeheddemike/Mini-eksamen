@@ -96,10 +96,10 @@ void updateAssignments() {
   } else if (mainSession.role.equals("Teacher")) {
     try {
       Statement st = db.createStatement();
-      ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.TeacherID = "+mainSession.userID+") AND (Assignments.ClassID = "+mainSession.currentClassID+");");
+      ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName, Assignments.ClassID AS ClassID, Classes.ClassName AS ClassName FROM Assignments, Tests, Classes WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.ClassID = Classes.ClassID) AND (Assignments.TeacherID = "+mainSession.userID+");");
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
-        teacherAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"), rs.getString("TestSubject"), rs.getInt("TestID")));
+        teacherAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"), rs.getString("TestSubject"), rs.getInt("TestID"), rs.getInt("ClassID"), rs.getString("ClassName")));
       }
     } 
     catch (Exception e) {
