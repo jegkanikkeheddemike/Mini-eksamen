@@ -20,6 +20,10 @@ void setupCreateAssignmentScreen() {
           }
         }
       }
+      pickedClassIDs.clear();
+      pickedTestIDs.clear();
+      updateAssignments();
+      activeScreen = homeTeacherScreen;
     }
   }
   );
@@ -34,7 +38,6 @@ ArrayList<TestIDButton> pickedTestIDs = new ArrayList<TestIDButton>();
 //Integer pickedTestID;
 
 void updateCreateAssLists() {
-  println("PUT SOME TESTS IN ME BRO");
   createAssTestList.elements.clear();
   createAssClassList.elements.clear();
 
