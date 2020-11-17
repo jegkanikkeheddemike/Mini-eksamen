@@ -853,7 +853,7 @@ class ClassIDButton extends Button {
   ClassIDButton(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, int ID_, Window getOwner) {
     super(getName, getDescription, getX, getY, getSizeX, getSizeY, getOwner);
     ID = ID_;
-    type = "ClassButton";
+    type = "ClassIDButton";
   }
   void reactClickedOn() {
     println(ID);
@@ -893,10 +893,10 @@ class TestIDButton extends Button {
   TestIDButton(String getName, String getDescription, int getX, int getY, int getSizeX, int getSizeY, int ID_, Window getOwner) {
     super(getName, getDescription, getX, getY, getSizeX, getSizeY, getOwner);
     ID = ID_;
-    type = "ClassButton";
+    type = "TestIDButton";
   }
+  
   void reactClickedOn() {
-    println(ID);
     if (!pickedTestIDs.contains(this)) {
       pickedTestIDs.add(this);
       Color = 100;
