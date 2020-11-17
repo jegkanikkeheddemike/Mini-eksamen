@@ -49,7 +49,7 @@ void setupHomeStudentScreen() {
   homeStudentScreen.windows.add(studentAssignments);
 
   takeTest = new Window(50, 300, width-550, height-400, "takeTestWindow");
-  takeTest.elements.add(new List("CheckCorrect","Your answers",50,50,takeTest.sizeX-100,takeTest.sizeY-100,takeTest));
+  takeTest.elements.add(new List("CheckCorrect", "Your answers", 50, 50, takeTest.sizeX-100, takeTest.sizeY-100, takeTest));
   takeTest.getElement("CheckCorrect").isVisible = false;
 
   ETest = new ElevTest("ElevTest", "Her tager du dine tests");
@@ -73,14 +73,20 @@ void setupHomeStudentScreen() {
         try {
           String correctness;
           Question Q = ETest.questions.get(ETest.cQuestionIndex);
-          if (Q.answers.getOutput() == Q.answerList.get(Q.rightAnswerIndex)) {
-            correctness = "RIGHT";
-          } else {
-            correctness = "WRONG";
+          if (Q.qtype == 1) {
+            if (Q.answers.getOutput() == Q.answerList.get(Q.rightAnswerIndex)) {
+              correctness = "RIGHT";
+            } else {
+              correctness = "WRONG";
+            }
+            Statement st = db.createStatement();
+            st.executeUpdate("INSERT INTO answers (studentid,assignmentid,questionid,answer,correctness) VALUES("+mainSession.userID+","+Q.assignmentID+","+ Q.QID+",'" +Q.answers.getOutput()+"','" + correctness+"')");
+            st.close();
+          } else if (Q.qtype == 2) {
+            Statement st = db.createStatement();
+            st.executeUpdate("INSERT INTO answers (studentid,assignmentid,questionid,answer,correctness) VALUES("+mainSession.userID+","+Q.assignmentID+","+ Q.QID+",'" +Q.textAnswer.getOutput()+"','PENDING')");
+            st.close();
           }
-          Statement st = db.createStatement();
-          st.executeUpdate("INSERT INTO answers (studentid,assignmentid,questionid,answer,correctness) VALUES("+mainSession.userID+","+Q.assignmentID+","+ Q.QID+",'" +Q.answers.getOutput()+"','" + correctness+"')");
-          st.close();
         } 
         catch (Exception e) {
           e.printStackTrace();

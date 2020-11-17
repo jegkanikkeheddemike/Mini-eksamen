@@ -327,6 +327,7 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   String className;
   float percentCorrect;
   float percentPending;
+  boolean withPending = false; 
   boolean finished = false;
   Assignment(int getAssignmentID, String getName, String getDescription, int getTestID) {
     assignmentID = getAssignmentID;
@@ -364,11 +365,17 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
         while (answers.next()) {
           q.next();
           String question = q.getString("question");
-          java.sql.Array pAnswersA = q.getArray("possibleanswers");
-          String[] pAnswers = (String[]) pAnswersA.getArray();
-          String cAnswer = pAnswers[q.getInt("rightanswerindex")];
+          int qtype = q.getInt("questiontypeid");
           String answer = answers.getString("answer");
-          answerList.elements.add(new Answer(question, answer, cAnswer, takeTest));
+          String correct = answers.getString("correctness");
+          if (qtype == 1) {
+            java.sql.Array pAnswersA = q.getArray("possibleanswers");
+            String[] pAnswers = (String[]) pAnswersA.getArray();
+            String cAnswer = pAnswers[q.getInt("rightanswerindex")];
+            answerList.elements.add(new Answer(question, answer, cAnswer, takeTest));
+          } else if (qtype == 2) {
+            answerList.elements.add(new Answer(question, answer, correct));
+          }
         }
       } 
       catch (Exception e) {
@@ -386,15 +393,21 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
           ArrayList<Question> readyQuestions = new ArrayList<Question>();
           while (rs.next()) {
             String Question = rs.getString("question");
-            int RAnsIn = rs.getInt("rightanswerindex");
-            Array AnsArray = rs.getArray("possibleanswers");  //Arrayen kan ikke læses med det samme. 
-            ResultSet ansRS = AnsArray.getResultSet(); //Den skal omdannes til et Reslustset som kan læses og omdannes til en ArrayList
-            ArrayList<String> Answers = new ArrayList<String>();
             int QID = rs.getInt("questionid");
-            while (ansRS.next()) {
-              Answers.add(ansRS.getString(2)); //GetString 1 er bare Indexet i resultsettet. Mens 2 er Værdien
+            int qtype = rs.getInt("questiontypeid");
+            if (qtype == 1) {
+              int RAnsIn = rs.getInt("rightanswerindex");
+              Array AnsArray = rs.getArray("possibleanswers");  //Arrayen kan ikke læses med det samme. 
+              ResultSet ansRS = AnsArray.getResultSet(); //Den skal omdannes til et Reslustset som kan læses og omdannes til en ArrayList
+              ArrayList<String> Answers = new ArrayList<String>();
+
+              while (ansRS.next()) {
+                Answers.add(ansRS.getString(2)); //GetString 1 er bare Indexet i resultsettet. Mens 2 er Værdien
+              }
+              readyQuestions.add(new Question(testID, assignmentID, Question, Answers, RAnsIn, QID));
+            } else if (qtype == 2) {
+              readyQuestions.add(new Question(testID, assignmentID, Question, QID));
             }
-            readyQuestions.add(new Question(testID, assignmentID, Question, Answers, RAnsIn, QID));
           }
           ETest.cQuestionIndex = 0;
           ETest.questions.clear();
@@ -420,24 +433,30 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
     if (finished) {
       window.fill(200, 255, 200);
     }
+    if (withPending) {
+      window.fill(255, 255, 200);
+    }
     window.rect(localX, localY, sizeX, 50);
     window.fill(0);
-    if(mainSession.role.equals("Student")){
+    if (mainSession.role.equals("Student")) {
       window.textSize(20);
       window.text(name + " ID : " + testID, localX+3, localY + 20);
       window.textSize(15);
       window.text(description, localX+3, localY + 40);
+      if (withPending) {
+        window.text("With Pending", localX+180, localY + 40);
+      }
       if (finished) {
         window.textSize(20);
         window.text(percentCorrect + "%", localX+280, localY + 40);
       }
-    }else if(mainSession.role.equals("Teacher")){
+    } else if (mainSession.role.equals("Teacher")) {
       window.textSize(20);
       window.text(name+" CLASS: "+className, localX+3, localY + 20);
       window.textSize(15);
-      window.fill(0,255,0);
+      window.fill(0, 255, 0);
       window.text("RIGHT: "+percentCorrect+"% ", localX+3, localY + 40);
-      window.fill(200,100,0);
+      window.fill(200, 100, 0);
       window.text("PENDING: "+percentPending+"%", localX+3+(textWidth("RIGHT: "+percentCorrect+"% ")/2), localY + 40);
     }
   }
@@ -457,7 +476,11 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       ResultSet rs = st.executeQuery("SELECT * FROM answers WHERE(assignmentid = " + assignmentID + " and studentid = " + mainSession.userID + ")");
       while (rs.next()) {
         finished = true;
-        if (rs.getString("correctness").equals("RIGHT")) {
+        if (rs.getString("correctness").equals("PENDING")) {
+          withPending = true;
+        }
+        if (rs.getString("correctness").equals("RIGHT")/*||rs.getString("correctness").equals("PENDING")*/) {
+
           correct++;
         }
       }
@@ -500,7 +523,7 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
         String correctness = rs.getString("Correctness");
         if (correctness.equals("RIGHT")) {
           numberOfCorrect++;
-        }else if(correctness.equals("PENDING")){
+        } else if (correctness.equals("PENDING")) {
           numberOfPending++;
         }
       }
@@ -895,7 +918,7 @@ class TestIDButton extends Button {
     ID = ID_;
     type = "TestIDButton";
   }
-  
+
   void reactClickedOn() {
     if (!pickedTestIDs.contains(this)) {
       pickedTestIDs.add(this);
@@ -967,7 +990,7 @@ class Question extends UIElement {
   int rightAnswerIndex;
   ArrayList<String> answerList;
   MultiChoice answers = new MultiChoice(question+"MC", "Choose Your answer", 50, 100, takeTest);
-  TextBox textAnswer = new TextBox("");
+  TextBox textAnswer = new TextBox("TEXT", "Write your Answer", 5, 100, 200, 30, takeTest);
   Question(int getTestID, int getAssignmentID, String getQuestion, ArrayList<String> getAnswers, int getRAI, int getQID) {
     qtype = 1;
     testID = getTestID;
@@ -981,22 +1004,31 @@ class Question extends UIElement {
     }
     type = "Question";
   }
-  Question(int getTestID, int getAssignmentID, String getQuestion, int getQID){
+  Question(int getTestID, int getAssignmentID, String getQuestion, int getQID) {
     qtype = 2;
     testID = getTestID;
     assignmentID = getAssignmentID;
-    quetion = getQuestion;
+    question = getQuestion;
     QID = getQID;
+    type = "Question";
   }
   void stepAlways() {
-    answers.step();
+    if (qtype == 1) {
+      answers.step();
+    } else if (qtype == 2) {
+      textAnswer.step();
+    }
   }
   void drawElement() {
     fill(0);
     textSize(30);
     text(question, 100, y);
     textSize(25);
-    answers.drawElement();
+    if (qtype == 1) {
+      answers.drawElement();
+    } else if (qtype==2) {
+      textAnswer.drawElement();
+    }
   }
 }
 
@@ -1027,7 +1059,10 @@ class Progressbar extends UIElement {
 
 class Answer extends UIElement {
   String question, answer, correctAnswer;
+  int atype;
+  String correct;
   Answer(String getQ, String getA, String getCA, Window getOwner) {
+    atype = 1;
     question = getQ;
     answer = getA;
     correctAnswer = getCA;
@@ -1038,21 +1073,46 @@ class Answer extends UIElement {
     sizeX = takeTest.sizeX-120;
     sizeY = 60;
   }
+  Answer(String getQ, String getA, String correct_) {
+    atype = 2;
+    question = getQ;
+    answer = getA;
+    type = "Answer";
+    localX = 0;
+    localY = 0;
+    sizeX = takeTest.sizeX-120;
+    sizeY = 60;
+    correct = correct_;
+  }
   void drawElementInList(PGraphics g) {
-    if (answer.equals(correctAnswer)) {
-      g.fill(200, 255, 200);
-    } else {
-      g.fill(255, 200, 200);
+    if (atype == 1) {
+      if (answer.equals(correctAnswer)) {
+        g.fill(200, 255, 200);
+      } else {
+        g.fill(255, 200, 200);
+      }
+    } else if (atype == 2) {
+      if (correct.equals("RIGHT")) {
+        g.fill(200, 255, 200);
+      } else if (correct.equals("PENDING")) {
+        g.fill(255, 255, 200);
+      } else {
+        g.fill(255, 200, 200);
+      }
     }
     g.rect(localX, localY, sizeX, sizeY);
     g.fill(0);
     g.textSize(25);
     g.text(question, localX+3, localY+27);
     g.textSize(20);
-    if (answer.equals(correctAnswer)) {
+    if (atype == 1) {
+      if (answer.equals(correctAnswer)) {
+        g.text(answer, localX+3, localY+50);
+      } else {
+        g.text(answer + " // " + correctAnswer, localX+3, localY+48);
+      }
+    } else if (atype == 2) {
       g.text(answer, localX+3, localY+50);
-    } else {
-      g.text(answer + " // " + correctAnswer, localX+3, localY+48);
     }
   }
 }
