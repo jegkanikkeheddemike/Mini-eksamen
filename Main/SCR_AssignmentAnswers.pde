@@ -131,7 +131,7 @@ class AssignmentStudentSpecificAnswer extends UIElement {  //IS A BUTTON DONT CH
     question = getQuestion;
     answerID = getAnswerID;
     answer = getAnswer;
-    name = question + " " + answer;
+    name = "SPG: "+question + " ANS: " + answer;
     sizeY = 50;
     testID = getTestID;
     type = "AssignmentStudentSpecificAnswer";

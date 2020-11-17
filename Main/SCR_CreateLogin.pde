@@ -1,41 +1,48 @@
 void setupCreateUserScreen() {
   //CREATE USER SCREEN
-  createUserWindow = new Window(width/2-200, height/2-400, 400, 800, "CreateUserWindow");
+  createUserWindow = new Window(width/2-200, height/2-300, 400, 600, "CreateUserWindow");
   createUserScreen.windows.add(createUserWindow);
 
-  createUserWindow.elements.add(new TextDisplay("CreateUser", "Create Teacher Profile", 200, 80, 45, createUserWindow, CENTER));
+  createUserWindow.elements.add(new TextDisplay("CreateUser", "Create Teacher Profile", 200, 80, 30, createUserWindow, CENTER));
 
-  createUserWindow.elements.add(new TextBox("CreateLogin", "Login", 20, 280, 360, 40, createUserWindow) {
+  createUserWindow.elements.add(new TextBox("CreateLogin", "Login", 20, 150, 360, 30, createUserWindow) {
     public void reactEnter() {
       owner.getElement("CreateTeacherButton").reactClickedOn();
     }
   }
   );
 
-  createUserWindow.elements.add(new TextBox("CreatePassword", "Password", 20, 380, 360, 40, createUserWindow) {
+  createUserWindow.elements.add(new TextBox("CreatePassword", "Password", 20, 210, 360, 30, createUserWindow) {
     public void reactEnter() {
       owner.getElement("CreateTeacherButton").reactClickedOn();
     }
   }
   );
 
-  createUserWindow.elements.add(new TextBox("CreatePasswordAgain", "Password again", 20, 480, 360, 40, createUserWindow) {
+  createUserWindow.elements.add(new TextBox("CreatePasswordAgain", "Password again", 20, 270, 360, 30, createUserWindow) {
     public void reactEnter() {
       owner.getElement("CreateTeacherButton").reactClickedOn();
     }
   }
   );
 
-  createUserWindow.elements.add(new TextBox("CreateRealName", "Real Name", 20, 580, 360, 40, createUserWindow) {
+  createUserWindow.elements.add(new TextBox("CreateRealName", "Real Name", 20, 330, 360, 30, createUserWindow) {
     public void reactEnter() {
       owner.getElement("CreateTeacherButton").reactClickedOn();
     }
   }
   );
 
-  createUserWindow.elements.add(new Button("CreateTeacherButton", "Create Teacher", 90, createUserWindow.sizeY-50, 220, 40, createUserWindow) {
+  createUserWindow.elements.add(new Button("CreateTeacherButton", "Create Teacher", 80, 400, 240, 40, createUserWindow) {
     public void reactClickedOn() {
       createLogin();
+    }
+  }
+  );
+  
+  createUserWindow.elements.add(new Button("Back", "Back", 80, 460, 240, 40, createUserWindow) {
+    public void reactClickedOn() {
+      activeScreen = loginScreen;
     }
   }
   );
