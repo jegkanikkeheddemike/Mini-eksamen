@@ -5,6 +5,7 @@ void setupCreateAssignmentScreen() {
   createAssignmentWindow.elements.add(createAssClassList);
   createAssTestList = new List("AssignTest", "Tests", width-(width-1000+120), 80, width-1000, 300, createAssignmentWindow);
   createAssignmentWindow.elements.add(createAssTestList);
+  createAssignmentWindow.elements.add(new TextBox("DueDate", "DueDate", width/2-160, 240, 200, 40, createAssignmentWindow));
   createAssignmentWindow.elements.add(new Button("AssignAssignment", "Assign", width/2-120, 160, 120, 40, createAssignmentWindow) {
     public void reactClickedOn() {
 
@@ -12,7 +13,8 @@ void setupCreateAssignmentScreen() {
         for (TestIDButton TB : pickedTestIDs) {
           try {
             Statement st = db.createStatement();
-            st.executeUpdate("INSERT INTO Assignments (teacherid, classid, testid, duedate) VALUES ("+mainSession.userID+","+CB.ID+","+TB.ID+",'imorgen')");
+            st.executeUpdate("INSERT INTO Assignments (teacherid, classid, testid, duedate) VALUES ("+mainSession.userID+","+CB.ID+","+TB.ID+",'"+createAssignmentWindow.getElement("DueDate").getOutput()+"')");
+            
             st.close();
           }
           catch(Exception e) {
@@ -22,6 +24,7 @@ void setupCreateAssignmentScreen() {
       }
       pickedClassIDs.clear();
       pickedTestIDs.clear();
+      createAssignmentWindow.getElement("DueDate").clearText();
       updateAssignments();
       activeScreen = homeTeacherScreen;
     }
