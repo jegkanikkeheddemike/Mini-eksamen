@@ -320,7 +320,7 @@ class Test extends UIElement {
 }
 
 class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
-  Date dueDate;
+  String dueDate;
   int testID;
   int assignmentID;
   int classID;
@@ -329,18 +329,20 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
   float percentPending;
   boolean withPending = false; 
   boolean finished = false;
-  Assignment(int getAssignmentID, String getName, String getDescription, int getTestID) {
+  Assignment(int getAssignmentID, String getName, String getDescription, int getTestID, String getDueDate) {
     assignmentID = getAssignmentID;
     name = getName;
     description = getDescription;
     sizeY = 50;
     testID = getTestID;
+    dueDate = getDueDate;
     type = "Assignment";
   }
   //This is the constructor the teachers will use
-  Assignment(int getAssignmentID, String getName, String getDescription, int getTestID, int getClassID, String getClassName) {
+  Assignment(int getAssignmentID, String getName, String getDescription, int getTestID, int getClassID, String getClassName,String getDueDate) {
     assignmentID = getAssignmentID;
     name = getName;
+    dueDate = getDueDate;
     description = getDescription;
     sizeY = 50;
     testID = getTestID;
@@ -447,8 +449,15 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
         window.text("With Pending", localX+180, localY + 40);
       }
       if (finished) {
+        window.textAlign(RIGHT);
         window.textSize(20);
-        window.text(percentCorrect + "%", localX+280, localY + 40);
+        window.text(percentCorrect + "%", localX+sizeX-5, localY + 40);
+        window.textAlign(LEFT);
+      } else {
+        window.textAlign(RIGHT);
+        window.textSize(20);
+        window.text(dueDate,localX+sizeX-5,localY+40);
+        window.textAlign(LEFT);
       }
     } else if (mainSession.role.equals("Teacher")) {
       window.textSize(20);
@@ -469,6 +478,9 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       ResultSet getQr = getQs.executeQuery("SELECT * FROM questions WHERE testid = " + testID + ";");
       while (getQr.next()) {
         qAmount++;
+      }
+      if (qAmount == 0) {
+        return;
       }
       getQr.close();
       getQs.close();

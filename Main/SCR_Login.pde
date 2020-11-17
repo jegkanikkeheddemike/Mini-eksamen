@@ -84,10 +84,10 @@ void updateAssignments() {
     try {
       Statement st = db.createStatement();
       //Give all the assignments that belong to the students class.
-      ResultSet rs = st.executeQuery("SELECT AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName as TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.ClassID = "+mainSession.studentClassID+");");
+      ResultSet rs = st.executeQuery("SELECT AssignmentID, Assignments.TestID AS TestID, Assignments.DueDate AS DueDate, Tests.TestSubject AS TestSubject, Tests.TestName as TestName FROM Assignments, Tests WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.ClassID = "+mainSession.studentClassID+");");
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
-        studentAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"), rs.getString("TestSubject"), rs.getInt("TestID")));
+        studentAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"), rs.getString("TestSubject"), rs.getInt("TestID"),rs.getString("duedate")));
       }
     } 
     catch (Exception e) {
@@ -96,10 +96,10 @@ void updateAssignments() {
   } else if (mainSession.role.equals("Teacher")) {
     try {
       Statement st = db.createStatement();
-      ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName, Assignments.ClassID AS ClassID, Classes.ClassName AS ClassName FROM Assignments, Tests, Classes WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.ClassID = Classes.ClassID) AND (Assignments.TeacherID = "+mainSession.userID+");");
+      ResultSet rs = st.executeQuery("SELECT Assignments.AssignmentID AS AssignmentID, Assignments.TestID AS TestID, Tests.TestSubject AS TestSubject, Tests.TestName AS TestName, Assignments.ClassID AS ClassID, Classes.ClassName AS ClassName, Assignments.DueDate AS DueDate FROM Assignments, Tests, Classes WHERE (Assignments.TestID = Tests.TestID) AND (Assignments.ClassID = Classes.ClassID) AND (Assignments.TeacherID = "+mainSession.userID+");");
       while (rs.next()) {
         //HANDLE THE DATE BETTER?
-        teacherAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"), rs.getString("TestSubject"), rs.getInt("TestID"), rs.getInt("ClassID"), rs.getString("ClassName")));
+        teacherAssignmentList.elements.add(new Assignment(rs.getInt("AssignmentID"), rs.getString("TestName"), rs.getString("TestSubject"), rs.getInt("TestID"), rs.getInt("ClassID"),rs.getString("ClassName"),rs.getString("DueDate")));
       }
     } 
     catch (Exception e) {
