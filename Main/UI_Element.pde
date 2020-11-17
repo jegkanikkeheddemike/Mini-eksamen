@@ -962,11 +962,14 @@ class Question extends UIElement {
   int testID;
   int assignmentID;
   int QID;
+  int qtype;
   String question;
   int rightAnswerIndex;
   ArrayList<String> answerList;
   MultiChoice answers = new MultiChoice(question+"MC", "Choose Your answer", 50, 100, takeTest);
+  TextBox textAnswer = new TextBox("");
   Question(int getTestID, int getAssignmentID, String getQuestion, ArrayList<String> getAnswers, int getRAI, int getQID) {
+    qtype = 1;
     testID = getTestID;
     assignmentID = getAssignmentID;
     question = getQuestion;
@@ -977,6 +980,13 @@ class Question extends UIElement {
       answers.choices.add(new Choice(A, answers));
     }
     type = "Question";
+  }
+  Question(int getTestID, int getAssignmentID, String getQuestion, int getQID){
+    qtype = 2;
+    testID = getTestID;
+    assignmentID = getAssignmentID;
+    quetion = getQuestion;
+    QID = getQID;
   }
   void stepAlways() {
     answers.step();
