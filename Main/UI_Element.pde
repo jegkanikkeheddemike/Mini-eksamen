@@ -967,7 +967,7 @@ class Question extends UIElement {
   int rightAnswerIndex;
   ArrayList<String> answerList;
   MultiChoice answers = new MultiChoice(question+"MC", "Choose Your answer", 50, 100, takeTest);
-  TextBox textAnswer = new TextBox("");
+  //TextBox textAnswer = new TextBox("");
   Question(int getTestID, int getAssignmentID, String getQuestion, ArrayList<String> getAnswers, int getRAI, int getQID) {
     qtype = 1;
     testID = getTestID;
@@ -985,7 +985,7 @@ class Question extends UIElement {
     qtype = 2;
     testID = getTestID;
     assignmentID = getAssignmentID;
-    quetion = getQuestion;
+    question = getQuestion;
     QID = getQID;
   }
   void stepAlways() {

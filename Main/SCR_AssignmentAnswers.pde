@@ -116,16 +116,20 @@ class AssignmentStudentSpecificAnswer extends UIElement {  //IS A BUTTON DONT CH
   int questionID;
   String question;
   //String question; THE QUESTION WILL JUST BE THE NAME?
+  int answerID;
   String answer;
   int assignmentID;
   int classID;
   int studentID;
   String correctness;
+  boolean chosen =  false;
+  List parent;
   //JUST TO TRY IT OUT!!!
-  AssignmentStudentSpecificAnswer(int getAssignmentID, int getQuestionID, String getQuestion, String getAnswer, int getTestID, int getClassID, int getStudentID, String getCorrectness) {
+  AssignmentStudentSpecificAnswer(int getAssignmentID, int getQuestionID, String getQuestion, int getAnswerID, String getAnswer, int getTestID, int getClassID, int getStudentID, String getCorrectness, List getParent) {
     assignmentID = getAssignmentID;
     questionID = getQuestionID;
     question = getQuestion;
+    answerID = getAnswerID;
     answer = getAnswer;
     name = question + " " + answer;
     sizeY = 50;
@@ -134,16 +138,26 @@ class AssignmentStudentSpecificAnswer extends UIElement {  //IS A BUTTON DONT CH
     classID = getClassID;
     studentID = getStudentID;
     correctness = getCorrectness;
+    parent = getParent;
   }
   void reactClickedOn() {
-      println("IT SHOULD BE MADE SUCH THAT ONE COULD CHANGE THE RATING By CLICKING IN THE SIDE BUTTONS AND STUFF");
+    for(UIElement elem : parent.elements){
+      AssignmentStudentSpecificAnswer elem_ = (AssignmentStudentSpecificAnswer) elem;
+      elem_.chosen = false;
+    }
+    chosen = true;
   }
   void drawElementInList(PGraphics window) {
-    window.fill(255);
-    if (mouseOn()) {
-      window.fill(200, 200, 255);
+    if(chosen){
+      window.fill(200);
+    }else{
+      window.fill(255);
     }
     window.rect(localX, localY, sizeX, 50);
+    if (mouseOn()) {
+      window.fill(200, 200, 255, 150);
+      window.rect(localX, localY, sizeX, 50);
+    }
     window.fill(0);
     
     window.textSize(20);
@@ -161,7 +175,7 @@ class AssignmentStudentSpecificAnswer extends UIElement {  //IS A BUTTON DONT CH
     window.text(correctness, localX+3, localY + 40);
   }
   void updateRightness() {
-      //THIS WILL UPDATE THE RIGHTNESS FOR THE SPECIFIC ANSWER MOSTLY TO BE USED WITH PENDING
+      
   }
 }
 
@@ -171,9 +185,9 @@ void updateAssignmentStudentAnswers(int testID, int classID, int assignmentID, i
     assignmentStudentAnswers.getElement("AssignmentStudentAnswerResults").description = "RIGHT: "+percentCorrect+"% PENDING: "+percentPending+"%";
     try{
         Statement st = db.createStatement();
-        ResultSet rs = st.executeQuery("SELECT Questions.Question AS Question, Answers.QuestionID AS QuestionID, Answers.Answer AS Answer, Answers.Correctness AS Correctness FROM Answers, Questions WHERE (Answers.StudentID = "+studentID+") AND (Answers.AssignmentID = "+assignmentID+") AND (Answers.QuestionID = Questions.QuestionID);");
+        ResultSet rs = st.executeQuery("SELECT Questions.Question AS Question, Answers.QuestionID AS QuestionID, Answers.AnswerID AS AnswerID, Answers.Answer AS Answer, Answers.Correctness AS Correctness FROM Answers, Questions WHERE (Answers.StudentID = "+studentID+") AND (Answers.AssignmentID = "+assignmentID+") AND (Answers.QuestionID = Questions.QuestionID);");
         while(rs.next()){
-            assignmentAnswersSpecificStudent.elements.add(new AssignmentStudentSpecificAnswer(assignmentID, rs.getInt("QuestionID"), rs.getString("Question"), rs.getString("Answer"), testID, classID, studentID, rs.getString("Correctness")));
+            assignmentAnswersSpecificStudent.elements.add(new AssignmentStudentSpecificAnswer(assignmentID, rs.getInt("QuestionID"), rs.getString("Question"), rs.getInt("AnswerID"),rs.getString("Answer"), testID, classID, studentID, rs.getString("Correctness"), assignmentAnswersSpecificStudent));
         }
         rs.close();
         st.close();
@@ -193,13 +207,35 @@ void setupAssignmentStudentAnswersWindow(){
     assignmentStudentAnswers.elements.add(assignmentAnswersSpecificStudent);
 
     MultiChoice changeCorrectness = new MultiChoice("ChangeCorrectness", "Change correctness", width-340+20, 150, assignmentStudentAnswers);
-	changeCorrectness.choices.add(new Choice("RIGHT", changeCorrectness));
-	changeCorrectness.choices.add(new Choice("WRONG", changeCorrectness));
+	  changeCorrectness.choices.add(new Choice("RIGHT", changeCorrectness));
+	  changeCorrectness.choices.add(new Choice("WRONG", changeCorrectness));
     assignmentStudentAnswers.elements.add(changeCorrectness);
     
     assignmentStudentAnswers.elements.add(new Button("ChangeCorrectness", "Change correctness", width-340+20, 250, 200, 20, assignmentStudentAnswers){
         public void reactClickedOn(){
-            println("DO WHATEVER NEEDS TO BE DONE");
+          for(UIElement elem : assignmentAnswersSpecificStudent.elements){
+            AssignmentStudentSpecificAnswer answer = (AssignmentStudentSpecificAnswer) elem;
+            if(answer.chosen){
+              //Update the rightness
+              try{
+                MultiChoice changeCorrectness = (MultiChoice) assignmentStudentAnswers.getElement("ChangeCorrectness");
+                String newCorrectness = changeCorrectness.getOutput();
+                if(newCorrectness != null){
+                  Statement st = db.createStatement();
+                  st.executeUpdate("UPDATE Answers SET Correctness = '"+newCorrectness+"' WHERE AnswerID ="+answer.answerID);
+                  st.close();
+
+                  answer.correctness = newCorrectness;
+                  answer.chosen = false;
+
+                  changeCorrectness.clearText();
+                  break;
+                }
+              }catch(Exception e){
+                e.printStackTrace();
+              }
+            }
+          }
         }
     });
 }
