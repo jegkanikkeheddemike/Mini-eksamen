@@ -1002,7 +1002,7 @@ class Question extends UIElement {
   int rightAnswerIndex;
   ArrayList<String> answerList;
   MultiChoice answers = new MultiChoice(question+"MC", "Choose Your answer", 50, 100, takeTest);
-  TextBox textAnswer = new TextBox("TEXT", "Write your Answer", 5, 100, 200, 30, takeTest);
+  TextBox textAnswer = new TextBox("TEXT", "Write your Answer", 50, 100, 500, 30, takeTest);
   Question(int getTestID, int getAssignmentID, String getQuestion, ArrayList<String> getAnswers, int getRAI, int getQID) {
     qtype = 1;
     testID = getTestID;

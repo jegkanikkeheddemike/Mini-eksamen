@@ -161,7 +161,7 @@ void addQuestion(){
 				//Add the question
 				try{
 					Statement st = db.createStatement();
-					st.executeUpdate("INSERT INTO Questions (TestID, Question, PossibleAnswers, RightAnswerIndex, QuestionTypeID)  VALUES ("+mainSession.teacherTestID+", '"+question+"', '"+possibleAnswers+"', "+rightAnswerIndex+", "+questionTypeID+");");
+					st.executeUpdate("INSERT INTO Questions (TestID, Question, QuestionTypeID)  VALUES ("+mainSession.teacherTestID+", '"+question+"', "+questionTypeID+");");
 					st.close();
 				}catch (Exception e) {
 					e.printStackTrace();
