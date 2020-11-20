@@ -76,8 +76,6 @@ void switchQuestionType(){
 	String questionType = makeQuestion.getElement("QuestionType").getOutput();
 	if(questionType != null){
 		if(questionType.equals("Multiple choice")){
-			//Make the fields unique for textfield invisible
-			makeQuestion.getElement("TextFieldQuestionType").makeInvisible();
 			//Make the fields unique for multiple choice visible
 			makeQuestion.getElement("Possible answers").makeVisible();
 			makeQuestion.getElement("AnswerRight").makeVisible();
@@ -87,8 +85,6 @@ void switchQuestionType(){
 			makeQuestion.getElement("Possible answers").makeInvisible();
 			makeQuestion.getElement("AnswerRight").makeInvisible();
 			makeQuestion.getElement("NewAnswer").makeInvisible();
-			//Make the fields unique for textfield visible
-			makeQuestion.getElement("TextFieldQuestionType").makeVisible();
 		}
 	}else{
 		//If none is selected all of them should be hidden
@@ -227,9 +223,6 @@ void setupMakeQuestionWindow(){
 	});
 	makeQuestion.getElement("NewAnswer").makeInvisible();
 
-	// TEXTFIELD QUESTIONTYPE
-	makeQuestion.elements.add(new TextDisplay("TextFieldQuestionType", "SPACE FOR STUDENT TO ANSWER", 20, 300, 20, makeQuestion));
-	makeQuestion.getElement("TextFieldQuestionType").makeInvisible();
 	
 	//GENERAL
 	makeQuestion.elements.add(new Button("AddQuestion", "Add question", ((width-100)/3)*0+((width-100)/3)/2-((width-100)/4)/2, height-240-60, ((width-100)/4), 40, makeQuestion){
