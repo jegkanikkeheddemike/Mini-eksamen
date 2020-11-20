@@ -360,20 +360,18 @@ class Assignment extends UIElement {  //IS A BUTTON DONT CHANGE
       answerList.isVisible = true;
       answerList.elements.clear();
       try {
-        Statement getAnswersS = db.createStatement();
-        ResultSet answers = getAnswersS.executeQuery("SELECT * FROM answers WHERE(assignmentid = " + assignmentID + " and studentid = " + mainSession.userID + ");");
-        Statement getQS = db.createStatement();
-        ResultSet q = getQS.executeQuery("SELECT * FROM questions WHERE testid = " + testID);
-        while (answers.next()) {
-          q.next();
-          String question = q.getString("question");
-          int qtype = q.getInt("questiontypeid");
-          String answer = answers.getString("answer");
-          String correct = answers.getString("correctness");
+        Statement aq = db.createStatement();
+        ResultSet aqRs = aq.executeQuery("SELECT Questions.Question AS Question, Questions.QuestionTypeID AS QuestionTypeID, Answers.Answer AS Answer, Answers.Correctness AS Correctness, Questions.PossibleAnswers AS PossibleAnswers, Questions.RightAnswerIndex AS RightAnswerIndex FROM Questions, Answers WHERE (Questions.QuestionID = Answers.QuestionID AND Answers.assignmentID = " + assignmentID + " AND Answers.studentid = " + mainSession.userID + ")");
+        while (aqRs.next()) {
+          String question = aqRs.getString("question");
+          int qtype = aqRs.getInt("questiontypeID");
+          String answer = aqRs.getString("answer");
+          String correct = aqRs.getString("correctness");
+          println(question + '=' + correct);
           if (qtype == 1) {
-            java.sql.Array pAnswersA = q.getArray("possibleanswers");
+            java.sql.Array pAnswersA = aqRs.getArray("possibleanswers");
             String[] pAnswers = (String[]) pAnswersA.getArray();
-            String cAnswer = pAnswers[q.getInt("rightanswerindex")];
+            String cAnswer = pAnswers[aqRs.getInt("rightanswerindex")];
             answerList.elements.add(new Answer(question, answer, cAnswer, takeTest));
           } else if (qtype == 2) {
             answerList.elements.add(new Answer(question, answer, correct));
@@ -1105,11 +1103,14 @@ class Answer extends UIElement {
       }
     } else if (atype == 2) {
       if (correct.equals("RIGHT")) {
+        //println(question + '=' + correct);
         g.fill(200, 255, 200);
       } else if (correct.equals("PENDING")) {
         g.fill(255, 255, 200);
+        //println(question + '=' + correct);
       } else {
         g.fill(255, 200, 200);
+        //println(question + '=' + correct);
       }
     }
     g.rect(localX, localY, sizeX, sizeY);
