@@ -91,6 +91,7 @@ class UIElement {
   void stepAlways() {  //Used only for multiple choice so far
   }
   String getOutput() {
+    println(name + " HAS GIVEN NO OUTPUT AS " + type);
     return "NO OUTPUT GIVEN";
   }
   void deleteMe() {
@@ -807,6 +808,9 @@ class TextBox extends UIElement {
   }
 
   String getOutput() {
+    if (text == "") {
+      super.getOutput();
+    }
     return text;
   }
 }

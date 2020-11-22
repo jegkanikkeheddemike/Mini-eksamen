@@ -25,7 +25,7 @@ void connectToDatabase() {
         println("Connected to database at", millis(), "ms");
       }
       catch (java.sql.SQLException e) {
-        connectionStatus = "Failed to connect to database";
+        connectionStatus = "No Internet connection";
         System.out.println(e.getMessage());
       }
     }

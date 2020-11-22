@@ -131,6 +131,13 @@ void login() {
       String login = loginWindow.getElement("LoginName").getOutput();
       String password = loginWindow.getElement("Password").getOutput();
       println(role, login, password);
+        
+      if (!isConnected) {
+        errorWindow.getElement("ErrorMessage").description = "Failed to connect to Database.\nStatus: " + connectionStatus; 
+        errorWindow.show();
+        return;
+      }
+
 
       if (role != null) {
         try {
