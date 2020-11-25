@@ -88,7 +88,7 @@ void switchQuestionType(){
 		}
 	}else{
 		//If none is selected all of them should be hidden
-		makeQuestion.getElement("TextFieldQuestionType").makeInvisible();
+		//makeQuestion.getElement("TextFieldQuestionType").makeInvisible();  //DET CRASHER NÅR DEN KØRER. "TextFieldQuestionType" Bliver aldrig brugt
 		makeQuestion.getElement("Possible answers").makeInvisible();
 		makeQuestion.getElement("AnswerRight").makeInvisible();
 		makeQuestion.getElement("NewAnswer").makeInvisible();

@@ -17,7 +17,6 @@ void keyPressed() {
     }
   }
   if (!downKeys.contains(k) &&  !ignoredChar.contains(k)) {
-    
     downKeys.add(k);
     tappedKeys.add(k);
   }

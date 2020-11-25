@@ -731,7 +731,7 @@ class TextBox extends UIElement {
         } else if (tappedKey == -3 && cursorIndex < text.length()) {  //RIGHT ARROW KEY
           cursorIndex += 1;
           //}
-        } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122) || (tappedKey >= 32 && tappedKey <= 63)) {
+        } else if ((tappedKey >= 48 && tappedKey <= 57) || (tappedKey >= 65 && tappedKey <= 122) || (tappedKey >= 32 && tappedKey <= 63) || (tappedKey >=197 && tappedKey <=248)) {
           text = text.substring(0, cursorIndex) + char(tappedKey) + text.substring(cursorIndex);
           cursorIndex += 1;
         }
@@ -1004,7 +1004,7 @@ class Question extends UIElement {
   int rightAnswerIndex;
   ArrayList<String> answerList;
   MultiChoice answers = new MultiChoice(question+"MC", "Choose Your answer", 50, 100, takeTest);
-  TextBox textAnswer = new TextBox("TEXT", "Write your Answer", 50, 100, 500, 30, takeTest);
+  TextBox textAnswer = new TextBox("TEXT", "Write your Answer", 50, 100, 900, 40, takeTest);
   Question(int getTestID, int getAssignmentID, String getQuestion, ArrayList<String> getAnswers, int getRAI, int getQID) {
     qtype = 1;
     testID = getTestID;
