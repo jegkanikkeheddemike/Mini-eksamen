@@ -240,7 +240,7 @@ void setupMakeQuestionWindow(){
 				updateTeacherTests();
 				activeScreen = homeTeacherScreen;
 			}else{
-				errorWindow.getElement("ErrorMessage").description = "Clear the question to finish making the test"; 
+				errorWindow.getElement("ErrorMessage").description = "Add the question before finishing the test"; 
 				errorWindow.show();
 			}
 		}

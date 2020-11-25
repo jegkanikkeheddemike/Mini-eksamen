@@ -17,7 +17,7 @@ void updateAssignmentAnswers(int testID, int classID, int assignmentID){
         }
         rs.close();
         st.close();
-    }catch(Exception e){
+    } catch(Exception e){
         e.printStackTrace();
     }
 }
@@ -25,8 +25,8 @@ void updateAssignmentAnswers(int testID, int classID, int assignmentID){
 void setupAssignmentAnswersWindow(){
     assignmentAnswers = new Window(50, 220, width-100, height-240, "AssignmentAnswersWindow");
 
-    assignmentAnswers.elements.add(new TextDisplay("AssignmentAnswerHeader", "THIS WILL BE WHERE THE ASSIGNMENT NAME WILL BE!!!", 20, 50, 40, assignmentAnswers));
-    assignmentAnswers.elements.add(new TextDisplay("AssignmentAnswerResults", "RESULTS WILL BE HERE!!!", 20, 100, 40, assignmentAnswers));
+    assignmentAnswers.elements.add(new TextDisplay("AssignmentAnswerHeader", "Click on a Student", 20, 50, 40, assignmentAnswers));
+    assignmentAnswers.elements.add(new TextDisplay("AssignmentAnswerResults", "", 20, 100, 40, assignmentAnswers));
 
     assignmentAnswersStudents = new List("StudentsAssignmentAnswers", "", 20, 150, width-100-40, height-240-150-40, assignmentAnswers);
     assignmentAnswers.elements.add(assignmentAnswersStudents);
@@ -206,19 +206,21 @@ void setupAssignmentStudentAnswersWindow(){
     assignmentAnswersSpecificStudent = new List("StudentsAssignmentAnswers", "", 20, 150, width-340-20, height-240-150-40, assignmentStudentAnswers);
     assignmentStudentAnswers.elements.add(assignmentAnswersSpecificStudent);
 
-    MultiChoice changeCorrectness = new MultiChoice("ChangeCorrectness", "Change correctness", width-340+20, 150, assignmentStudentAnswers);
+    MultiChoice changeCorrectness = new MultiChoice("ChangeCorrectnessMC", "Change correctness", width-340+20, 150, assignmentStudentAnswers);
 	  changeCorrectness.choices.add(new Choice("RIGHT", changeCorrectness));
 	  changeCorrectness.choices.add(new Choice("WRONG", changeCorrectness));
     assignmentStudentAnswers.elements.add(changeCorrectness);
     
-    assignmentStudentAnswers.elements.add(new Button("ChangeCorrectness", "Change correctness", width-340+20, 250, 200, 20, assignmentStudentAnswers){
+    assignmentStudentAnswers.elements.add(new Button("ChangeCorrectnessButton", "Change correctness", width-340+20, 250, 200, 20, assignmentStudentAnswers){
         public void reactClickedOn(){
+          boolean foundChosenElement = false;
           for(UIElement elem : assignmentAnswersSpecificStudent.elements){
             AssignmentStudentSpecificAnswer answer = (AssignmentStudentSpecificAnswer) elem;
             if(answer.chosen){
+              foundChosenElement = true;
               //Update the rightness
               try{
-                MultiChoice changeCorrectness = (MultiChoice) assignmentStudentAnswers.getElement("ChangeCorrectness");
+                MultiChoice changeCorrectness = (MultiChoice) assignmentStudentAnswers.getElement("ChangeCorrectnessMC");
                 String newCorrectness = changeCorrectness.getOutput();
                 if(newCorrectness != null){
                   Statement st = db.createStatement();
@@ -230,11 +232,19 @@ void setupAssignmentStudentAnswersWindow(){
 
                   changeCorrectness.clearText();
                   break;
+                } else {
+                  errorWindow.getElement("ErrorMessage").description = "Please choose a correctness to change to";
+                  errorWindow.show();
+                  return;
                 }
               }catch(Exception e){
                 e.printStackTrace();
               }
             }
+          }
+          if (foundChosenElement == false) {
+            errorWindow.getElement("ErrorMessage").description = "Please choose a answer to change";
+            errorWindow.show();
           }
         }
     });

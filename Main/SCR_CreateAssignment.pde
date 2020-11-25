@@ -8,6 +8,22 @@ void setupCreateAssignmentScreen() {
   createAssignmentWindow.elements.add(new TextBox("DueDate", "DueDate", width/2-160, 240, 200, 40, createAssignmentWindow));
   createAssignmentWindow.elements.add(new Button("AssignAssignment", "Assign", width/2-120, 160, 120, 40, createAssignmentWindow) {
     public void reactClickedOn() {
+      if (pickedClassIDs.size() == 0 && pickedTestIDs.size() == 0) {
+        errorWindow.getElement("ErrorMessage").description = "Please pick at least one class and a test to assign";
+        errorWindow.show();
+        return;
+      }
+      if (pickedClassIDs.size() == 0) {
+        errorWindow.getElement("ErrorMessage").description = "Please pick at least one class to assign test to";
+        errorWindow.show();
+        return;
+      }
+      if (pickedTestIDs.size() == 0) {
+        errorWindow.getElement("ErrorMessage").description = "Please pick at least one test to assign to the classes";
+        errorWindow.show();
+        return;
+      }
+
 
       for (ClassIDButton CB : pickedClassIDs) {
         for (TestIDButton TB : pickedTestIDs) {
