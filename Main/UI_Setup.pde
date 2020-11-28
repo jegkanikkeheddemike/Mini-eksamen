@@ -109,14 +109,15 @@ void setupTopMenu() {
   topMenu.elements.add(new TextDisplay("Username", mainSession.userName, 20, 120, 30, topMenu));
   topMenu.elements.add(new Button("Backbutton", "Back", width-210, 160, 60, 25, topMenu) {
     public void reactClickedOn() {
-      if (mainSession.role.equals("Student")) {
+      if (mainSession.role.equals("Student")) { //GO BACK AS STUDENT
         activeScreen = homeStudentScreen;
-      } else {
+      } else {  //GO BACK AS TEACHER
         activeScreen = homeTeacherScreen;
+        createAssignmentWindow.getElement("DueDate").clearText();
+        pickedClassIDs.clear();
+        pickedTestIDs.clear();
       }
-      createAssignmentWindow.getElement("DueDate").clearText();
-      pickedClassIDs.clear();
-      pickedTestIDs.clear();
+      
     }
   }
   );
@@ -158,7 +159,7 @@ void updateTopMenu() {
           }
         }
         catch(Exception e) {
-          //e.printStackTrace();
+          e.printStackTrace();
         }
         elements.add(new ScreenButton("NEW CLASS", "+", 0, 0, 30, 30, topMenu, assignTeamScreen) {
           public void extraAction() {
